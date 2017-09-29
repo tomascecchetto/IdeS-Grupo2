@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ids.androidsong">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_app"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_app"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.principal"
+            android:label="@string/title_activity_principal"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.cancionMusicoListActivity"
+            android:label="@string/title_cancionmusico_list"
+            android:parentActivityName=".ui.principal"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ids.androidsong.ui.principal" />
+        </activity>
+        <activity
+            android:name=".ui.cancionMusicoDetailActivity"
+            android:label="@string/title_cancionmusico_detail"
+            android:parentActivityName=".ui.cancionMusicoListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ids.androidsong.ui.cancionMusicoListActivity" />
+        </activity>
+        <activity
+            android:name=".ui.editarCancion"
+            android:label="@string/title_activity_editar_cancion"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.nuevaCancion"
+            android:label="@string/title_activity_nueva_cancion"
+            android:parentActivityName=".ui.principal"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ids.androidsong.ui.principal" />
+        </activity>
+        <activity
+            android:name=".ui.FullscreenCancion"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen_cancion"
+            android:parentActivityName=".ui.cancionMusicoListActivity"
+            android:theme="@style/FullscreenTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ids.androidsong.ui.cancionMusicoListActivity" />
+        </activity>
+    </application>
+
+</manifest>
