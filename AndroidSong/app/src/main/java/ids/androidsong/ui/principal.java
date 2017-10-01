@@ -123,7 +123,7 @@ public class principal extends AppCompatActivity
         return true;
     }
 
-    public void testDBread(View view){
+    /*public void testDBread(View view){
         aSDbHelper helper = new aSDbHelper(con);
         try {
             helper.createDataBase();
@@ -132,11 +132,11 @@ public class principal extends AppCompatActivity
             e.printStackTrace();
         }
         TextView v = (TextView)findViewById(R.id.testview);
-        /*ContentValues value = new ContentValues();
+        ContentValues value = new ContentValues();
         value.put(aSDbContract.Carpetas.COLUMN_NAME_ID,1);
         value.put(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE,"Coros");
         long id = helper.currentDB.insert(aSDbContract.Carpetas.TABLE_NAME,null,value);
-        v.setText(String.valueOf(id));*/
+        v.setText(String.valueOf(id));
         String[] projection = {
                 aSDbContract.Carpetas.COLUMN_NAME_NOMBRE
         };
@@ -152,5 +152,5 @@ public class principal extends AppCompatActivity
         c.moveToFirst();
         v.setText(c.getString(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE)));
         c.close();
-    }
+    }*/
 }

@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static ids.androidsong.help.aSDbSQL.SQL_CREATE_ENTRIES;
-
 /**
  * Created by ALAN on 10/09/2017.
  */
