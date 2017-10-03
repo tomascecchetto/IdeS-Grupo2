@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class item {
     private int Id;
-    private int carpetaId;
+    private String carpeta;
     private String tipo;
     private String title;
     private ArrayList<seccion> secciones = new ArrayList<>();
@@ -23,12 +23,12 @@ public class item {
         Id = id;
     }
 
-    public int getCarpetaId() {
-        return carpetaId;
+    public String getCarpeta() {
+        return carpeta;
     }
 
-    public void setCarpetaId(int carpetaId) {
-        this.carpetaId = carpetaId;
+    public void setCarpeta(String carpeta) {
+        this.carpeta = carpeta;
     }
 
     public String getTipo() {

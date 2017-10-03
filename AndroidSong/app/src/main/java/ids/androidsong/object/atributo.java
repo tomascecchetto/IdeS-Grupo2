@@ -9,6 +9,11 @@ public class atributo {
     private String nombre;
     private String valor;
 
+    public atributo(String n, String v){
+        this.nombre = n;
+        this.valor = v;
+    }
+
     public String getNombre() {
         return nombre;
     }

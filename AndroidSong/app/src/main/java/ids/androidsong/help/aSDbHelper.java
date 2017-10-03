@@ -15,11 +15,12 @@ import java.io.OutputStream;
 
 /**
  * Created by ALAN on 10/09/2017.
+ * Clase para gestinar la carga y actualización de la BD en Assets
  */
 
 public class aSDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "androidSongDB";
     private static String DATABASE_PATH = "/data/user/0/ids.androidsong/databases/";
     private final Context con;

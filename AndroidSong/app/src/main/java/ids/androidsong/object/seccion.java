@@ -10,6 +10,14 @@ public class seccion {
     private String nombre;
     private String contenido;
 
+    public seccion(String n, String c) {
+        this.nombre = n;
+        this.contenido = c;
+    }
+    public seccion(String n) {
+        this.nombre = n;
+    }
+
     public int getId() {
         return Id;
     }
