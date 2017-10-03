@@ -27,7 +27,19 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Spinner
+        android:id="@+id/cancion_lista_carpeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
         <include layout="@layout/cancionmusico_list" />
+
+</LinearLayout>
     </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton

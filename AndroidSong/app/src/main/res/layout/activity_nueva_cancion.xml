@@ -29,7 +29,6 @@
         app:srcCompat="@drawable/ic_action_seccion" />
 
     <include
-        layout="@layout/content_nueva_cancion"
-        android:layout_width="348dp" />
+        layout="@layout/content_nueva_cancion" />
 
 </android.support.design.widget.CoordinatorLayout>

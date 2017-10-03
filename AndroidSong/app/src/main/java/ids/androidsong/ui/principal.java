@@ -25,6 +25,7 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import ids.androidsong.R;
+import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
 import ids.androidsong.help.aSDbHelper;
 
@@ -39,6 +40,7 @@ public class principal extends AppCompatActivity
         setContentView(R.layout.ac_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        App.setContext(con);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

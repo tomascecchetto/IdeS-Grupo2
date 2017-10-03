@@ -12,6 +12,8 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import android.support.v7.app.ActionBar;
@@ -19,6 +21,7 @@ import android.view.MenuItem;
 
 import ids.androidsong.R;
 
+import ids.androidsong.object.carpeta;
 import ids.androidsong.ui.dummy.DummyContent;
 
 import java.util.List;
@@ -75,6 +78,13 @@ public class cancionMusicoListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        Spinner spinner = (Spinner)findViewById(R.id.cancion_lista_carpeta);
+        String[] carpetas = (new carpeta()).get().toArray(new String[0]);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                carpetas);
+        spinner.setAdapter(spinnerArrayAdapter);
     }
 
     @Override
