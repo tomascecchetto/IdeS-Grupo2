@@ -14,24 +14,12 @@ public final class aSDbContract {
 
     public static class Atributos implements BaseColumns {
         public static final String TABLE_NAME = "Atributos";
-        public static final String COLUMN_NAME_ITEMID = "itemId";
-        public static final String COLUMN_NAME_PRESENTACION = "presentacion";
-        public static final String COLUMN_NAME_AUTOR = "autor";
-        public static final String COLUMN_NAME_TRANSPORTE = "transporte";
-        public static final String COLUMN_NAME_INTERPRETE = "interprete";
-        public static final String COLUMN_NAME_TONO = "tono";
-
-        public static final String TABLE_CREATE = "CREATE TABLE Atributos (itemId INTEGER PRIMARY KEY CONSTRAINT fk_atributosItem REFERENCES Items (Id) NOT NULL, presentacion TEXT, autor TEXT, transporte INTEGER DEFAULT (0), interprete TEXT, tono CHAR (3));";
-        public static final String TABLE_DROP = "DROP TABLE IF EXISTS Atributos;";
-    }
-
-    public static class AtributosUsuario implements BaseColumns {
-        public static final String TABLE_NAME = "AtributosUsuario";
         public static final String COLUMN_NAME_ID = "Id";
         public static final String COLUMN_NAME_ITEMID = "itemId";
+        public static final String COLUMN_NAME_NOMBRE = "valor";
         public static final String COLUMN_NAME_VALOR = "valor";
 
-        public static final String TABLE_CREATE = "CREATE TABLE AtributosUsuario (Id INTEGER PRIMARY KEY, itemId INTEGER CONSTRAINT fk_atributosUsuarioItem REFERENCES Items (Id), valor TEXT);";
+        public static final String TABLE_CREATE = "CREATE TABLE Atributos (Id INTEGER PRIMARY KEY, itemId INTEGER CONSTRAINT fk_atributosItem REFERENCES Items (Id) NOT NULL, nombre TEXT NOT NULL valor TEXT);";
         public static final String TABLE_DROP = "DROP TABLE IF EXISTS AtributosUsuario;";
     }
 

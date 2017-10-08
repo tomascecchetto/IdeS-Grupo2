@@ -47,7 +47,7 @@ public class cancion extends item {
                                 seccion = new seccion(nombre);
                                 contenido = "";
                             }else {
-                                contenido += linea + "\n";
+                                contenido += " " + linea + "\n";
                                 break;
                             }
                     }
