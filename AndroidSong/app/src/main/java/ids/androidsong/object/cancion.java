@@ -4,11 +4,20 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 
+import ids.androidsong.help.Enum;
+
 /**
  * Created by ALAN on 01/10/2017.
+ * Objeto Canción
  */
 
 public class cancion extends item {
+
+    public cancion(int i, String t) {
+        super(i, t);
+    }
+
+    public cancion(){}
 
     public void llenarSecciones(String letra){
         String nombre = "";
@@ -61,5 +70,13 @@ public class cancion extends item {
             seccion.setContenido(contenido);
             this.getSecciones().add(seccion);
         }
+    }
+
+    public ArrayList<item> get(){
+        return super.get(Enum.itemTipo.CANCION.name());
+    }
+
+    public void alta(){
+        super.alta(Enum.itemTipo.CANCION.name());
     }
 }

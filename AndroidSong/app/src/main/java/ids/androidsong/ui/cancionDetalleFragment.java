@@ -14,11 +14,11 @@ import ids.androidsong.ui.dummy.DummyContent;
 
 /**
  * A fragment representing a single cancionMusico detail screen.
- * This fragment is either contained in a {@link cancionMusicoListActivity}
- * in two-pane mode (on tablets) or a {@link cancionMusicoDetailActivity}
+ * This fragment is either contained in a {@link cancionLista}
+ * in two-pane mode (on tablets) or a {@link cancionDetalle}
  * on handsets.
  */
-public class cancionMusicoDetailFragment extends Fragment {
+public class cancionDetalleFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -34,7 +34,7 @@ public class cancionMusicoDetailFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public cancionMusicoDetailFragment() {
+    public cancionDetalleFragment() {
     }
 
     @Override
@@ -58,7 +58,7 @@ public class cancionMusicoDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.cancionmusico_detail, container, false);
+        View rootView = inflater.inflate(R.layout.cancion_detalle, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {

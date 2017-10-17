@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="ids.androidsong.ui.cancionMusicoListActivity">
+    tools:context="ids.androidsong.ui.cancionLista">
 
     <!--
     This layout is a two-pane layout for the Canciones
@@ -26,8 +26,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="ids.androidsong.ui.cancionMusicoListActivity"
-        tools:listitem="@layout/cancionmusico_list_content" />
+        tools:context="ids.androidsong.ui.cancionLista"
+        tools:listitem="@layout/cancion_lista_content" />
 
     <FrameLayout
         android:id="@+id/cancionmusico_detail_container"

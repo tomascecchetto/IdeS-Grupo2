@@ -57,5 +57,15 @@ public class carpeta {
         return carpetas;
     }
 
-    //TODO: Add get by ID for Item filling
+    public String get(int id){
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openWriteDataBase();
+        String carpeta = "";
+        String[] projection = { aSDbContract.Carpetas.COLUMN_NAME_NOMBRE };
+        Cursor c = helper.currentDB.query(aSDbContract.Carpetas.TABLE_NAME, projection, aSDbContract.Carpetas.COLUMN_NAME_ID + "=" + Integer.toString(id), null, null, null, null);
+        c.moveToFirst();
+        carpeta = c.getString(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE));
+        c.close();
+        return carpeta;
+    }
 }

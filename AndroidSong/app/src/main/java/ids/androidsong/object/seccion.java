@@ -63,15 +63,15 @@ public class seccion {
         this.contenido = contenido;
     }
 
-    public void alta(seccion s, item i) {
+    public void alta(item i) {
 
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
 
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Secciones.COLUMN_NAME_ITEMID, i.getId());
-        registro.put(aSDbContract.Secciones.COLUMN_NAME_NOMBRE, s.getNombre());
-        registro.put(aSDbContract.Secciones.COLUMN_NAME_CONTENIDO, s.getContenido());
+        registro.put(aSDbContract.Secciones.COLUMN_NAME_NOMBRE, getNombre());
+        registro.put(aSDbContract.Secciones.COLUMN_NAME_CONTENIDO, getContenido());
 
         helper.currentDB.insert(aSDbContract.Secciones.TABLE_NAME, null, registro);
         helper.currentDB.close();

@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:textStyle="italic"
         android:text="Carpeta"
-        android:gravity="right"
+        android:gravity="end"
         android:textSize="16sp">
     </TextView>
 </LinearLayout>

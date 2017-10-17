@@ -21,7 +21,9 @@ import android.view.MenuItem;
 
 import ids.androidsong.R;
 
+import ids.androidsong.object.cancion;
 import ids.androidsong.object.carpeta;
+import ids.androidsong.object.item;
 import ids.androidsong.ui.dummy.DummyContent;
 
 import java.util.List;
@@ -32,11 +34,11 @@ import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
  * An activity representing a list of Canciones. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link cancionMusicoDetailActivity} representing
+ * lead to a {@link cancionDetalle} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class cancionMusicoListActivity extends AppCompatActivity {
+public class cancionLista extends AppCompatActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -47,7 +49,7 @@ public class cancionMusicoListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cancionmusico_list);
+        setContentView(R.layout.activity_cancion_lista);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,7 +69,14 @@ public class cancionMusicoListActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        View recyclerView = findViewById(R.id.cancionmusico_list);
+        Spinner spinner = (Spinner)findViewById(R.id.cancion_lista_carpeta);
+        String[] carpetas = (new carpeta()).get().toArray(new String[0]);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                carpetas);
+        spinner.setAdapter(spinnerArrayAdapter);
+
+        View recyclerView = findViewById(R.id.cancion_lista);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
@@ -78,13 +87,6 @@ public class cancionMusicoListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-
-        Spinner spinner = (Spinner)findViewById(R.id.cancion_lista_carpeta);
-        String[] carpetas = (new carpeta()).get().toArray(new String[0]);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item,
-                carpetas);
-        spinner.setAdapter(spinnerArrayAdapter);
     }
 
     @Override
@@ -105,46 +107,51 @@ public class cancionMusicoListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        //Inicializa la lista
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((new cancion()).get()));
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        //Guarda el array para referencia y linkeo
+        private final List<item> canciones;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
+        public SimpleItemRecyclerViewAdapter(List<item> items) {
+            canciones = items;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.cancionmusico_list_content, parent, false);
+                    //Layout de la lista
+                    .inflate(R.layout.cancion_lista_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
+        //Une las partes del objeto a la vista
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mItem = canciones.get(position);
+            holder.mIdView.setText(Integer.toString(canciones.get(position).getId()));
+            holder.mContentView.setText(canciones.get(position).getTitle());
 
+            // Accion al hacer clic, depende de la pantalla
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(cancionMusicoDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        cancionMusicoDetailFragment fragment = new cancionMusicoDetailFragment();
+                        arguments.putString(cancionDetalleFragment.ARG_ITEM_ID, Integer.toString(holder.mItem.getId()));
+                        cancionDetalleFragment fragment = new cancionDetalleFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.cancionmusico_detail_container, fragment)
                                 .commit();
                     } else {
                         Context context = v.getContext();
-                        Intent intent = new Intent(context, cancionMusicoDetailActivity.class);
-                        intent.putExtra(cancionMusicoDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        Intent intent = new Intent(context, cancionDetalle.class);
+                        intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID, Integer.toString(holder.mItem.getId()));
 
                         context.startActivity(intent);
                     }
@@ -154,14 +161,15 @@ public class cancionMusicoListActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return mValues.size();
+            return canciones.size();
         }
 
+        // Define la vista
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public item mItem;
 
             public ViewHolder(View view) {
                 super(view);

@@ -63,7 +63,7 @@ public class nuevaCancion extends AppCompatActivity {
         cancion.getAtributos().add(new atributo(Enum.atributo.transporte.toString(),transporte.getText().toString()));
         EditText letra = (EditText)findViewById(R.id.nueva_cancion_letra);
         cancion.llenarSecciones(letra.getText().toString());
-        //TODO: Agregar llamada a método Guardar
+        cancion.alta();
     }
 
 }

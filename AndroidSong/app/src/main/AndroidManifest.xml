@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.cancionMusicoListActivity"
+            android:name=".ui.cancionLista"
             android:label="@string/title_cancionmusico_list"
             android:parentActivityName=".ui.principal"
             android:theme="@style/AppTheme.NoActionBar">
@@ -29,13 +29,13 @@
                 android:value="ids.androidsong.ui.principal" />
         </activity>
         <activity
-            android:name=".ui.cancionMusicoDetailActivity"
+            android:name=".ui.cancionDetalle"
             android:label="@string/title_cancionmusico_detail"
-            android:parentActivityName=".ui.cancionMusicoListActivity"
+            android:parentActivityName=".ui.cancionLista"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionMusicoListActivity" />
+                android:value="ids.androidsong.ui.cancionLista" />
         </activity>
         <activity
             android:name=".ui.editarCancion"
@@ -54,11 +54,11 @@
             android:name=".ui.FullscreenCancion"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen_cancion"
-            android:parentActivityName=".ui.cancionMusicoListActivity"
+            android:parentActivityName=".ui.cancionLista"
             android:theme="@style/FullscreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionMusicoListActivity" />
+                android:value="ids.androidsong.ui.cancionLista" />
         </activity>
     </application>
 

@@ -56,15 +56,15 @@ public class atributo {
         Id = id;
     }
 
-    public void alta(atributo a, item i) {
+    public void alta(item i) {
 
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
 
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Atributos.COLUMN_NAME_ITEMID, i.getId());
-        registro.put(aSDbContract.Atributos.COLUMN_NAME_NOMBRE, a.getNombre());
-        registro.put(aSDbContract.Atributos.COLUMN_NAME_VALOR, a.getValor());
+        registro.put(aSDbContract.Atributos.COLUMN_NAME_NOMBRE, getNombre());
+        registro.put(aSDbContract.Atributos.COLUMN_NAME_VALOR, getValor());
 
         helper.currentDB.insert(aSDbContract.Atributos.TABLE_NAME, null, registro);
         helper.currentDB.close();
