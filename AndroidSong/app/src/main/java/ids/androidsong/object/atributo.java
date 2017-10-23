@@ -94,19 +94,20 @@ public class atributo {
 
     public ArrayList<atributo> get(item item){
         aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
+        helper.openDataBase();
         ArrayList<atributo> atributos = new ArrayList<>();
         String sortOrder = aSDbContract.Atributos.COLUMN_NAME_NOMBRE + " ASC";
-        String filter = aSDbContract.Secciones.COLUMN_NAME_ITEMID + "=" + item.getId();
-        Cursor c = helper.currentDB.query(aSDbContract.Atributos.TABLE_NAME, null, filter, null, null, null, sortOrder);
-        c.moveToFirst();
-        do {
-            atributos.add(new atributo(
-                    c.getInt(c.getColumnIndex(aSDbContract.Atributos.COLUMN_NAME_ID)),
-                    c.getString(c.getColumnIndex(aSDbContract.Atributos.COLUMN_NAME_NOMBRE)),
-                    c.getString(c.getColumnIndex(aSDbContract.Atributos.COLUMN_NAME_VALOR))
-            ));
-        } while (c.moveToNext());
+        String filter = aSDbContract.Atributos.COLUMN_NAME_ITEMID + "=" + item.getId();
+        Cursor c = helper.currentDB.query(aSDbContract.Atributos.TABLE_NAME, null, filter, null, null, null, null);
+        if (c.moveToFirst()) {
+            do {
+                atributos.add(new atributo(
+                        c.getInt(c.getColumnIndex(aSDbContract.Atributos.COLUMN_NAME_ID)),
+                        c.getString(c.getColumnIndex(aSDbContract.Atributos.COLUMN_NAME_NOMBRE)),
+                        c.getString(c.getColumnIndex(aSDbContract.Atributos.COLUMN_NAME_VALOR))
+                ));
+            } while (c.moveToNext());
+        }
         c.close();
         return atributos;
     }

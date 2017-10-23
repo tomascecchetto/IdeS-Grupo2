@@ -4,12 +4,17 @@ import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import ids.androidsong.R;
+import ids.androidsong.adapter.listaSecciones;
+import ids.androidsong.help.App;
+import ids.androidsong.object.cancion;
 import ids.androidsong.ui.dummy.DummyContent;
 
 /**
@@ -24,17 +29,21 @@ public class cancionDetalleFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    private CollapsingToolbarLayout appBarLayout;
 
     /**
-     * The dummy content this fragment is presenting.
+     * The content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private cancion cancion;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public cancionDetalleFragment() {
+        if (appBarLayout != null) {
+            appBarLayout.setTitle(cancion.getTitle());
+        }
     }
 
     @Override
@@ -45,12 +54,13 @@ public class cancionDetalleFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            cancion = new cancion(getArguments().getInt(ARG_ITEM_ID));
+            cancion.fill();
 
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(cancion.getTitle());
             }
         }
     }
@@ -61,10 +71,8 @@ public class cancionDetalleFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.cancion_detalle, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.cancionmusico_detail)).setText(mItem.details);
-        }
-
+        RecyclerView secciones = (RecyclerView) rootView.findViewById(R.id.cancion_detalle_secciones);
+        secciones.setAdapter(new listaSecciones(cancion.getSecciones()));
         return rootView;
     }
 }

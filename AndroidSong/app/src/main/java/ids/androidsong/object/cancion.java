@@ -1,6 +1,7 @@
 package ids.androidsong.object;
 
 import java.io.BufferedReader;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 
@@ -11,10 +12,14 @@ import ids.androidsong.help.Enum;
  * Objeto Canción
  */
 
-public class cancion extends item {
+public class cancion extends item implements Serializable {
 
     public cancion(int i, String t) {
         super(i, t);
+    }
+
+    public cancion(int i) {
+        super(i);
     }
 
     public cancion(){}

@@ -34,6 +34,10 @@ public class item {
         this.title = t;
     }
 
+    public item(int i){
+        this.Id = i;
+    }
+
     public item(){}
 
     public int getId() {
@@ -110,13 +114,31 @@ public class item {
             e.printStackTrace();
         }
         String sortOrder = aSDbContract.Items.COLUMN_NAME_TITULO + " ASC";
-        String filter = aSDbContract.Items.COLUMN_NAME_ID + "=" + item.getId();
+        String filter = aSDbContract.Items.COLUMN_NAME_ID + "=" + Integer.toString(item.getId());
         Cursor c = helper.currentDB.query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
         c.moveToFirst();
         item.setTipo(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TIPO)));
         item.setSecciones(new seccion().get(item));
         item.setAtributos(new atributo().get(item));
         return item;
+    }
+
+    public void fill(){
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        try {
+            helper.createDataBase();
+            helper.openWriteDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String sortOrder = aSDbContract.Items.COLUMN_NAME_TITULO + " ASC";
+        String filter = aSDbContract.Items.COLUMN_NAME_ID + "=" + Integer.toString(getId());
+        Cursor c = helper.currentDB.query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
+        c.moveToFirst();
+        setTitle(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TITULO)));
+        setTipo(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TIPO)));
+        setSecciones(new seccion().get(this));
+        setAtributos(new atributo().get(this));
     }
 
     public ArrayList<item> get(String tipo){

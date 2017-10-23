@@ -32,7 +32,9 @@ public class cancionDetalle extends AppCompatActivity {
             public void onClick(View view) {
                 /*Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
+                int id = getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0);
                 Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
+                intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID,id);
                 startActivity(intent);
             }
         });
@@ -56,8 +58,8 @@ public class cancionDetalle extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(cancionDetalleFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(cancionDetalleFragment.ARG_ITEM_ID));
+            arguments.putInt(cancionDetalleFragment.ARG_ITEM_ID,
+                    getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0));
             cancionDetalleFragment fragment = new cancionDetalleFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

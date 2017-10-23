@@ -5,18 +5,28 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import ids.androidsong.R;
+import ids.androidsong.adapter.listaSecciones;
+import ids.androidsong.object.cancion;
+
+import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_ID;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class FullscreenCancion extends AppCompatActivity {
+
+    private cancion cancion;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -35,7 +45,7 @@ public class FullscreenCancion extends AppCompatActivity {
      */
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
-    private View mContentView;
+    private RecyclerView mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
         @Override
@@ -91,21 +101,28 @@ public class FullscreenCancion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        cancion = new cancion(getIntent().getIntExtra(ARG_ITEM_ID,0));
+        cancion.fill();
+
+
+
         setContentView(R.layout.activity_fullscreen_cancion);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        mContentView = (RecyclerView)findViewById(R.id.cancion_fullscreen_secciones);
+
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content);
+        mContentView.setAdapter(new listaSecciones(cancion.getSecciones()));
 
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View View) {
                 toggle();
             }
         });

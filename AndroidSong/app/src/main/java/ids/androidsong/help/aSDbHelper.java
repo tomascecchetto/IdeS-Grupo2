@@ -20,7 +20,7 @@ import java.io.OutputStream;
 
 public class aSDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "androidSongDB";
     private static String DATABASE_PATH = "/data/user/0/ids.androidsong/databases/";
     private final Context con;

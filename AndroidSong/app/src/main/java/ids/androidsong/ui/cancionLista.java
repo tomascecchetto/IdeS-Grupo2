@@ -45,6 +45,7 @@ public class cancionLista extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    public int itemId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +60,14 @@ public class cancionLista extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (itemId == 0) {
+                    Snackbar.make(view, "Seleccione una canción primero", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
+                intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID,itemId);
+                startActivity(intent);
+                }
             }
         });
         // Show the Up button in the action bar.
@@ -141,17 +148,19 @@ public class cancionLista extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
+                        itemId = holder.mItem.getId();
                         Bundle arguments = new Bundle();
-                        arguments.putString(cancionDetalleFragment.ARG_ITEM_ID, Integer.toString(holder.mItem.getId()));
+                        arguments.putInt(cancionDetalleFragment.ARG_ITEM_ID,
+                                holder.mItem.getId());
                         cancionDetalleFragment fragment = new cancionDetalleFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.cancionmusico_detail_container, fragment)
+                                .add(R.id.cancionmusico_detail_container, fragment)
                                 .commit();
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, cancionDetalle.class);
-                        intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID, Integer.toString(holder.mItem.getId()));
+                        intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID, holder.mItem.getId());
 
                         context.startActivity(intent);
                     }

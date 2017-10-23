@@ -16,7 +16,7 @@ public final class aSDbContract {
         public static final String TABLE_NAME = "Atributos";
         public static final String COLUMN_NAME_ID = "Id";
         public static final String COLUMN_NAME_ITEMID = "itemId";
-        public static final String COLUMN_NAME_NOMBRE = "valor";
+        public static final String COLUMN_NAME_NOMBRE = "nombre";
         public static final String COLUMN_NAME_VALOR = "valor";
 
         public static final String TABLE_CREATE = "CREATE TABLE Atributos (Id INTEGER PRIMARY KEY, itemId INTEGER CONSTRAINT fk_atributosItem REFERENCES Items (Id) NOT NULL, nombre TEXT NOT NULL valor TEXT);";
