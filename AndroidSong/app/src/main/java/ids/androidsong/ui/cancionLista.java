@@ -1,6 +1,8 @@
 package ids.androidsong.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +14,9 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -21,11 +25,12 @@ import android.view.MenuItem;
 
 import ids.androidsong.R;
 
+import ids.androidsong.help.alert;
 import ids.androidsong.object.cancion;
 import ids.androidsong.object.carpeta;
 import ids.androidsong.object.item;
-import ids.androidsong.ui.dummy.DummyContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
@@ -45,7 +50,11 @@ public class cancionLista extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    Context con;
     public int itemId = 0;
+    SimpleItemRecyclerViewAdapter adapter;
+    View recyclerView;
+    Spinner spinnerCarpetas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +69,10 @@ public class cancionLista extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (itemId == 0) {
+                if (itemId == 0)
                     Snackbar.make(view, "Seleccione una canción primero", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
-                } else {
+                else {
                 Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID,itemId);
                 startActivity(intent);
@@ -76,16 +85,13 @@ public class cancionLista extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Spinner spinner = (Spinner)findViewById(R.id.cancion_lista_carpeta);
-        String[] carpetas = (new carpeta()).get().toArray(new String[0]);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item,
-                carpetas);
-        spinner.setAdapter(spinnerArrayAdapter);
+        setupCarpetas();
 
-        View recyclerView = findViewById(R.id.cancion_lista);
+        recyclerView = findViewById(R.id.cancion_lista);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+        registerForContextMenu(recyclerView);
+
 
         if (findViewById(R.id.cancionmusico_detail_container) != null) {
             // The detail container view will be present only in the
@@ -94,6 +100,29 @@ public class cancionLista extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+        con=this;
+    }
+
+    private void setupCarpetas() {
+        spinnerCarpetas = (Spinner)findViewById(R.id.cancion_lista_carpeta);
+        ArrayList<String> carpetas = (new carpeta()).get();
+        carpetas.add("Todas");
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                carpetas);
+        spinnerCarpetas.setAdapter(spinnerArrayAdapter);
+        spinnerCarpetas.setSelection(carpetas.size()-1);
+        spinnerCarpetas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setupRecyclerView((RecyclerView) recyclerView);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -115,7 +144,9 @@ public class cancionLista extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         //Inicializa la lista
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter((new cancion()).get()));
+        adapter = new SimpleItemRecyclerViewAdapter((new cancion()).get(spinnerCarpetas.getSelectedItem().toString()));
+        recyclerView.setAdapter(null);
+        recyclerView.setAdapter(adapter);
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -140,30 +171,54 @@ public class cancionLista extends AppCompatActivity {
         //Une las partes del objeto a la vista
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = canciones.get(position);
-            holder.mIdView.setText(Integer.toString(canciones.get(position).getId()));
-            holder.mContentView.setText(canciones.get(position).getTitle());
+            holder.iTitulo.setText(canciones.get(position).getTitulo());
+            holder.iCarpeta.setText(canciones.get(position).getCarpeta());
 
             // Accion al hacer clic, depende de la pantalla
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        itemId = holder.mItem.getId();
-                        Bundle arguments = new Bundle();
-                        arguments.putInt(cancionDetalleFragment.ARG_ITEM_ID,
-                                holder.mItem.getId());
-                        cancionDetalleFragment fragment = new cancionDetalleFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.cancionmusico_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, cancionDetalle.class);
-                        intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID, holder.mItem.getId());
+                    itemId = holder.mItem.getId();
+                    abrirCancion();
+                }
+            });
 
-                        context.startActivity(intent);
-                    }
+            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    itemId = holder.mItem.getId();
+                    final cancion cancion = new cancion(itemId);
+                    cancion.fill();
+                    final CharSequence[] items = {"Abrir", "Añadir a Favoritos", "Copiar a carpeta", "Mover a carpeta", "Renombrar canción", "Eliminar canción"};
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(con);
+
+                    builder.setTitle(cancion.getTitulo());
+                    builder.setItems(items, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int item) {
+                            switch (item) {
+                                //TODO: Completar acción de Favorito
+                                case 0:
+                                    abrirCancion();
+                                    break;
+                                case 2:
+                                    copiarCancion();
+                                    break;
+                                case 3:
+                                    moverCancion();
+                                    break;
+                                case 4:
+                                    renombrarCancion();
+                                    break;
+                                case 5:
+                                    borrarCancion();
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                    return true;
                 }
             });
         }
@@ -176,21 +231,118 @@ public class cancionLista extends AppCompatActivity {
         // Define la vista
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            public final TextView iTitulo;
+            public final TextView iCarpeta;
             public item mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                iTitulo = (TextView) view.findViewById(R.id.cancion_lista_item_titulo);
+                iCarpeta = (TextView) view.findViewById(R.id.cancion_lista_item_carpeta);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + iTitulo.getText() + "'";
             }
         }
+
+        public void abrirCancion() {
+            if (mTwoPane) {
+                Bundle arguments = new Bundle();
+                arguments.putInt(cancionDetalleFragment.ARG_ITEM_ID,
+                        itemId);
+                cancionDetalleFragment fragment = new cancionDetalleFragment();
+                fragment.setArguments(arguments);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.cancionmusico_detail_container, fragment)
+                        .commit();
+            } else {
+                Context context = con;
+                Intent intent = new Intent(context, cancionDetalle.class);
+                intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID, itemId);
+
+                context.startActivity(intent);
+            }
+        }
+
+        public void copiarCancion() {
+            final cancion cancion = new cancion(itemId);
+            cancion.fill();
+            final Spinner input = new Spinner(con);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(con,android.R.layout.simple_spinner_item,(new carpeta()).get().toArray(new String[0]));
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            input.setAdapter(adapter);
+            alert.SpinnerAlert(con,
+                    input,
+                    new alert.InputRunnable() {
+                        @Override
+                        public void run(String text) throws Exception {
+                            cancion.setCarpeta(text);
+                            cancion.alta();
+                            setupRecyclerView((RecyclerView) recyclerView);
+                        }
+                    },
+                    "Copiar " + cancion.getTitulo() + " a la carpeta:");
+        }
+
+        public void moverCancion() {
+            final cancion cancion = new cancion(itemId);
+            cancion.fill();
+            final Spinner input = new Spinner(con);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(con,android.R.layout.simple_spinner_item,(new carpeta()).get().toArray(new String[0]));
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            input.setAdapter(adapter);
+            alert.SpinnerAlert(con,
+                    input,
+                    new alert.InputRunnable() {
+                        @Override
+                        public void run(String text) throws Exception {
+                            cancion.setCarpeta(text);
+                            cancion.modificacion();
+                            setupRecyclerView((RecyclerView) recyclerView);
+                        }
+                    },
+                    "Mover " + cancion.getTitulo() + " a la carpeta:");
+        }
+
+        protected void renombrarCancion() {
+            final EditText input = new EditText(con);
+            final cancion cancion = new cancion(itemId);
+            cancion.fill();
+            input.setText(cancion.getTitulo());
+            alert.TextViewAlert(con,
+                    input,
+                    new alert.InputRunnable() {
+                        @Override
+                        public void run(String text) throws Exception {
+                            if (text.length() > 0) {
+                                cancion.setTitulo(text);
+                                cancion.modificacion();
+                                setupRecyclerView((RecyclerView) recyclerView);
+                            } else {
+                                throw new Exception("El título no puede estar vacío");
+                            }
+                        }
+                    },
+                    "Renombrar " + cancion.getTitulo());
+
+        }
+
+        private void borrarCancion(){
+            final cancion cancion = new cancion(itemId);
+            cancion.fill();
+            alert.SimpleAlert(con,
+                    new alert.SimpleRunnable(){
+                        @Override
+                        public void run() throws Exception {
+                            cancion.baja();
+                            setupRecyclerView((RecyclerView) recyclerView);
+                        }
+                    },
+                "Eliminar " + cancion.getTitulo());
+        }
+
     }
 }

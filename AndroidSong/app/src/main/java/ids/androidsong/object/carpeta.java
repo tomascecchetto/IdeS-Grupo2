@@ -1,5 +1,6 @@
 package ids.androidsong.object;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.io.IOException;
@@ -21,6 +22,12 @@ public class carpeta {
     private int Id;
     private String nombre;
 
+    public carpeta(String n){
+        this.nombre = n;
+    }
+
+    public carpeta(){}
+
     public int getId() {
         return Id;
     }
@@ -35,6 +42,16 @@ public class carpeta {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public int alta(){
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openWriteDataBase();
+        ContentValues registro = new ContentValues();
+        registro.put(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE, getNombre());
+        int carpetaId = (int) helper.currentDB.insert(aSDbContract.Carpetas.TABLE_NAME, null, registro);
+        helper.currentDB.close();
+        return carpetaId;
     }
 
     public ArrayList<String> get(){
@@ -62,10 +79,26 @@ public class carpeta {
         helper.openWriteDataBase();
         String carpeta = "";
         String[] projection = { aSDbContract.Carpetas.COLUMN_NAME_NOMBRE };
-        Cursor c = helper.currentDB.query(aSDbContract.Carpetas.TABLE_NAME, projection, aSDbContract.Carpetas.COLUMN_NAME_ID + "=" + Integer.toString(id), null, null, null, null);
+        Cursor c = helper.currentDB.query(aSDbContract.Carpetas.TABLE_NAME, projection, aSDbContract.Carpetas.COLUMN_NAME_ID + " = " + Integer.toString(id), null, null, null, null);
         c.moveToFirst();
         carpeta = c.getString(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE));
         c.close();
         return carpeta;
+    }
+
+    public int get(String nombre){
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openWriteDataBase();
+        int carpetaId;
+        String[] projection = { aSDbContract.Carpetas.COLUMN_NAME_ID };
+        Cursor c = helper.currentDB.query(aSDbContract.Carpetas.TABLE_NAME, projection, aSDbContract.Carpetas.COLUMN_NAME_NOMBRE + "=\"" + nombre + "\"", null, null, null, null);
+        if (c.moveToFirst())
+            carpetaId = c.getInt(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_ID));
+        else {
+            setNombre(nombre);
+            carpetaId = alta();
+        }
+        c.close();
+        return carpetaId;
     }
 }

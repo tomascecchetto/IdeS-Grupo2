@@ -8,14 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import ids.androidsong.R;
 import ids.androidsong.adapter.listaSecciones;
-import ids.androidsong.help.App;
 import ids.androidsong.object.cancion;
-import ids.androidsong.ui.dummy.DummyContent;
 
 /**
  * A fragment representing a single cancionMusico detail screen.
@@ -42,7 +38,7 @@ public class cancionDetalleFragment extends Fragment {
      */
     public cancionDetalleFragment() {
         if (appBarLayout != null) {
-            appBarLayout.setTitle(cancion.getTitle());
+            appBarLayout.setTitle(cancion.getTitulo());
         }
     }
 
@@ -60,7 +56,7 @@ public class cancionDetalleFragment extends Fragment {
             Activity activity = this.getActivity();
             appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(cancion.getTitle());
+                appBarLayout.setTitle(cancion.getTitulo());
             }
         }
     }
@@ -75,4 +71,5 @@ public class cancionDetalleFragment extends Fragment {
         secciones.setAdapter(new listaSecciones(cancion.getSecciones()));
         return rootView;
     }
+
 }

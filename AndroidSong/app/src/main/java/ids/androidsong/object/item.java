@@ -6,13 +6,8 @@ import android.support.annotation.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import ids.androidsong.help.App;
-import ids.androidsong.help.Enum;
 import ids.androidsong.help.aSDbContract;
 import ids.androidsong.help.aSDbHelper;
 
@@ -22,16 +17,24 @@ import ids.androidsong.help.aSDbHelper;
  */
 
 public class item {
-    private int Id;
-    private String carpeta;
-    private String tipo;
-    private String title;
+    protected int Id;
+    protected String carpeta;
+    protected int carpetaId;
+    protected String tipo;
+    protected String titulo;
     private ArrayList<seccion> secciones = new ArrayList<>();
     private ArrayList<atributo> atributos = new ArrayList<>();
+    protected final String FILTRO_CARPETA_TODAS = "Todas";
+
+    public item(int i, String t, int c){
+        this.Id = i;
+        this.titulo = t;
+        this.carpetaId = c;
+    }
 
     public item(int i, String t){
         this.Id = i;
-        this.title = t;
+        this.titulo = t;
     }
 
     public item(int i){
@@ -49,6 +52,8 @@ public class item {
     }
 
     public String getCarpeta() {
+        if (carpeta == null)
+            carpeta = new carpeta().get(carpetaId);
         return carpeta;
     }
 
@@ -64,12 +69,12 @@ public class item {
         this.tipo = tipo;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public ArrayList<seccion> getSecciones() {
@@ -94,9 +99,10 @@ public class item {
         helper.openWriteDataBase();
 
         ContentValues registro = new ContentValues();
-        registro.put(aSDbContract.Items.COLUMN_NAME_TITULO, getTitle());
+        registro.put(aSDbContract.Items.COLUMN_NAME_TITULO, getTitulo());
         registro.put(aSDbContract.Items.COLUMN_NAME_TIPO, tipo);
-        //TODO: Agregar la carpeta
+        registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID,
+                (new carpeta()).get(getCarpeta()));
         setId((int)helper.currentDB.insert(aSDbContract.Items.TABLE_NAME, null, registro));
         helper.currentDB.close();
 
@@ -123,6 +129,19 @@ public class item {
         return item;
     }
 
+    public void fillId(){
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openWriteDataBase();
+        String filter = aSDbContract.Items.COLUMN_NAME_TITULO + "=\"" + getTitulo() + "\" AND " +
+                aSDbContract.Items.COLUMN_NAME_CARPETAID + "=" + new carpeta().get(getCarpeta());
+        Cursor c = helper.currentDB.query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, null);
+        if (c.moveToFirst())
+            setId(c.getInt(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_ID)));
+        else
+            setId(0);
+        c.close();
+    }
+
     public void fill(){
         aSDbHelper helper = new aSDbHelper(App.getContext());
         try {
@@ -135,13 +154,19 @@ public class item {
         String filter = aSDbContract.Items.COLUMN_NAME_ID + "=" + Integer.toString(getId());
         Cursor c = helper.currentDB.query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
         c.moveToFirst();
-        setTitle(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TITULO)));
+        setTitulo(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TITULO)));
         setTipo(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TIPO)));
+        setCarpeta((new carpeta()).get(c.getInt(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_CARPETAID))));
         setSecciones(new seccion().get(this));
         setAtributos(new atributo().get(this));
     }
 
-    public ArrayList<item> get(String tipo){
+    protected ArrayList<item> get(String tipo){
+        return getByCarpeta(tipo,FILTRO_CARPETA_TODAS);
+    }
+
+    @NonNull
+    protected ArrayList<item> getByCarpeta(String tipo, String carpeta) {
         aSDbHelper helper = new aSDbHelper(App.getContext());
         try {
             helper.createDataBase();
@@ -151,17 +176,45 @@ public class item {
         }
         ArrayList<item> items = new ArrayList<>();
         String sortOrder = aSDbContract.Items.COLUMN_NAME_TITULO + " ASC";
-        //TODO: Agregar filtro por carpeta y excepción para "Todas"
-        String filter = aSDbContract.Items.COLUMN_NAME_TIPO + "= \"" + tipo + "\"";
+        String filter;
+        if (carpeta.equals(FILTRO_CARPETA_TODAS)) {
+            filter = aSDbContract.Items.COLUMN_NAME_TIPO + "= \"" + tipo + "\"";
+        } else {
+            filter = aSDbContract.Items.COLUMN_NAME_TIPO + "= \"" + tipo + "\" AND " + aSDbContract.Items.COLUMN_NAME_CARPETAID + "=" + (new carpeta().get(carpeta));
+        }
         Cursor c = helper.currentDB.query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
         if (c.moveToFirst()) {
         do {
             items.add(new item(
                     c.getInt(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_ID)),
-                    c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TITULO))
+                    c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TITULO)),
+                    c.getInt(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_CARPETAID))
             ));
         } while (c.moveToNext());
         }
+        c.close();
         return items;
+    }
+
+    public void modificacion() {
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openWriteDataBase();
+
+        ContentValues registro = new ContentValues();
+        registro.put(aSDbContract.Items.COLUMN_NAME_TITULO, getTitulo());
+        registro.put(aSDbContract.Items.COLUMN_NAME_TIPO, tipo);
+        registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID,
+                (new carpeta()).get(getCarpeta()));
+        helper.currentDB.update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
+        helper.currentDB.close();
+    }
+
+    public void baja() {
+
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openWriteDataBase();
+
+        helper.currentDB.delete(aSDbContract.Items.TABLE_NAME, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
+        helper.currentDB.close();
     }
 }

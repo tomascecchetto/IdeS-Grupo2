@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,14 +14,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import ids.androidsong.R;
 import ids.androidsong.help.App;
+import ids.androidsong.help.aSDbContract;
+import ids.androidsong.help.alert;
+import ids.androidsong.help.directorios;
+import ids.androidsong.help.permisos;
+import ids.androidsong.object.cancion;
+import ids.androidsong.object.cancionCabecera;
+import ids.androidsong.object.cancionXml;
+import ids.androidsong.object.opciones;
 
 public class principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     protected Context con = this;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +58,33 @@ public class principal extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        leerOpciones();
+        permisos.solicitar(this);
+    }
+
+    private void leerOpciones() {
+        Menu menu=navigationView.getMenu();
+        Switch switchAcordes =(Switch) MenuItemCompat.getActionView(menu.findItem(R.id.switch_acordes)).findViewById(R.id.mostrar_acordes_switch);
+        try {
+            boolean value = (new opciones()).getBool(aSDbContract.Opciones.OPT_NAME_MOSTRARACORDES);
+            switchAcordes.setChecked(value);
+        } catch (Exception e) {
+            alert.SimpleErrorAlert(con,e.getMessage());
+        }
+        switchAcordes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                opciones opcion = new opciones(aSDbContract.Opciones.OPT_NAME_MOSTRARACORDES,Boolean.toString(isChecked));
+                try {
+                    opcion.modificacion();
+                } catch (Exception e) {
+                    alert.SimpleErrorAlert(con,e.getMessage());
+                }
+            }
+        });
     }
 
     private void abrirCanciones() {
@@ -57,6 +94,11 @@ public class principal extends AppCompatActivity
 
     private void abrirCancionNueva() {
         Intent intent = new Intent(con,nuevaCancion.class);
+        startActivity(intent);
+    }
+
+    private void abrirImportador() {
+        Intent intent = new Intent(con,importador.class);
         startActivity(intent);
     }
 
@@ -102,8 +144,8 @@ public class principal extends AppCompatActivity
             abrirCanciones();
         } else if (id == R.id.nav_newSong) {
             abrirCancionNueva();
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_import) {
+            abrirImportador();
         } else if (id == R.id.nav_manage) {
 
         }
@@ -113,34 +155,12 @@ public class principal extends AppCompatActivity
         return true;
     }
 
-    /*public void testDBread(View view){
-        aSDbHelper helper = new aSDbHelper(con);
-        try {
-            helper.createDataBase();
-            helper.openWriteDataBase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        TextView v = (TextView)findViewById(R.id.testview);
-        ContentValues value = new ContentValues();
-        value.put(aSDbContract.Carpetas.COLUMN_NAME_ID,1);
-        value.put(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE,"Coros");
-        long id = helper.currentDB.insert(aSDbContract.Carpetas.TABLE_NAME,null,value);
-        v.setText(String.valueOf(id));
-        String[] projection = {
-                aSDbContract.Carpetas.COLUMN_NAME_NOMBRE
-        };
-        Cursor c = helper.currentDB.query(
-                aSDbContract.Carpetas.TABLE_NAME,                     // The table to query
-                projection,                               // The columns to return
-                "id > 0",                                // The columns for the WHERE clause
-                null,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                 // The sort order
-        );
-        c.moveToFirst();
-        v.setText(c.getString(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE)));
-        c.close();
-    }*/
+    private void testMethod(){
+        cancionXml[] canciones = directorios.generarListaCanciones();
+        cancionXml cancion = canciones[8];
+        cancion.load();
+        cancion.alta();
+        int algo = canciones.length;
+    }
+
 }

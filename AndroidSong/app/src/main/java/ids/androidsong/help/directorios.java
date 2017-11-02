@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import ids.androidsong.R;
-import ids.androidsong.object.cancionCabecera;
+import ids.androidsong.object.cancionXml;
 import ids.androidsong.object.setCabecera;
 
 import static ids.androidsong.help.xml.*;
@@ -86,12 +86,12 @@ public class directorios {
         return sets;
     }
 
-    public static cancionCabecera[] generarListaCanciones (){
+    public static cancionXml[] generarListaCanciones (){
         return generarListaCanciones(AllFolders);
     }
 
-    private static ArrayList<cancionCabecera> getCabeceras(File[] archivos, String carpetaSeleccionada){
-        ArrayList<cancionCabecera> resultado = new ArrayList<cancionCabecera>();
+    private static ArrayList<cancionXml> getCabeceras(File[] archivos, String carpetaSeleccionada){
+        ArrayList<cancionXml> resultado = new ArrayList<cancionXml>();
         String ultimaCarpeta;
         try {
             for (File archivo : archivos){
@@ -103,26 +103,26 @@ public class directorios {
                                 ultimaCarpeta = getUltimaCarpeta(archivo.getAbsolutePath());
                                 ultimaCarpeta = ultimaCarpeta.equals(SongsFolder) ? MainFolder : ultimaCarpeta;
                                 if (carpetaSeleccionada.equalsIgnoreCase(AllFolders) || carpetaSeleccionada.equalsIgnoreCase(ultimaCarpeta)) {
-                                    resultado.add(new cancionCabecera(archivo.getName(), archivo.getAbsolutePath(), ultimaCarpeta));
+                                    resultado.add(new cancionXml(archivo.getName(), archivo.getAbsolutePath(), ultimaCarpeta));
                         }
                     }
                 }
             }
         }
         catch (Exception e){
-            resultado = new ArrayList<cancionCabecera>();
-            resultado.add(new cancionCabecera(e.getMessage(),"Error al parsear",""));
+            resultado = new ArrayList<cancionXml>();
+            resultado.add(new cancionXml(e.getMessage(),"Error al parsear",""));
         }
         return resultado;
     }
 
-    public static cancionCabecera[] generarListaCanciones (String carpeta){
-        ArrayList<cancionCabecera> temp = getCabeceras(archivos,carpeta);
-        cancionCabecera[] canciones = temp.toArray(new cancionCabecera[temp.size()]);
+    public static cancionXml[] generarListaCanciones (String carpeta){
+        ArrayList<cancionXml> temp = getCabeceras(archivos,carpeta);
+        cancionXml[] canciones = temp.toArray(new cancionXml[temp.size()]);
         try {
-            Arrays.sort(canciones, new Comparator<cancionCabecera>() {
+            Arrays.sort(canciones, new Comparator<cancionXml>() {
                 @Override
-                public int compare(final cancionCabecera entry1, final cancionCabecera entry2) {
+                public int compare(final cancionXml entry1, final cancionXml entry2) {
                     final String cancion1 = entry1.getTitulo();
                     final String cancion2 = entry2.getTitulo();
                     return cancion1.compareTo(cancion2);
@@ -130,7 +130,7 @@ public class directorios {
             });
         }
         catch (Exception e){
-            return  new cancionCabecera[]{new cancionCabecera(e.getMessage(),"Error al Ordenar","")};
+            return  new cancionXml[]{new cancionXml(e.getMessage(),"Error al Ordenar","")};
         }
         return canciones;
     }
@@ -142,13 +142,13 @@ public class directorios {
         return path.substring(i+1,f);
     }
 
-    public static cancionCabecera[] generarListaFavoritos() {
-        ArrayList<cancionCabecera> temp = generarListaFavorito();
-        cancionCabecera[] favoritos = temp.toArray(new cancionCabecera[temp.size()]);
+    /*public static cancionXml[] generarListaFavoritos() {
+        ArrayList<cancionXml> temp = generarListaFavorito();
+        cancionXml[] favoritos = temp.toArray(new cancionXml[temp.size()]);
         try {
-            Arrays.sort(favoritos, new Comparator<cancionCabecera>() {
+            Arrays.sort(favoritos, new Comparator<cancionXml>() {
                 @Override
-                public int compare(final cancionCabecera entry1, final cancionCabecera entry2) {
+                public int compare(final cancionXml entry1, final cancionXml entry2) {
                     final String cancion1 = entry1.getTitulo();
                     final String cancion2 = entry2.getTitulo();
                     return cancion1.compareTo(cancion2);
@@ -156,26 +156,26 @@ public class directorios {
             });
         }
         catch (Exception e){
-            return  new cancionCabecera[]{new cancionCabecera(e.getMessage(),"","Error al Ordenar")};
+            return  new cancionXml[]{new cancionXml(e.getMessage(),"","Error al Ordenar")};
         }
         return favoritos;
     }
 
-    private static ArrayList<cancionCabecera> generarListaFavorito() {
-        ArrayList<cancionCabecera> canciones = new ArrayList<cancionCabecera>();
+    private static ArrayList<cancionXml> generarListaFavorito() {
+        ArrayList<cancionXml> canciones = new ArrayList<cancionXml>();
         Document fs = GetInternalDocument("favoritos.xml");
         Element[] f = GetChilds("fav",fs);
         for (Element e:f){
-            canciones.add(new cancionCabecera(GetValue(e,"titulo"),GetValue(e,"dir"),GetValue(e,"carpeta")));
+            canciones.add(new cancionXml(GetValue(e,"titulo"),GetValue(e,"dir"),GetValue(e,"carpeta")));
         }
         if (canciones.size()==0){
-            canciones.add(new cancionCabecera("Aww! No hay Favoritos =(","",""));
-            canciones.add(new cancionCabecera("Hay que agregarlos desde la lista ;-)","",""));
+            canciones.add(new cancionXml("Aww! No hay Favoritos =(","",""));
+            canciones.add(new cancionXml("Hay que agregarlos desde la lista ;-)","",""));
         }
         return canciones;
     }
 
-    public static void addFavorito(cancionCabecera fav){
+    public static void addFavorito(cancionXml fav){
         Document fs = GetInternalDocument("favoritos.xml");
         Element f = fs.getDocumentElement();
         try{
@@ -194,7 +194,7 @@ public class directorios {
         }
     }
 
-    public static void removeFavorito(cancionCabecera fav){
+    public static void removeFavorito(cancionXml fav){
         Document fs = GetInternalDocument("favoritos.xml");
         Element f = fs.getDocumentElement();
         try{
@@ -209,5 +209,5 @@ public class directorios {
             String tmp = e.getMessage();
             tmp = e.getLocalizedMessage();
         }
-    }
+    }*/
 }

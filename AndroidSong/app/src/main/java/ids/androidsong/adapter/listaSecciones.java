@@ -1,8 +1,10 @@
 package ids.androidsong.adapter;
 
 import android.app.Activity;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ public class listaSecciones  extends RecyclerView.Adapter<listaSecciones.ViewHol
 {
     Activity contexto;
     ArrayList<seccion> lista;
+    int fontSize = 18;
 
     public listaSecciones(ArrayList<seccion> secciones) {
         lista = secciones;
@@ -94,6 +97,15 @@ public class listaSecciones  extends RecyclerView.Adapter<listaSecciones.ViewHol
         return title;
     }
 
+    private int getTextSize(seccion item, View view){
+        int width = view.getMeasuredWidth();
+        int slong;
+        slong = width/item.maxCaracteres()*9/5;
+
+        return slong;
+    }
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -107,7 +119,13 @@ public class listaSecciones  extends RecyclerView.Adapter<listaSecciones.ViewHol
         holder.seccion = lista.get(position);
         holder.titulo.setText(getTitulo(lista.get(position).getNombre()));
         holder.nombre.setText(lista.get(position).getNombre());
-        holder.contenido.setText(lista.get(position).getContenido());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            holder.contenido.setText(Html.fromHtml(lista.get(position).getFormateado(), Html.FROM_HTML_MODE_COMPACT));
+        else
+            holder.contenido.setText(Html.fromHtml(lista.get(position).getFormateado()));
+//        int preferedSize = getTextSize(holder.seccion,holder.mView);
+//        fontSize = preferedSize < fontSize ? preferedSize : fontSize;
+//        holder.contenido.setTextSize(2,fontSize);
     }
 
     @Override

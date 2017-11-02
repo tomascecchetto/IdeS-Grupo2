@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import ids.androidsong.R;
+import ids.androidsong.object.cancion;
 import ids.androidsong.object.cancionCabecera;
 
 
@@ -61,13 +62,13 @@ public class alert {
         alert.show();
     }
 
-    public static void SimpleAlert (final Context context, final SimpleRunnable aceptar, String title, final cancionCabecera cancion) {
+    public static void SimpleAlert (final Context context, final SimpleRunnable aceptar, String title) {
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle(title);
         alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 try {
-                    aceptar.run(cancion);
+                    aceptar.run();
                 } catch (Exception e) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
                     alert.setTitle(R.string.ErrorGenerico);
@@ -83,12 +84,19 @@ public class alert {
         alert.show();
     }
 
+    public static void SimpleErrorAlert (final Context context, String message) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle(R.string.ErrorGenerico);
+        alert.setMessage(message);
+        alert.show();
+    }
+
     public interface InputRunnable {
         void run(String text) throws Exception;
     }
 
     public interface SimpleRunnable {
-        void run(cancionCabecera fav) throws Exception;
+        void run() throws Exception;
     }
 
 }

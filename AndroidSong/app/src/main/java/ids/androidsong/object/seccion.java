@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 
 import ids.androidsong.help.App;
@@ -57,6 +59,16 @@ public class seccion {
 
     public String getContenido() {
         return contenido;
+    }
+
+    public String getFormateado() {
+        boolean acordes = false;
+        try {
+            acordes = new opciones().getBool(aSDbContract.Opciones.OPT_NAME_MOSTRARACORDES);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return formatearContenido(acordes);
     }
 
     public void setContenido(String contenido) {
@@ -116,5 +128,55 @@ public class seccion {
         } while (c.moveToNext());
         c.close();
         return secciones;
+    }
+
+    public String formatearContenido (boolean chords) {
+        String formated = "";
+        StringReader reader = new StringReader(contenido);
+        BufferedReader br = new BufferedReader(reader);
+        String linea;
+        try
+        {
+            while ((linea = br.readLine()) != null) if (linea.length() > 0) {
+                Character caracter = linea.charAt(0);
+                switch (caracter) {
+                    case '.':
+                        if (chords) {
+                            linea = linea.replaceAll(" ", "&nbsp;");
+                            formated += "<b>" + linea.substring(1) + "</b><br/>";
+                        }
+                        break;
+                    case ' ':
+                        if (linea.length() > 2) {
+                            formated += linea.substring(1) + "<br/>";
+                        } else {
+                            formated += linea + "&nbsp;<br/>";
+                        }
+                        break;
+                    default:
+                        formated += linea + "<br/>";
+                        break;
+                }
+            } else {
+                formated += "<br/>";
+            }
+        }
+        catch (Exception e){
+            formated += "Error al cargar.<br/>";
+        }
+        return formated;
+    }
+
+    public int maxCaracteres(){
+        BufferedReader textReader = new BufferedReader(new StringReader(contenido));
+        int i = 0;
+        String linea = "";
+        try {
+            while ((linea = textReader.readLine()) != null) {
+                i = linea.length() > i ? linea.length() : i;
+            }
+        }
+        catch (Exception e) {}
+        return i;
     }
 }

@@ -69,6 +69,13 @@ public final class aSDbContract {
         public static final String COLUMN_NAME_TIPO = "tipo";
         public static final String COLUMN_NAME_VALOR = "valor";
 
+        public static final String OPT_NAME_MOSTRARACORDES = "mostrarAcordes";
+        public static final String OPT_NAME_IMPORTPATH = "importPath";
+        public static final String OPT_NAME_IMPORTOVERRIDE = "importOverride";
+
+        public static final String OPT_TYPE_BOOL = "bool";
+        public static final String OPT_TYPE_TEXT = "text";
+
         public static final String TABLE_CREATE = "CREATE TABLE Opciones (nombre CHAR (20) PRIMARY KEY ON CONFLICT REPLACE, tipo CHAR (3) NOT NULL, valor CHAR (20));";
         public static final String TABLE_DROP = "DROP TABLE IF EXISTS Opciones;";
         public static final String TABLE_INIT = "INSERT INTO Opciones (nombre, tipo, valor) VALUES ('mostrarAcordes', 'bool', 'true');";

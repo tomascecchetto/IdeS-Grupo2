@@ -81,6 +81,10 @@ public class cancion extends item implements Serializable {
         return super.get(Enum.itemTipo.CANCION.name());
     }
 
+    public ArrayList<item> get(String carpeta){
+        return getByCarpeta(Enum.itemTipo.CANCION.name(),carpeta);
+    }
+
     public void alta(){
         super.alta(Enum.itemTipo.CANCION.name());
     }
