@@ -28,6 +28,7 @@ import ids.androidsong.R;
 import ids.androidsong.help.alert;
 import ids.androidsong.object.cancion;
 import ids.androidsong.object.carpeta;
+import ids.androidsong.object.coleccion;
 import ids.androidsong.object.item;
 
 import java.util.ArrayList;
@@ -202,6 +203,9 @@ public class cancionLista extends AppCompatActivity {
                                 case 0:
                                     abrirCancion();
                                     break;
+                                case 1:
+                                    agregarFavorito();
+                                    break;
                                 case 2:
                                     copiarCancion();
                                     break;
@@ -344,5 +348,12 @@ public class cancionLista extends AppCompatActivity {
                 "Eliminar " + cancion.getTitulo());
         }
 
+        private void agregarFavorito() {
+            new coleccion(0).addItem(itemId);
+            Snackbar.make(recyclerView, "Añadido a Favoritos", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
+
+
 }

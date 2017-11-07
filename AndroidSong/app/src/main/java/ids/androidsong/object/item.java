@@ -3,6 +3,7 @@ package ids.androidsong.object;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.text.format.Time;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +11,9 @@ import java.util.ArrayList;
 import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
 import ids.androidsong.help.aSDbHelper;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by ALAN on 01/10/2017.
@@ -19,7 +23,7 @@ import ids.androidsong.help.aSDbHelper;
 public class item {
     protected int Id;
     protected String carpeta;
-    protected int carpetaId;
+    private int carpetaId;
     protected String tipo;
     protected String titulo;
     private ArrayList<seccion> secciones = new ArrayList<>();
@@ -98,17 +102,23 @@ public class item {
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
 
+        int carpeta = (new carpeta()).get(getCarpeta());
+        String modificacion = new GregorianCalendar().getTime().toString();
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Items.COLUMN_NAME_TITULO, getTitulo());
         registro.put(aSDbContract.Items.COLUMN_NAME_TIPO, tipo);
-        registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID,
-                (new carpeta()).get(getCarpeta()));
+        registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID, carpeta);
+        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, modificacion);
+
+        new driveStatus(getId(), modificacion, null).alta();
         setId((int)helper.currentDB.insert(aSDbContract.Items.TABLE_NAME, null, registro));
         helper.currentDB.close();
 
         for (atributo a: atributos) { a.alta(this); }
 
         for (seccion s: secciones) { s.alta(this); }
+
+
     }
 
     public item get(item item){
@@ -200,11 +210,13 @@ public class item {
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
 
+        int carpeta = (new carpeta()).get(getCarpeta());
+        String modificacion = new GregorianCalendar().getTime().toString();
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Items.COLUMN_NAME_TITULO, getTitulo());
         registro.put(aSDbContract.Items.COLUMN_NAME_TIPO, tipo);
-        registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID,
-                (new carpeta()).get(getCarpeta()));
+        registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID, carpeta);
+        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, modificacion);
         helper.currentDB.update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
         helper.currentDB.close();
     }
@@ -214,7 +226,11 @@ public class item {
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
 
+        new driveStatus(getId()).bajaLocal();
+
         helper.currentDB.delete(aSDbContract.Items.TABLE_NAME, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
         helper.currentDB.close();
+
+
     }
 }

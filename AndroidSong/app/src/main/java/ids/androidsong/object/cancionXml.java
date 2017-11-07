@@ -40,17 +40,23 @@ public class cancionXml extends cancion {
     protected String time_sig = "";
     protected String lyrics = "";
 
+    public cancionXml(){
+
+    }
+
     public cancionXml(String t, String p, String c){
         this.titulo = t;
         this.path = p;
         this.carpeta = c;
     }
 
-    public void load(){
+    @Override
+    public void fill(){
         Document dom;
         try {
             dom = getDocument();
             BuildCancion(dom);
+            fillId();
         } catch (Exception e) {
             GetCancionError();
         }
@@ -70,7 +76,7 @@ public class cancionXml extends cancion {
         lyrics = "Error al cargar la canción";
     }
 
-    private Document getDocument()
+    protected Document getDocument()
             throws ParserConfigurationException, SAXException, IOException {
         InputStream is = new FileInputStream(new File(path));
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

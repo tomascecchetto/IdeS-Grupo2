@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView android:id = "@+id/favoritos_lista_item_titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Titulo"
+        android:textColor="#FFFFFF"
+        android:gravity="start"
+        android:textSize="18sp">
+    </TextView>
+    <TextView android:id = "@+id/favoritos_lista_item_carpeta"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:text="Carpeta"
+        android:textColor="#FFFFFF"
+        android:gravity="end"
+        android:textSize="16sp">
+    </TextView>
+</LinearLayout>

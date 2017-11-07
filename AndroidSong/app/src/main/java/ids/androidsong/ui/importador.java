@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -21,8 +22,11 @@ import ids.androidsong.R;
 import ids.androidsong.help.aSDbContract;
 import ids.androidsong.help.alert;
 import ids.androidsong.help.importar;
+import ids.androidsong.help.permisos;
 import ids.androidsong.object.cancionXml;
 import ids.androidsong.object.opciones;
+
+import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
 public class importador extends AppCompatActivity {
 
@@ -39,6 +43,7 @@ public class importador extends AppCompatActivity {
         con = this;
         path = (TextView) findViewById(R.id.importar_text_path);
         ToggleButton sobreescribir = (ToggleButton) findViewById(R.id.importar_button_override);
+        permisos.solicitar(this);
         try {
             path.setText(new opciones().getString(aSDbContract.Opciones.OPT_NAME_IMPORTPATH,importar.defaultPath));
             sobreescritura=new opciones().getBool(aSDbContract.Opciones.OPT_NAME_IMPORTOVERRIDE);
@@ -73,6 +78,16 @@ public class importador extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void changePath(View view){
@@ -110,8 +125,7 @@ public class importador extends AppCompatActivity {
                     canciones) {
                 isCancelled();
                 try {
-                    cancion.load();
-                    cancion.fillId();
+                    cancion.fill();
                     if (cancion.getId() > 0){
                         if (sobreescritura) {
                             cancion.modificacion();

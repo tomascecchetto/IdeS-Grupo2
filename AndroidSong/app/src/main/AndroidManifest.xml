@@ -64,7 +64,13 @@
         </activity>
         <activity
             android:name=".ui.importador"
+            android:parentActivityName=".ui.principal"
             android:label="@string/title_activity_importador"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.sincronizador"
+            android:parentActivityName=".ui.principal"
+            android:label="@string/title_activity_sincronizar"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

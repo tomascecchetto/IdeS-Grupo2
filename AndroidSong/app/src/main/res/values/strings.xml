@@ -20,4 +20,5 @@
     <string name="hint_editar_cancion">Inicia con un \'.\' para lineas de acordes, o usa el botón \'[S]\' para dividir secciones/estrofas.</string>
     <string name="nueva_cancion_guardar">Guardar</string>
     <string name="title_activity_importador">Importar</string>
+    <string name="title_activity_sincronizar">Sincronizar con Drive</string>
 </resources>

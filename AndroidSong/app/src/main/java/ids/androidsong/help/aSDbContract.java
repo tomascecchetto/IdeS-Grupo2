@@ -37,6 +37,8 @@ public final class aSDbContract {
         public static final String TABLE_NAME = "Colecciones";
         public static final String COLUMN_NAME_ID = "Id";
         public static final String COLUMN_NAME_NOMBRE = "nombre";
+        public static final String COLUMN_NAME_FECHABAJA = "fechabaja";
+        public static final String COLUMN_NAME_FECHAMODIFICACION = "fechamodificacion";
 
         public static final String TABLE_CREATE = "CREATE TABLE Colecciones (Id INTEGER PRIMARY KEY, nombre CHAR (50) NOT NULL);";
         public static final String TABLE_DROP = "DROP TABLE IF EXISTS Colecciones;";
@@ -48,6 +50,8 @@ public final class aSDbContract {
         public static final String COLUMN_NAME_CARPETAID = "carpetaId";
         public static final String COLUMN_NAME_TIPO = "tipo";
         public static final String COLUMN_NAME_TITULO = "titulo";
+        public static final String COLUMN_NAME_FECHABAJA = "fechabaja";
+        public static final String COLUMN_NAME_FECHAMODIFICACION = "fechamodificacion";
 
         public static final String TABLE_CREATE = "CREATE TABLE Items (Id INTEGER PRIMARY KEY NOT NULL, carpetaId CONSTRAINT fk_itemsCarpetas REFERENCES Carpetas (Id) NOT NULL DEFAULT (0), tipo CHAR (10) NOT NULL, titulo TEXT NOT NULL);";
         public static final String TABLE_DROP = "DROP TABLE IF EXISTS Items;";
@@ -72,6 +76,8 @@ public final class aSDbContract {
         public static final String OPT_NAME_MOSTRARACORDES = "mostrarAcordes";
         public static final String OPT_NAME_IMPORTPATH = "importPath";
         public static final String OPT_NAME_IMPORTOVERRIDE = "importOverride";
+        public static final String OPT_NAME_SYNCPATH = "synctPath";
+        public static final String OPT_NAME_SYNCOVERRIDE = "syncOverride";
 
         public static final String OPT_TYPE_BOOL = "bool";
         public static final String OPT_TYPE_TEXT = "text";
@@ -90,5 +96,12 @@ public final class aSDbContract {
 
         public static final String TABLE_CREATE = "CREATE TABLE Secciones (Id INTEGER PRIMARY KEY, itemId INTEGER CONSTRAINT fk_seccionesItem REFERENCES Items (Id), nombre CHAR (3) DEFAULT V1 NOT NULL, contenido TEXT);";
         public static final String TABLE_DROP = "DROP TABLE IF EXISTS Secciones;";
+    }
+
+    public static class DriveStatus implements BaseColumns {
+        public static final String TABLE_NAME = "DriveStatus";
+        public static final String COLUMN_NAME_ITEMID = "itemId";
+        public static final String COLUMN_NAME_LOCALDT = "localDT";
+        public static final String COLUMN_NAME_DRIVEDT = "driveDT";
     }
 }

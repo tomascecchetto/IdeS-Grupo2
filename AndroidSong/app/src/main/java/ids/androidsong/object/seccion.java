@@ -164,6 +164,8 @@ public class seccion {
         catch (Exception e){
             formated += "Error al cargar.<br/>";
         }
+        if (getNombre().charAt(0) == 'C')
+            formated = "<i>" + formated + "</i>";
         return formated;
     }
 

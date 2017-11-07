@@ -67,6 +67,8 @@ public class cancion extends item implements Serializable {
                     }
                 }
             }
+            if (seccion.getNombre().equals(""))
+                seccion.setNombre("V1");
             seccion.setContenido(contenido);
             this.getSecciones().add(seccion);
         }

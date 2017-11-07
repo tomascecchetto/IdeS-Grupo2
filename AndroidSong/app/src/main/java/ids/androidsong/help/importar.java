@@ -14,6 +14,7 @@ import ids.androidsong.object.opciones;
 
 /**
  * Created by ALAN on 01/11/2017.
+ * Clase que gestiona la busqueda y carga de canciones desde disco
  */
 
 public class importar {
@@ -41,20 +42,20 @@ public class importar {
     }
 
     private ArrayList<cancionXml> getCabeceras(File[] archivos){
-        ArrayList<cancionXml> resultado = new ArrayList<cancionXml>();
-        String ultimaCarpeta;
-        try {
-            for (File archivo : archivos){
-                if (archivo.isDirectory()){
-                    resultado.addAll(getCabeceras(archivo.listFiles()));
-                }
-                else {
-                    if (!(".".contains(archivo.getName().subSequence(0,1)))){
-                        ultimaCarpeta = getUltimaCarpeta(archivo.getAbsolutePath());
-                        resultado.add(new cancionXml(archivo.getName(), archivo.getAbsolutePath(), ultimaCarpeta));
+                ArrayList<cancionXml> resultado = new ArrayList<cancionXml>();
+                String ultimaCarpeta;
+                try {
+                    for (File archivo : archivos){
+                        if (archivo.isDirectory()){
+                            resultado.addAll(getCabeceras(archivo.listFiles()));
+                        }
+                        else {
+                            if (!(".".contains(archivo.getName().subSequence(0,1)))){
+                                ultimaCarpeta = getUltimaCarpeta(archivo.getAbsolutePath());
+                                resultado.add(new cancionXml(archivo.getName(), archivo.getAbsolutePath(), ultimaCarpeta));
+                            }
+                        }
                     }
-                }
-            }
         }
         catch (Exception e){
             resultado = new ArrayList<>();

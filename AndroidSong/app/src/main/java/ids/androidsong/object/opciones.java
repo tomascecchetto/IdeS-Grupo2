@@ -107,6 +107,10 @@ public class opciones {
             setNombre(c.getString(c.getColumnIndex(aSDbContract.Opciones.COLUMN_NAME_NOMBRE)));
             setTipo(c.getString(c.getColumnIndex(aSDbContract.Opciones.COLUMN_NAME_TIPO)));
             setValor(c.getString(c.getColumnIndex(aSDbContract.Opciones.COLUMN_NAME_VALOR)));
+            if (getValor().equals("")){
+                setValor(defaultValue);
+                modificacion();
+            }
         } else {
             setNombre(nombre);
             setTipo(aSDbContract.Opciones.OPT_TYPE_TEXT);
