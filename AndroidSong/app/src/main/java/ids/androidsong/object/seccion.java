@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
 import ids.androidsong.help.aSDbHelper;
+import ids.androidsong.help.tonalidad;
 
 import static ids.androidsong.help.App.getContext;
 
@@ -61,14 +62,18 @@ public class seccion {
         return contenido;
     }
 
-    public String getFormateado() {
+    public String getFormateado(int capo) {
         boolean acordes = false;
         try {
             acordes = new opciones().getBool(aSDbContract.Opciones.OPT_NAME_MOSTRARACORDES);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return formatearContenido(acordes);
+        return formatearContenido(acordes, capo);
+    }
+
+    public String getFormateado() {
+        return getFormateado(0);
     }
 
     public void setContenido(String contenido) {
@@ -130,7 +135,7 @@ public class seccion {
         return secciones;
     }
 
-    public String formatearContenido (boolean chords) {
+    public String formatearContenido (boolean chords, int capo) {
         String formated = "";
         StringReader reader = new StringReader(contenido);
         BufferedReader br = new BufferedReader(reader);
@@ -142,6 +147,7 @@ public class seccion {
                 switch (caracter) {
                     case '.':
                         if (chords) {
+                            linea = tonalidad.getLineaTonos(linea, capo);
                             linea = linea.replaceAll(" ", "&nbsp;");
                             formated += "<b>" + linea.substring(1) + "</b><br/>";
                         }

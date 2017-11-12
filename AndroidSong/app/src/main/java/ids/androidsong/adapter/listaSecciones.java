@@ -11,10 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import ids.androidsong.R;
+import ids.androidsong.help.tonalidad;
 import ids.androidsong.object.cancion;
 import ids.androidsong.object.cancionCabecera;
 import ids.androidsong.object.item;
@@ -29,48 +32,14 @@ public class listaSecciones  extends RecyclerView.Adapter<listaSecciones.ViewHol
 {
     Activity contexto;
     ArrayList<seccion> lista;
-    int fontSize = 18;
+    int fontSize;
+    int capo;
 
-    public listaSecciones(ArrayList<seccion> secciones) {
+    public listaSecciones(ArrayList<seccion> secciones, int c, int f) {
         lista = secciones;
+        this.capo = c;
+        this.fontSize = f;
     }
-
-/*    public listaSecciones (Activity context, ArrayList<seccion> canciones)
-    {
-        super(context, R.layout.lista_secciones,canciones);
-        contexto = context;
-        lista = canciones;
-    }
-
-    @NonNull
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        View item = convertView;
-        seccionesHolder holder;
-
-        if (item == null)
-        {
-            LayoutInflater inflater = contexto.getLayoutInflater();
-            item = inflater.inflate(R.layout.lista_secciones, null);
-
-            holder = new seccionesHolder();
-            holder.titulo = (TextView) item.findViewById(R.id.seccion_titulo);
-            holder.nombre = (TextView) item.findViewById(R.id.seccion_nombre);
-            holder.contenido = (TextView) item.findViewById(R.id.seccion_contenido);
-
-            item.setTag(holder);
-        }
-        else
-        {
-            holder = (seccionesHolder)item.getTag();
-        }
-
-        holder.titulo.setText(getTitulo(lista.get(position).getNombre()));
-        holder.nombre.setText(lista.get(position).getNombre());
-        holder.contenido.setText(lista.get(position).getContenido());
-
-        return(item);
-    }*/
 
     private String getTitulo(String nombre){
         String title = nombre;
@@ -120,9 +89,10 @@ public class listaSecciones  extends RecyclerView.Adapter<listaSecciones.ViewHol
         holder.titulo.setText(getTitulo(lista.get(position).getNombre()));
         holder.nombre.setText(lista.get(position).getNombre());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            holder.contenido.setText(Html.fromHtml(lista.get(position).getFormateado(), Html.FROM_HTML_MODE_COMPACT));
+            holder.contenido.setText(Html.fromHtml(lista.get(position).getFormateado(capo), Html.FROM_HTML_MODE_COMPACT));
         else
-            holder.contenido.setText(Html.fromHtml(lista.get(position).getFormateado()));
+            holder.contenido.setText(Html.fromHtml(lista.get(position).getFormateado(capo)));
+        holder.contenido.setTextSize(2,fontSize);
 //        int preferedSize = getTextSize(holder.seccion,holder.mView);
 //        fontSize = preferedSize < fontSize ? preferedSize : fontSize;
 //        holder.contenido.setTextSize(2,fontSize);

@@ -25,7 +25,12 @@ public class cancionDetalleFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_ITEM_CAPO = "capo";
+    public static final String ARG_ITEM_FUENTE = "fuente";
     private CollapsingToolbarLayout appBarLayout;
+    private int capo = 0;
+    private int fontSize = 16;
+    private RecyclerView secciones;
 
     /**
      * The content this fragment is presenting.
@@ -61,14 +66,35 @@ public class cancionDetalleFragment extends Fragment {
         }
     }
 
+    public void modificarAcordesSostenido() {
+        capo = capo + 1;
+        secciones.setAdapter(new listaSecciones(cancion.getSecciones(),capo,fontSize));
+    }
+
+    public void modificarAcordesBemol() {
+        capo = capo - 1;
+        secciones.setAdapter(new listaSecciones(cancion.getSecciones(),capo,fontSize));
+    }
+
+    public void tamanioLetraMenor() {
+        fontSize = fontSize - 2;
+        secciones.setAdapter(new listaSecciones(cancion.getSecciones(),capo,fontSize));
+    }
+
+    public void tamanioLetraMayor() {
+        fontSize = fontSize + 2;
+        secciones.setAdapter(new listaSecciones(cancion.getSecciones(),capo,fontSize));
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.cancion_detalle, container, false);
 
         // Show the dummy content as text in a TextView.
-        RecyclerView secciones = (RecyclerView) rootView.findViewById(R.id.cancion_detalle_secciones);
-        secciones.setAdapter(new listaSecciones(cancion.getSecciones()));
+        secciones = rootView.findViewById(R.id.cancion_detalle_secciones);
+        secciones.setAdapter(new listaSecciones(cancion.getSecciones(),capo,fontSize));
         return rootView;
     }
 

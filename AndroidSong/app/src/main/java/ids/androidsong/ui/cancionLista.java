@@ -56,6 +56,9 @@ public class cancionLista extends AppCompatActivity {
     SimpleItemRecyclerViewAdapter adapter;
     View recyclerView;
     Spinner spinnerCarpetas;
+    cancionDetalleFragment fragment;
+    private int capo = 0;
+    private int fontSize = 16;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,8 @@ public class cancionLista extends AppCompatActivity {
                 else {
                 Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID,itemId);
+                intent.putExtra(cancionDetalleFragment.ARG_ITEM_CAPO,capo);
+                intent.putExtra(cancionDetalleFragment.ARG_ITEM_FUENTE,fontSize);
                 startActivity(intent);
                 }
             }
@@ -257,7 +262,7 @@ public class cancionLista extends AppCompatActivity {
                 Bundle arguments = new Bundle();
                 arguments.putInt(cancionDetalleFragment.ARG_ITEM_ID,
                         itemId);
-                cancionDetalleFragment fragment = new cancionDetalleFragment();
+                fragment = new cancionDetalleFragment();
                 fragment.setArguments(arguments);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.cancionmusico_detail_container, fragment)
@@ -355,5 +360,24 @@ public class cancionLista extends AppCompatActivity {
         }
     }
 
+    public void modificarAcordesSostenido(View view) {
+        capo = capo + 1;
+        fragment.modificarAcordesSostenido();
+    }
+
+    public void modificarAcordesBemol(View view) {
+        capo = capo - 1;
+        fragment.modificarAcordesBemol();
+    }
+
+    public void tamanioLetraMenor(View view) {
+        fontSize = fontSize - 2;
+        fragment.tamanioLetraMenor();
+    }
+
+    public void tamanioLetraMayor(View view) {
+        fontSize = fontSize + 2;
+        fragment.tamanioLetraMayor();
+    }
 
 }

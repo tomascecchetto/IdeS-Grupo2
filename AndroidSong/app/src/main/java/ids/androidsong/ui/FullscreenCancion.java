@@ -17,6 +17,8 @@ import ids.androidsong.R;
 import ids.androidsong.adapter.listaSecciones;
 import ids.androidsong.object.cancion;
 
+import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_CAPO;
+import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_FUENTE;
 import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_ID;
 
 /**
@@ -102,6 +104,8 @@ public class FullscreenCancion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         cancion = new cancion(getIntent().getIntExtra(ARG_ITEM_ID,0));
+        int capo = getIntent().getIntExtra(ARG_ITEM_CAPO,0);
+        int fuente = getIntent().getIntExtra(ARG_ITEM_FUENTE,0);
         cancion.fill();
 
 
@@ -116,7 +120,7 @@ public class FullscreenCancion extends AppCompatActivity {
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView.setAdapter(new listaSecciones(cancion.getSecciones()));
+        mContentView.setAdapter(new listaSecciones(cancion.getSecciones(),capo,fuente));
 
 
         // Set up the user interaction to manually show or hide the system UI.

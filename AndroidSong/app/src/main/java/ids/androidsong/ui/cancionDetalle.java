@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import ids.androidsong.R;
+import ids.androidsong.adapter.listaSecciones;
 
 /**
  * An activity representing a single cancionMusico detail screen. This
@@ -18,6 +19,10 @@ import ids.androidsong.R;
  * in a {@link cancionLista}.
  */
 public class cancionDetalle extends AppCompatActivity {
+
+    private cancionDetalleFragment fragment;
+    private int capo = 0;
+    private int fontSize = 16;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,8 @@ public class cancionDetalle extends AppCompatActivity {
                 int id = getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0);
                 Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID,id);
+                intent.putExtra(cancionDetalleFragment.ARG_ITEM_CAPO,capo);
+                intent.putExtra(cancionDetalleFragment.ARG_ITEM_FUENTE,fontSize);
                 startActivity(intent);
             }
         });
@@ -60,12 +67,32 @@ public class cancionDetalle extends AppCompatActivity {
             Bundle arguments = new Bundle();
             arguments.putInt(cancionDetalleFragment.ARG_ITEM_ID,
                     getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0));
-            cancionDetalleFragment fragment = new cancionDetalleFragment();
+            fragment = new cancionDetalleFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.cancionmusico_detail_container, fragment)
                     .commit();
         }
+    }
+
+    public void modificarAcordesSostenido(View view) {
+        capo = capo + 1;
+        fragment.modificarAcordesSostenido();
+    }
+
+    public void modificarAcordesBemol(View view) {
+        capo = capo - 1;
+        fragment.modificarAcordesBemol();
+    }
+
+    public void tamanioLetraMenor(View view) {
+        fontSize = fontSize - 2;
+        fragment.tamanioLetraMenor();
+    }
+
+    public void tamanioLetraMayor(View view) {
+        fontSize = fontSize + 2;
+        fragment.tamanioLetraMayor();
     }
 
     @Override
