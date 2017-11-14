@@ -43,7 +43,7 @@ public class importador extends AppCompatActivity {
         con = this;
         path = (TextView) findViewById(R.id.importar_text_path);
         ToggleButton sobreescribir = (ToggleButton) findViewById(R.id.importar_button_override);
-        permisos.solicitar(this);
+        permisos.solicitarLocal(this);
         try {
             path.setText(new opciones().getString(aSDbContract.Opciones.OPT_NAME_IMPORTPATH,importar.defaultPath));
             sobreescritura=new opciones().getBool(aSDbContract.Opciones.OPT_NAME_IMPORTOVERRIDE);

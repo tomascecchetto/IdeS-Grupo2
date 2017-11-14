@@ -233,4 +233,17 @@ public class item {
 
 
     }
+
+    public void modificarContenido(){
+        new seccion().baja(this);
+        for (seccion s: secciones) { s.alta(this); }
+
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openWriteDataBase();
+        String modificacion = new GregorianCalendar().getTime().toString();
+        ContentValues registro = new ContentValues();
+        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, modificacion);
+        helper.currentDB.update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
+        helper.currentDB.close();
+    }
 }

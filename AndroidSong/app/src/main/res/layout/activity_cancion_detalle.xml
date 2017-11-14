@@ -49,6 +49,88 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_opciones"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@color/colorPrimary"
+        android:cropToPadding="false"
+        android:onClick="mostrarOpciones"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/ic_action_collapse"
+        android:contentDescription="Icon" />
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_flat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="false"
+        android:backgroundTint="@android:color/holo_purple"
+        android:cropToPadding="false"
+        android:onClick="modificarAcordesBemol"
+        android:scaleType="fitXY"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="56dp"
+        app:srcCompat="@drawable/ic_action_flat" />
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_sharp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/holo_purple"
+        android:cropToPadding="false"
+        android:onClick="modificarAcordesSostenido"
+        android:scaleType="fitXY"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="96dp"
+        app:srcCompat="@drawable/ic_action_sharp" />
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_menor"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/holo_purple"
+        android:cropToPadding="false"
+        android:onClick="tamanioLetraMenor"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="136dp"
+        app:srcCompat="@drawable/ic_action_expand" />
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_mayor"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/holo_purple"
+        android:cropToPadding="false"
+        android:onClick="tamanioLetraMayor"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="176dp"
+        app:srcCompat="@drawable/ic_action_collapse" />
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_editar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="216dp"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/holo_purple"
+        android:cropToPadding="true"
+        android:onClick="mostrarEdicion"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/ic_action_edit" />
 </android.support.design.widget.CoordinatorLayout>

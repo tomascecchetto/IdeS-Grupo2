@@ -94,12 +94,12 @@ public class seccion {
         helper.currentDB.close();
     }
 
-    public void baja(seccion s) {
+    public void baja(item i) {
 
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
 
-        helper.currentDB.delete(aSDbContract.Secciones.TABLE_NAME, aSDbContract.Secciones.COLUMN_NAME_ID + "=" + s.getId(), null);
+        helper.currentDB.delete(aSDbContract.Secciones.TABLE_NAME, aSDbContract.Secciones.COLUMN_NAME_ITEMID + "=" + i.getId(), null);
         helper.currentDB.close();
     }
 

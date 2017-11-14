@@ -90,4 +90,13 @@ public class cancion extends item implements Serializable {
     public void alta(){
         super.alta(Enum.itemTipo.CANCION.name());
     }
+
+    public String getLetra(){
+        String letra = "";
+        for (seccion sec : getSecciones()){
+            letra = letra + "[" + sec.getNombre() + "]\n";
+            letra = letra + sec.getContenido() + "\n";
+        }
+        return letra;
+    }
 }

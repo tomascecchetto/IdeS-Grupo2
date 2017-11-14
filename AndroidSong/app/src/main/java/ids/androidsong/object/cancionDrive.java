@@ -1,8 +1,5 @@
 package ids.androidsong.object;
 
-import com.google.android.gms.drive.DriveFile;
-import com.google.android.gms.drive.DriveFolder;
-import com.google.android.gms.drive.DriveId;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -22,10 +19,6 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 
 public class cancionDrive extends cancionXml {
-
-    DriveFolder driveFolder;
-    DriveFile driveFile;
-    DriveId driveId;
 
     public cancionDrive() {
     }

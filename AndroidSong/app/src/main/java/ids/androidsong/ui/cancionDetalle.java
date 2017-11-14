@@ -8,6 +8,7 @@ import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 
 import ids.androidsong.R;
 import ids.androidsong.adapter.listaSecciones;
@@ -23,6 +24,8 @@ public class cancionDetalle extends AppCompatActivity {
     private cancionDetalleFragment fragment;
     private int capo = 0;
     private int fontSize = 16;
+    private boolean opciones = true;
+    private int itemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +33,16 @@ public class cancionDetalle extends AppCompatActivity {
         setContentView(R.layout.activity_cancion_detalle);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-
+        itemId = getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /*Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-                int id = getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0);
+                itemId = getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0);
                 Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
-                intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID,id);
+                intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID,itemId);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_CAPO,capo);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_FUENTE,fontSize);
                 startActivity(intent);
@@ -73,6 +76,7 @@ public class cancionDetalle extends AppCompatActivity {
                     .add(R.id.cancionmusico_detail_container, fragment)
                     .commit();
         }
+        mostrarOpciones();
     }
 
     public void modificarAcordesSostenido(View view) {
@@ -93,6 +97,39 @@ public class cancionDetalle extends AppCompatActivity {
     public void tamanioLetraMayor(View view) {
         fontSize = fontSize + 2;
         fragment.tamanioLetraMayor();
+    }
+
+    public void mostrarOpciones(View view) {
+        mostrarOpciones();
+    }
+
+    public void mostrarEdicion(View view) {
+        Intent intent = new Intent(this, editarCancion.class);
+        intent.putExtra("ITEM_ID", itemId);
+        startActivity(intent);
+    }
+
+    private void mostrarOpciones() {
+        ImageButton modificarAcordesSostenido = findViewById(R.id.cancion_detalle_sharp);
+        ImageButton modificarAcordesBemol = findViewById(R.id.cancion_detalle_flat);
+        ImageButton tamanioLetraMenor = findViewById(R.id.cancion_detalle_menor);
+        ImageButton tamanioLetraMayor = findViewById(R.id.cancion_detalle_mayor);
+        ImageButton mostrarEdicion = findViewById(R.id.cancion_detalle_editar);
+        if (opciones){
+            modificarAcordesSostenido.setVisibility(View.GONE);
+            modificarAcordesBemol.setVisibility(View.GONE);
+            tamanioLetraMenor.setVisibility(View.GONE);
+            tamanioLetraMayor.setVisibility(View.GONE);
+            mostrarEdicion.setVisibility(View.GONE);
+            opciones = false;
+        } else {
+            modificarAcordesSostenido.setVisibility(View.VISIBLE);
+            modificarAcordesBemol.setVisibility(View.VISIBLE);
+            tamanioLetraMenor.setVisibility(View.VISIBLE);
+            tamanioLetraMayor.setVisibility(View.VISIBLE);
+            mostrarEdicion.setVisibility(View.VISIBLE);
+            opciones = true;
+        }
     }
 
     @Override

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -59,6 +60,7 @@ public class cancionLista extends AppCompatActivity {
     cancionDetalleFragment fragment;
     private int capo = 0;
     private int fontSize = 16;
+    private boolean opciones = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,15 +100,18 @@ public class cancionLista extends AppCompatActivity {
         setupRecyclerView((RecyclerView) recyclerView);
         registerForContextMenu(recyclerView);
 
-
+        mostrarOpciones();
         if (findViewById(R.id.cancionmusico_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
+        } else {
+            findViewById(R.id.cancion_detalle_opciones).setVisibility(View.GONE);
         }
         con=this;
+
     }
 
     private void setupCarpetas() {
@@ -380,4 +385,36 @@ public class cancionLista extends AppCompatActivity {
         fragment.tamanioLetraMayor();
     }
 
+    public void mostrarOpciones(View view) {
+        mostrarOpciones();
+    }
+
+    public void mostrarEdicion(View view) {
+        Intent intent = new Intent(con, editarCancion.class);
+        intent.putExtra("ITEM_ID", itemId);
+        startActivity(intent);
+    }
+
+    private void mostrarOpciones() {
+        ImageButton modificarAcordesSostenido = findViewById(R.id.cancion_detalle_sharp);
+        ImageButton modificarAcordesBemol = findViewById(R.id.cancion_detalle_flat);
+        ImageButton tamanioLetraMenor = findViewById(R.id.cancion_detalle_menor);
+        ImageButton tamanioLetraMayor = findViewById(R.id.cancion_detalle_mayor);
+        ImageButton mostrarEdicion = findViewById(R.id.cancion_detalle_editar);
+        if (opciones){
+            modificarAcordesSostenido.setVisibility(View.GONE);
+            modificarAcordesBemol.setVisibility(View.GONE);
+            tamanioLetraMenor.setVisibility(View.GONE);
+            tamanioLetraMayor.setVisibility(View.GONE);
+            mostrarEdicion.setVisibility(View.GONE);
+            opciones = false;
+        } else {
+            modificarAcordesSostenido.setVisibility(View.VISIBLE);
+            modificarAcordesBemol.setVisibility(View.VISIBLE);
+            tamanioLetraMenor.setVisibility(View.VISIBLE);
+            tamanioLetraMayor.setVisibility(View.VISIBLE);
+            mostrarEdicion.setVisibility(View.VISIBLE);
+            opciones = true;
+        }
+    }
 }

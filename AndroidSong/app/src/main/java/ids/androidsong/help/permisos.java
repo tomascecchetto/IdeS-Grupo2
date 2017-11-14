@@ -11,26 +11,24 @@ import android.support.v4.content.ContextCompat;
  */
 
 public class permisos {
-    final static int PERMISO_ESCRITURA_LOCAL = 0;
-    final static int PERMISO_CUENTAS_USUARIO = 1;
 
-    public static void solicitar(Activity activity){
-        if (ContextCompat.checkSelfPermission(activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    PERMISO_ESCRITURA_LOCAL);
-        }
+    public static void solicitarLocal(Activity activity){
+        solicitar(activity,Manifest.permission.WRITE_EXTERNAL_STORAGE,0);
     }
 
     public static void solicitarCuenta(Activity activity){
+        solicitar(activity,Manifest.permission.GET_ACCOUNTS,1);
+        solicitar(activity,Manifest.permission.INTERNET,2);
+        solicitar(activity,Manifest.permission.ACCESS_NETWORK_STATE,3);
+    }
+
+    public static void solicitar(Activity activity, String permission, int id){
         if (ContextCompat.checkSelfPermission(activity,
-                Manifest.permission.GET_ACCOUNTS)
+                permission)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.GET_ACCOUNTS},
-                    PERMISO_CUENTAS_USUARIO);
+                    new String[]{permission},
+                    id);
         }
     }
 }
