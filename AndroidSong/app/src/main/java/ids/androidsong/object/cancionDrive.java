@@ -1,13 +1,18 @@
 package ids.androidsong.object;
 
 
+import com.google.api.services.drive.Drive;
+
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,15 +25,34 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class cancionDrive extends cancionXml {
 
-    public cancionDrive() {
+    com.google.api.services.drive.Drive driveService = null;
+    private String driveId;
+
+    public cancionDrive(String t, Drive s, String c, String d) {
+        this.driveService = s;
+        this.driveId = d;
+        this.titulo = t;
+        this.carpeta = c;
+    }
+
+    public String getDriveId() {
+        return driveId;
+    }
+
+    public void setDriveId(String driveId) {
+        this.driveId = driveId;
     }
 
     @Override
     protected Document getDocument()
             throws ParserConfigurationException, SAXException, IOException {
-        InputStream is = new FileInputStream(new File(path));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        driveService.files().get(getDriveId())
+                .executeMediaAndDownloadTo(outputStream);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = factory.newDocumentBuilder();
-        return db.parse(is);
+        return db.parse(new ByteArrayInputStream(outputStream.toByteArray()));
     }
+
+
 }

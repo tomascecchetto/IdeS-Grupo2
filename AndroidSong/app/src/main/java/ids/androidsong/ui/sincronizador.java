@@ -75,7 +75,8 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
                 iniciarSincronizacion();
             }
         });
-
+        sincBl = new sincronizar(this);
+        sincBl.getDriveConnection();
     }
 
     @Override
@@ -85,9 +86,7 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
     }
 
     private void iniciarSincronizacion() {
-        sincBl = new sincronizar(this);
-        sincBl.getDriveConnection();
-        sincBl.getSongsFolder();
+        sincBl.sincronizarEnBackground();
     }
 
 
@@ -100,6 +99,10 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
                 new alert.InputRunnable() {
                     @Override
                     public void run(String text) throws Exception {
+                        if (text.charAt(0) == '/')
+                            text = text.substring(1);
+                        if (text.charAt(text.length()-1) == '/')
+                            text = text.substring(0,text.length()-1);
                         path.setText((CharSequence) text);
                         new opciones(aSDbContract.Opciones.OPT_NAME_SYNCPATH, text).modificacion();
                     }

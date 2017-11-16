@@ -30,12 +30,16 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.ParentReference;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ids.androidsong.R;
+import ids.androidsong.object.cancionDrive;
+import ids.androidsong.object.opciones;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -48,8 +52,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class sincronizar implements EasyPermissions.PermissionCallbacks {
 
-    public static String defaultPath = "/" +
-            App.getContext().getString(R.string.OpenSongFolder) + "/" +
+    public static String defaultPath = App.getContext().getString(R.string.OpenSongFolder) + "/" +
             App.getContext().getString(R.string.SongsFolder);
     boolean existeLocal;
     boolean existeStatus;
@@ -57,6 +60,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
     GoogleAccountCredential mCredential;
     ProgressDialog mProgress;
     public TextView syncLog;
+    public TextView confLog;
     com.google.api.services.drive.Drive mService = null;
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
@@ -71,6 +75,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
     public sincronizar(Activity context){
         con = context;
         syncLog = con.findViewById(R.id.sincronizar_log_sync);
+        confLog = con.findViewById(R.id.sincronizar_log_conflict);
         mCredential = GoogleAccountCredential.usingOAuth2(
                 con.getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
@@ -90,25 +95,164 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         return mService;
     }
 
-    public String getSongsFolder(){
-        String songsId = "";
-        try {
-            FileList result = getDriveService().files().list()
-                    .setQ("title='OpenSong'")
-                    .setQ("trashed=false")
-                    .setFields("nextPageToken, items(id, title)")
-                    .execute();
-            FileList songFolder = getDriveService().files().list()
-                    .setQ(result.getItems().get(0).getId() + " in parents")
-                    .setQ("title='Songs'")
-                    .execute();
-            songsId = songFolder.getItems().get(0).getId();
-            syncLog.setText(songFolder.getItems().get(0).getTitle() + "\n" +
-                    songFolder.getItems().get(0).getAlternateLink() + "\n" +
-                    songsId);
-        } catch (IOException e) {}
 
-        return songsId;
+
+    //Métodos del algoritmo de sincronización
+    private void crearCarpeta(){
+    }
+
+    public void sincronizarEnBackground(){
+        new sincronizarBackground().execute();
+    }
+
+    private String getFolder(String parent, String path)  throws IOException {
+        String folderId = "";
+        String folder = "";
+        String subFolders= "";
+        if (path.contains("/")) {
+            folder = path.substring(0, path.indexOf("/"));
+            subFolders = path.substring(path.indexOf("/") + 1);
+        } else {
+            folder = path;
+            subFolders = null;
+        }
+        if (parent == null) parent = "root";
+        FileList result = getDriveService().files().list()
+                .setQ("title='" + folder + "' and trashed=false and mimeType='application/vnd.google-apps.folder' and '" + parent + "' in parents")
+                .setFields("items(id, title)")
+                .execute();
+        if (result.getItems().size() > 0) {
+            folderId = result.getItems().get(0).getId();
+            if (subFolders != null)
+                folderId = getFolder(folderId, subFolders);
+        } else {
+            folderId = createFolder(parent,path);
+        }
+        return folderId;
+    }
+
+    private String createFolder(String parent, String path)  throws IOException {
+        String folderId = "";
+        String folder = "";
+        String subFolders= "";
+        if (path.contains("/")) {
+            folder = path.substring(0, path.indexOf("/"));
+            subFolders = path.substring(path.indexOf("/") + 1);
+        } else {
+            folder = path;
+            subFolders = null;
+        }
+        if (parent == null) parent = "root";
+        File fileMetadata = new File();
+        fileMetadata.setTitle(folder);
+        fileMetadata.setMimeType("application/vnd.google-apps.folder");
+        fileMetadata.setParents(Collections.singletonList(
+                new ParentReference().setId(parent)));
+        File file = getDriveService().files().insert(fileMetadata)
+                .setFields("id")
+                .execute();
+        folderId = file.getId();
+        if (subFolders != null)
+            folderId = createFolder(folderId,subFolders);
+        return folderId;
+    }
+
+    //Tarea asincrónica para envolver la sincronización
+    private class sincronizarBackground extends AsyncTask<Void, String[], String> {
+
+        private Exception mLastError = null;
+
+        sincronizarBackground() {
+            getDriveService();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                sincronizar();
+                return getSongsFolder();
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+        }
+
+        public String getSongsFolder() throws Exception{
+            String folder = getFolder(null,new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCPATH,defaultPath));
+            publishProgress(getLog("sync", "Carpeta correctamente identificada."));
+            return folder;
+        }
+
+        private void procesarCarpeta(String file) throws IOException {
+            String parent;
+            if (file == null) parent = "root";
+            else parent = file;
+            FileList result = getDriveService().files().list()
+                    .setQ("trashed=false and '" + parent + "' in parents")
+                    .setFields("items(id, title, mimeType)")
+                    .execute();
+            for (File item: result.getItems()) {
+                if (item.getMimeType().equals("application/vnd.google-apps.folder")) {
+                    publishProgress(getLog("sync", "Encontré la carpeta " + item.getTitle() + "\n"));
+                    procesarCarpeta(item.getId());
+                } else
+                    procesarFile(item, getDriveService().files().get(parent).execute().getTitle());
+            }
+        }
+
+        private void procesarFile(File file, String carpeta){
+            cancionDrive cancion = new cancionDrive(file.getTitle(),getDriveService(),carpeta,file.getId());
+            cancion.fill();
+            publishProgress(getLog("sync", cancion.getTitulo() + ", ID interno: " + cancion.getId()));
+        }
+
+        private void sincronizar() throws Exception {
+            String folder = getSongsFolder();
+            procesarCarpeta(folder);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            syncLog.setText("");
+            mProgress.show();
+        }
+
+        @Override
+        protected void onProgressUpdate (String[]... values){
+            if (values[0][0].equals("sync")) syncLog.setText(
+                    syncLog.getText() + "\n" + values[0][1]);
+            else confLog.setText(
+                    confLog.getText() + "\n" + values[0][1]);
+        }
+
+        private String[] getLog(String tipo, String mensaje){
+            String[] progreso = new String[2];
+            progreso[0] = tipo;
+            progreso[1] = mensaje;
+            return progreso;
+        }
+
+        @Override
+        protected void onPostExecute(String output) {
+            mProgress.hide();
+            if (output == null) {
+                syncLog.setText("No se pudo conectar a Drive");
+            } else {
+                syncLog.setText(syncLog.getText() + output);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mProgress.hide();
+            if (mLastError != null) {
+                    syncLog.setText("The following error occurred:\n"
+                            + mLastError.getMessage());
+            } else {
+                syncLog.setText(syncLog.getText() + "\nRequest cancelled.");
+            }
+        }
     }
 
     //Métodos del flujo de autenticación
@@ -332,14 +476,13 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
          * @throws IOException
          */
         private String getDataFromApi() throws IOException {
-            // Get a list of up to 10 files.
             String fileInfo = "";
             FileList result = mService.files().list()
                     .setMaxResults(1)
                     .execute();
             List<File> files = result.getItems();
             if (files != null) {
-                fileInfo = String.format("%s (%s)\n", files.get(0).getTitle());
+                fileInfo = String.format("%s\n", files.get(0).getTitle());
             }
             return fileInfo;
         }
@@ -379,10 +522,5 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
                 syncLog.setText("Request cancelled.");
             }
         }
-    }
-
-
-    //Métodos del algoritmo de sincronización
-    private void crearCarpeta(){
     }
 }
