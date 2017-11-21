@@ -29,6 +29,7 @@ public class item {
     private ArrayList<seccion> secciones = new ArrayList<>();
     private ArrayList<atributo> atributos = new ArrayList<>();
     protected final String FILTRO_CARPETA_TODAS = "Todas";
+    private String fechaModificacion;
 
     public item(int i, String t, int c){
         this.Id = i;
@@ -97,22 +98,31 @@ public class item {
         this.atributos = atributos;
     }
 
+    public String getFechaModificacion() {
+        return fechaModificacion;
+    }
+
+    public void setFechaModificacion(String fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
+    }
+
     public void alta(String tipo) {
 
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
 
         int carpeta = (new carpeta()).get(getCarpeta());
-        String modificacion = new GregorianCalendar().getTime().toString();
+        fechaModificacion = new GregorianCalendar().getTime().toString();
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Items.COLUMN_NAME_TITULO, getTitulo());
         registro.put(aSDbContract.Items.COLUMN_NAME_TIPO, tipo);
         registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID, carpeta);
-        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, modificacion);
+        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, getFechaModificacion());
 
-        new driveStatus(getId(), modificacion, null).alta();
         setId((int)helper.currentDB.insert(aSDbContract.Items.TABLE_NAME, null, registro));
         helper.currentDB.close();
+
+        new driveStatus(this).alta();
 
         for (atributo a: atributos) { a.alta(this); }
 
@@ -169,6 +179,7 @@ public class item {
         setCarpeta((new carpeta()).get(c.getInt(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_CARPETAID))));
         setSecciones(new seccion().get(this));
         setAtributos(new atributo().get(this));
+        setFechaModificacion(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION)));
     }
 
     protected ArrayList<item> get(String tipo){
@@ -211,12 +222,12 @@ public class item {
         helper.openWriteDataBase();
 
         int carpeta = (new carpeta()).get(getCarpeta());
-        String modificacion = new GregorianCalendar().getTime().toString();
+        fechaModificacion = new GregorianCalendar().getTime().toString();
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Items.COLUMN_NAME_TITULO, getTitulo());
         registro.put(aSDbContract.Items.COLUMN_NAME_TIPO, tipo);
         registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID, carpeta);
-        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, modificacion);
+        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, fechaModificacion);
         helper.currentDB.update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
         helper.currentDB.close();
     }
@@ -226,7 +237,7 @@ public class item {
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
 
-        new driveStatus(getId()).bajaLocal();
+        new driveStatus(this).bajaLocal();
 
         helper.currentDB.delete(aSDbContract.Items.TABLE_NAME, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
         helper.currentDB.close();
@@ -240,9 +251,9 @@ public class item {
 
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
-        String modificacion = new GregorianCalendar().getTime().toString();
+        fechaModificacion = new GregorianCalendar().getTime().toString();
         ContentValues registro = new ContentValues();
-        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, modificacion);
+        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, fechaModificacion);
         helper.currentDB.update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
         helper.currentDB.close();
     }

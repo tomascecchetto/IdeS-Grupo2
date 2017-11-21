@@ -17,8 +17,8 @@ public class permisos {
     }
 
     public static void solicitarCuenta(Activity activity){
-        solicitar(activity,Manifest.permission.GET_ACCOUNTS,1);
         solicitar(activity,Manifest.permission.INTERNET,2);
+        solicitar(activity,Manifest.permission.GET_ACCOUNTS,1);
         solicitar(activity,Manifest.permission.ACCESS_NETWORK_STATE,3);
     }
 

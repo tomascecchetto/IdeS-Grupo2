@@ -126,16 +126,18 @@ public class importador extends AppCompatActivity {
                 isCancelled();
                 try {
                     cancion.fill();
-                    if (cancion.getId() > 0){
-                        if (sobreescritura) {
-                            cancion.modificacion();
-                            publishProgress(getLog("sync", cancion.getTitulo() + " sobreescrita correctamente."));
+                    if (cancion.getSecciones() != null) {
+                        if (cancion.getId() > 0) {
+                            if (sobreescritura) {
+                                cancion.modificacion();
+                                publishProgress(getLog("sync", cancion.getTitulo() + " sobreescrita correctamente."));
+                            } else {
+                                publishProgress(getLog("conf", "Conflicto con " + cancion.getTitulo() + ", exceptuado."));
+                            }
                         } else {
-                            publishProgress(getLog("conf", "Conflicto con " + cancion.getTitulo() + ", exceptuado."));
+                            cancion.alta();
+                            publishProgress(getLog("sync", cancion.getTitulo() + " importada correctamente."));
                         }
-                    } else {
-                        cancion.alta();
-                        publishProgress(getLog("sync", cancion.getTitulo() + " importada correctamente."));
                     }
                 } catch (Exception E) {
                     publishProgress(getLog("conf", "Conflicto con " + cancion.getTitulo() + ": " + E.getMessage()));

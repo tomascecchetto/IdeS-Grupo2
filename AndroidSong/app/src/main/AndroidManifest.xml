@@ -45,12 +45,18 @@
         <activity
             android:name=".ui.editarCancion"
             android:label="@string/title_activity_editar_cancion"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ids.androidsong.ui.cancionDetalle" />
+        </activity>
         <activity
             android:name=".ui.nuevaCancion"
             android:label="@string/title_activity_nueva_cancion"
             android:parentActivityName=".ui.principal"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ids.androidsong.ui.principal" />
@@ -69,12 +75,19 @@
             android:name=".ui.importador"
             android:parentActivityName=".ui.principal"
             android:label="@string/title_activity_importador"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ids.androidsong.ui.principal" />
+        </activity>
         <activity
             android:name=".ui.sincronizador"
             android:parentActivityName=".ui.principal"
             android:label="@string/title_activity_sincronizar"
             android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ids.androidsong.ui.principal" />
         </activity>
         <meta-data
             android:name="com.google.android.gms.version"

@@ -2,6 +2,7 @@ package ids.androidsong.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -23,13 +24,18 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ids.androidsong.R;
 import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
+import ids.androidsong.help.aSDbHelper;
 import ids.androidsong.help.alert;
+import ids.androidsong.help.importar;
+import ids.androidsong.help.permisos;
 import ids.androidsong.object.cancion;
+import ids.androidsong.object.cancionXml;
 import ids.androidsong.object.coleccion;
 import ids.androidsong.object.item;
 import ids.androidsong.object.opciones;
@@ -50,6 +56,8 @@ public class principal extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         App.setContext(con);
+
+        permisos.solicitarCuenta(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,9 +81,7 @@ public class principal extends AppCompatActivity
         recyclerView = findViewById(R.id.favoritos_lista);
         assert recyclerView != null;
 
-        //TODO:Mover a un AsyncTask
-        leerOpciones();
-        setupRecyclerView((RecyclerView) recyclerView);
+        new DBTask().execute();
     }
 
     @Override
@@ -278,6 +284,26 @@ public class principal extends AppCompatActivity
                         }
                     },
                     "Remover " + cancion.getTitulo() + " de la lista de favoritos");
+        }
+    }
+
+    private class DBTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                aSDbHelper helper = new aSDbHelper(con);
+                helper.openDataBase();
+                helper.currentDB.close();
+            } catch (Exception e) {}
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //TODO:Mover a un AsyncTask
+            leerOpciones();
+            setupRecyclerView((RecyclerView) recyclerView);
         }
     }
 }

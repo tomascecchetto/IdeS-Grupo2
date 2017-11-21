@@ -33,13 +33,20 @@ import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import ids.androidsong.R;
 import ids.androidsong.object.cancionDrive;
+import ids.androidsong.object.driveStatus;
 import ids.androidsong.object.opciones;
+import ids.androidsong.object.cancion;
+import ids.androidsong.ui.dummy.DummyContent;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -62,6 +69,8 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
     public TextView syncLog;
     public TextView confLog;
     com.google.api.services.drive.Drive mService = null;
+    Map<String, String> carpetasDriveId = new HashMap<String, String>();
+    String carpetaPrincipal;
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -75,7 +84,6 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
     public sincronizar(Activity context){
         con = context;
         syncLog = con.findViewById(R.id.sincronizar_log_sync);
-        confLog = con.findViewById(R.id.sincronizar_log_conflict);
         mCredential = GoogleAccountCredential.usingOAuth2(
                 con.getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
@@ -98,7 +106,8 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
 
 
     //Métodos del algoritmo de sincronización
-    private void crearCarpeta(){
+    private String crearCarpeta(String nombre) throws IOException {
+        return createFolder(carpetasDriveId.get("Principal"),nombre);
     }
 
     public void sincronizarEnBackground(){
@@ -117,6 +126,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
             subFolders = null;
         }
         if (parent == null) parent = "root";
+        carpetaPrincipal = folder;
         FileList result = getDriveService().files().list()
                 .setQ("title='" + folder + "' and trashed=false and mimeType='application/vnd.google-apps.folder' and '" + parent + "' in parents")
                 .setFields("items(id, title)")
@@ -143,6 +153,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
             subFolders = null;
         }
         if (parent == null) parent = "root";
+        carpetaPrincipal = folder;
         File fileMetadata = new File();
         fileMetadata.setTitle(folder);
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
@@ -170,7 +181,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         protected String doInBackground(Void... params) {
             try {
                 sincronizar();
-                return getSongsFolder();
+                return "\nSincronización completa.";
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
@@ -178,8 +189,18 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
             }
         }
 
-        public String getSongsFolder() throws Exception{
+        private String getSongsFolder() throws Exception{
             String folder = getFolder(null,new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCPATH,defaultPath));
+            carpetasDriveId.put("Principal",folder);
+            FileList result = getDriveService().files().list()
+                    .setQ("trashed=false and mimeType = 'application/vnd.google-apps.folder' and '" + folder + "' in parents")
+                    .setFields("items(id, title, mimeType)")
+                    .execute();
+            if (result.getItems().size() > 0)
+                for (File item: result.getItems()) {
+                    String nombreCarpeta = item.getTitle();
+                    carpetasDriveId.put(nombreCarpeta, item.getId());
+                }
             publishProgress(getLog("sync", "Carpeta correctamente identificada."));
             return folder;
         }
@@ -188,28 +209,95 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
             String parent;
             if (file == null) parent = "root";
             else parent = file;
+            String nombreCarpeta = getDriveService().files().get(parent).execute().getTitle();
             FileList result = getDriveService().files().list()
                     .setQ("trashed=false and '" + parent + "' in parents")
-                    .setFields("items(id, title, mimeType)")
+                    .setFields("items(id, title, mimeType, modifiedDate, parents)")
                     .execute();
-            for (File item: result.getItems()) {
-                if (item.getMimeType().equals("application/vnd.google-apps.folder")) {
-                    publishProgress(getLog("sync", "Encontré la carpeta " + item.getTitle() + "\n"));
-                    procesarCarpeta(item.getId());
-                } else
-                    procesarFile(item, getDriveService().files().get(parent).execute().getTitle());
+            if (result.getItems().size() > 0) {
+                for (File item : result.getItems()) {
+                    if (item.getMimeType().equals("application/vnd.google-apps.folder")) {
+                        publishProgress(getLog("sync", "\nEncontré la carpeta " + item.getTitle()));
+                        procesarCarpeta(item.getId());
+                    } else
+                        procesarFile(item, nombreCarpeta);
+                }
             }
         }
 
-        private void procesarFile(File file, String carpeta){
-            cancionDrive cancion = new cancionDrive(file.getTitle(),getDriveService(),carpeta,file.getId());
-            cancion.fill();
-            publishProgress(getLog("sync", cancion.getTitulo() + ", ID interno: " + cancion.getId()));
+        private void procesarFile(File file, String carpeta) throws IOException {
+            cancionDrive cancion = new cancionDrive(file,getDriveService(),carpeta);
+            driveStatus status = new driveStatus(cancion.getTitulo(),carpeta);
+            status.get();
+            if (!existeLocal(status)) {
+                nuevoDriveALocal(cancion, status);
+                publishProgress(getLog("sync", cancion.getTitulo() + ", Agregada a Android Song"));
+            } else {
+                if (statusLocalNuevo(status)){
+                    resolverConflicto(cancion, status);
+                    publishProgress(getLog("sync", cancion.getTitulo() + ", Conflicto detectado"));
+                } else {
+                    if (statusLocalBorrado(status)){
+                        bajaLocalADrive(cancion, status);
+                        publishProgress(getLog("sync", cancion.getTitulo() + ", Borrada en Drive"));
+                    } else {
+                        if (statusDriveModificado(cancion, status)){
+                            if (statusLocalModificado(status)){
+                                resolverConflicto(cancion,status);
+                                publishProgress(getLog("sync", cancion.getTitulo() + ", Conflicto detectado"));
+                            } else {
+                                actualizarDriveALocal(cancion, status);
+                                publishProgress(getLog("sync", cancion.getTitulo() + ", Versión Local actualizada"));
+                            }
+                        } else {
+                            if (statusLocalModificado(status)){
+                                actualizarLocalADrive(carpeta, cancion, status);
+                                publishProgress(getLog("sync", cancion.getTitulo() + ", Versión de Drive actualizada"));
+                            } else {
+                                status.marcarProcesado();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void procesarDriveBorrado() {
+            ArrayList<driveStatus> statuses = new driveStatus().getBajasDrive();
+            if (statuses.size() > 0) {
+                for (driveStatus status : statuses) {
+                    bajaDriveALocal(status);
+                    publishProgress(getLog("sync", status.getTitulo() + ", Eliminada de Android Song"));
+                }
+            }
+        }
+
+        private void procesarNuevosLocalADrive() throws IOException {
+            ArrayList<driveStatus> statuses = new driveStatus().getNuevos();
+            if (statuses.size() > 0) {
+                for (driveStatus status : statuses) {
+                nuevoLocalADrive(status);
+                publishProgress(getLog("sync", status.getTitulo() + ", Subida a Drive"));
+                }
+            }
+        }
+
+        private void procesarBajaSimultanea() {
+            ArrayList<driveStatus> statuses = new driveStatus().getBajasLocal();
+            if (statuses.size() > 0) {
+                for (driveStatus status : statuses) {
+                    bajaDriveYLocal(status);
+                }
+            }
         }
 
         private void sincronizar() throws Exception {
             String folder = getSongsFolder();
+            new driveStatus().borrarProcesado();
             procesarCarpeta(folder);
+            procesarNuevosLocalADrive();
+            procesarBajaSimultanea();
+            procesarDriveBorrado();
         }
 
         @Override
@@ -253,6 +341,103 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
                 syncLog.setText(syncLog.getText() + "\nRequest cancelled.");
             }
         }
+    }
+
+    private void bajaDriveALocal(driveStatus status) {
+        status.getItem().baja();
+        status.setLocalDT(null);
+        status.modificacion();
+        status.marcarProcesado();
+    }
+
+    private void nuevoLocalADrive(driveStatus status) throws IOException {
+        cancionDrive cancion = new cancionDrive(status.getItem());
+        cancion.setDriveService(getDriveService());
+        cancion.altaDrive(buscarCarpetaId(status));
+        status.setDriveDT(cancion.getDriveFile().getModifiedDate().toString());
+        status.modificacion();
+        status.marcarProcesado();
+    }
+
+    private void bajaDriveYLocal(driveStatus status) {
+        status.marcarProcesado();
+    }
+
+    private void bajaLocalADrive(cancionDrive cancion, driveStatus status) throws IOException {
+        cancion.bajaDrive();
+        status.marcarProcesado();
+    }
+
+    private void actualizarLocalADrive(String carpeta, cancionDrive cancion, driveStatus status) throws IOException {
+        String currentParent = buscarCarpetaId(status);
+        cancion.copiarDatos(status.getItem());
+        cancion.modificarDrive(currentParent);
+        status.setDriveDT(cancion.getDriveFile().getModifiedDate().toString());
+        status.setLocalDT(status.getItem().getFechaModificacion());
+        status.modificacion();
+        status.marcarProcesado();
+    }
+
+    private String buscarCarpetaId(driveStatus status) throws IOException {
+        String currentParent;
+        if (!carpetasDriveId.containsKey(status.getItem().getCarpeta())){
+            currentParent = crearCarpeta(status.getItem().getCarpeta());
+        } else {
+            currentParent = carpetasDriveId.get(status.getItem().getCarpeta());
+        }
+        return currentParent;
+    }
+
+    private void actualizarDriveALocal(cancionDrive cancion, driveStatus status) {
+        cancion.fill();
+        cancion.modificarContenido();
+        status.setLocalDT(cancion.getFechaModificacion());
+        status.setDriveDT(cancion.getDriveFile().getModifiedDate().toString());
+        status.modificacion();
+        status.marcarProcesado();
+    }
+
+    private boolean statusLocalModificado(driveStatus status) {
+        return !status.getItem().getFechaModificacion().equals(status.getLocalDT());
+    }
+
+    private boolean statusDriveModificado(cancionDrive cancion, driveStatus status) {
+        return !cancion.getDriveFile().getModifiedDate().toString().equals(status.getDriveDT());
+    }
+
+    private void resolverConflicto(cancionDrive cancion, driveStatus status) {
+        cancion cancionLocal = new cancion(status.getItemId());
+        cancionLocal.fill();
+        cancionLocal.setTitulo(cancionLocal.getTitulo() + " (Conflicto)");
+        status.setTitulo(cancionLocal.getTitulo());
+        cancionLocal.modificacion();
+        status.setDriveDT(null);
+        status.setLocalDT(cancionLocal.getFechaModificacion());
+        status.modificacion();
+        status.marcarProcesado();
+        nuevoDriveALocal(cancion,status);
+    }
+
+    private boolean statusLocalNuevo(driveStatus status) {
+        return status.getDriveDT() == null;
+    }
+
+    private boolean existeLocal(driveStatus status) {
+        return status.getItemId() != 0;
+    }
+
+    private boolean statusLocalBorrado(driveStatus status) {
+        return status.getLocalDT() == null;
+    }
+
+    private void nuevoDriveALocal(cancionDrive cancion, driveStatus status) {
+        cancion.fill();
+        cancion.alta();
+        status.setItem(cancion);
+        status.setDriveDT(cancion.getDriveFile().getModifiedDate().toString());
+        status.setLocalDT(cancion.getFechaModificacion());
+        status.modificacion();
+        status.marcarProcesado();
     }
 
     //Métodos del flujo de autenticación
@@ -416,6 +601,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         con.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(
                 requestCode, permissions, grantResults, this);
+        getDriveConnection();
     }
 
     /**
@@ -427,7 +613,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
      */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
-        // Do nothing.
+        chooseAccount();
     }
 
     /**

@@ -1,7 +1,9 @@
 package ids.androidsong.object;
 
 
+import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.ParentReference;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -13,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,12 +30,22 @@ public class cancionDrive extends cancionXml {
 
     com.google.api.services.drive.Drive driveService = null;
     private String driveId;
+    private com.google.api.services.drive.model.File driveFile;
 
-    public cancionDrive(String t, Drive s, String c, String d) {
+    public cancionDrive(com.google.api.services.drive.model.File f, Drive s, String c) {
         this.driveService = s;
-        this.driveId = d;
-        this.titulo = t;
+        this.driveFile = f;
+        this.driveId = f.getId();
+        this.titulo = f.getTitle();
         this.carpeta = c;
+    }
+
+    public cancionDrive(item item){
+        this.setId(item.getId());
+        this.setCarpeta(item.getCarpeta());
+        this.setTitulo(item.getTitulo());
+        this.setSecciones(item.getSecciones());
+        this.setAtributos(item.getAtributos());
     }
 
     public String getDriveId() {
@@ -41,6 +54,25 @@ public class cancionDrive extends cancionXml {
 
     public void setDriveId(String driveId) {
         this.driveId = driveId;
+    }
+
+    public com.google.api.services.drive.model.File getDriveFile() {
+        return driveFile;
+    }
+
+    public void setDriveFile(com.google.api.services.drive.model.File driveFile) {
+        this.driveFile = driveFile;
+    }
+    public void setDriveService(Drive service){
+        this.driveService = service;
+    }
+
+    public void copiarDatos(item item){
+        this.setId(item.getId());
+        this.setCarpeta(item.getCarpeta());
+        this.setTitulo(item.getTitulo());
+        this.setSecciones(item.getSecciones());
+        this.setAtributos(item.getAtributos());
     }
 
     @Override
@@ -52,6 +84,52 @@ public class cancionDrive extends cancionXml {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = factory.newDocumentBuilder();
         return db.parse(new ByteArrayInputStream(outputStream.toByteArray()));
+    }
+
+    @Override
+    protected File toXml(){
+        Document dom = null;
+        try {
+            dom = getDocument();
+        } catch (Exception e) {}
+        LoadCancion(dom);
+        return grabar(dom);
+    }
+
+    public void modificarDrive(String currentParent) throws IOException {
+        com.google.api.services.drive.model.File file = getDriveFile();
+        file.setTitle(getTitulo());
+        StringBuilder previousParents = new StringBuilder();
+        for (ParentReference parent : file.getParents()) {
+            previousParents.append(parent.getId());
+            previousParents.append(',');
+        }
+        FileContent mediaContent = new FileContent(null,toXml());
+        file = driveService.files().update(getDriveId(), file, mediaContent)
+                .setRemoveParents(previousParents.toString())
+                .setAddParents(currentParent)
+                .execute();
+        setDriveFile(file);
+    }
+
+    public void bajaDrive() throws IOException {
+        driveService.files().trash(getDriveId()).execute();
+    }
+
+    public void altaDrive(String currentParent) {
+        com.google.api.services.drive.model.File body = new com.google.api.services.drive.model.File();
+        body.setTitle(getTitulo());
+
+        body.setParents(
+                Arrays.asList(new ParentReference().setId(currentParent)));
+
+        java.io.File fileContent = super.toXml();
+        FileContent mediaContent = new FileContent(null, fileContent);
+        try {
+            setDriveFile(driveService.files().insert(body, mediaContent).execute());
+        } catch (IOException e) {
+            System.out.println("An error occurred: " + e);
+        }
     }
 
 

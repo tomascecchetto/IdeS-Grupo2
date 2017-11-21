@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--OpenSong values-->
-    <string name="OpenSongFolder">OpenSong</string>
+    <string name="OpenSongFolder">AndroidSong</string>
     <string name="SongsFolder">Songs</string>
     <string name="SetsFolder">Sets</string>
     <string name="BackgroundsFolder">Backgrounds</string>

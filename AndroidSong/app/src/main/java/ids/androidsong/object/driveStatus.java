@@ -2,6 +2,7 @@ package ids.androidsong.object;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,16 +21,26 @@ public class driveStatus {
     private int itemId;
     private String localDT;
     private String driveDT;
-
-    public driveStatus(int i){
-        this.itemId = i;
-    }
+    private item item;
+    private String titulo;
+    private String carpeta;
 
     public driveStatus(int id, String local, String drive){
         this.itemId = id;
         this.localDT = local;
         this.driveDT = drive;
     }
+
+    public driveStatus(item i){
+        setItem(i);
+    }
+
+    public driveStatus(String t, String c){
+        this.carpeta = c;
+        this.titulo = t;
+    }
+
+    public driveStatus(){}
 
     public int getItemId() {
         return itemId;
@@ -55,6 +66,38 @@ public class driveStatus {
         this.driveDT = driveDT;
     }
 
+    public ids.androidsong.object.item getItem() {
+        if (item == null) {
+            item = new item(getItemId());
+            item.fill();
+        }
+        return item;
+    }
+
+    public void setItem(ids.androidsong.object.item item) {
+        this.item = item;
+        this.itemId = item.getId();
+        this.localDT = item.getFechaModificacion();
+        this.titulo = item.getTitulo();
+        this.carpeta = item.getCarpeta();
+    }
+
+    public String getCarpeta() {
+        return carpeta;
+    }
+
+    public void setCarpeta(String carpeta) {
+        this.carpeta = carpeta;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
     public void alta() {
 
         aSDbHelper helper = new aSDbHelper(App.getContext());
@@ -62,8 +105,12 @@ public class driveStatus {
 
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_ITEMID, getItemId());
-        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT, getLocalDT() == null ? null : getLocalDT());
-        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT, getDriveDT() == null ? null : getDriveDT());
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_TITULO, getTitulo());
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_CARPETA, getCarpeta());
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT, getLocalDT());
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT, getDriveDT());
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO, 0);
+
 
         helper.currentDB.insert(aSDbContract.DriveStatus.TABLE_NAME, null, registro);
         helper.currentDB.close();
@@ -79,13 +126,12 @@ public class driveStatus {
     }
 
     public void modificacion() {
-
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
 
         ContentValues registro = new ContentValues();
-        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT, getLocalDT() == null ? null : getLocalDT());
-        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT, getDriveDT() == null ? null : getDriveDT());
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT, getLocalDT());
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT, getDriveDT());
 
         helper.currentDB.update(aSDbContract.DriveStatus.TABLE_NAME, registro, aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + "=" + getItemId(), null);
         helper.currentDB.close();
@@ -101,25 +147,56 @@ public class driveStatus {
             setLocalDT(local);
             String drive = c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT));
             setDriveDT(drive);
+
+        }
+        c.close();
+    }
+
+    public void get(){
+        String filter = aSDbContract.DriveStatus.COLUMN_NAME_TITULO + " = \"" + getTitulo() +
+                "\" AND " + aSDbContract.DriveStatus.COLUMN_NAME_CARPETA + " = \"" + getCarpeta() + "\"";
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openDataBase();
+        Cursor c = helper.currentDB.query(aSDbContract.DriveStatus.TABLE_NAME, null, filter, null, null, null, null);
+        if (c.moveToFirst()) {
+            setItemId(c.getInt(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_ITEMID)));
+            setLocalDT(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT)));
+            setDriveDT(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT)));
         }
         c.close();
     }
 
     public ArrayList<driveStatus> getNuevos(){
+        String filter = aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT + " is null";
+        return get(filter);
+    }
+
+    public ArrayList<driveStatus> getBajasDrive(){
+        String filter = aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO + " = 0";
+        return get(filter);
+    }
+
+    public ArrayList<driveStatus> getBajasLocal(){
+        String filter = aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO + "= 0 AND " +
+                aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT + " is null";
+        return get(filter);
+    }
+
+    @NonNull
+    private ArrayList<driveStatus> get(String filter) {
         aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openDataBase();
+        helper.openWriteDataBase();
         ArrayList<driveStatus> statuses = new ArrayList<>();
-        String filter = aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT + "= NULL";
         Cursor c = helper.currentDB.query(aSDbContract.DriveStatus.TABLE_NAME, null, filter, null, null, null, null);
         if (c.moveToFirst()) {
             do {
-                String local = c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT));
-                String drive = c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT));
-                statuses.add(new driveStatus(
-                        c.getInt(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_ITEMID)),
-                        local,
-                        drive
-                ));
+                driveStatus status = new driveStatus();
+                status.setDriveDT(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT)));
+                status.setLocalDT(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT)));
+                status.setItemId(c.getInt(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_ITEMID)));;
+                status.setTitulo(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_TITULO)));
+                status.setCarpeta(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_CARPETA)));
+                statuses.add(status);
             } while (c.moveToNext());
         }
         c.close();
@@ -136,4 +213,29 @@ public class driveStatus {
         }
     }
 
+    public void marcarProcesado(){
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openWriteDataBase();
+
+        ContentValues registro = new ContentValues();
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO, 1);
+        String filtro = aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + " = " + getItemId();
+
+        helper.currentDB.update(aSDbContract.DriveStatus.TABLE_NAME, registro, filtro, null);
+        helper.currentDB.close();
+    }
+
+    public void borrarProcesado(){
+        aSDbHelper helper = new aSDbHelper(App.getContext());
+        helper.openWriteDataBase();
+
+        String filter = aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO + " = 1 AND " +
+                aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT + "= NULL";
+        helper.currentDB.delete(aSDbContract.DriveStatus.TABLE_NAME,filter,null);
+
+        ContentValues registro = new ContentValues();
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO, 0);
+        helper.currentDB.update(aSDbContract.DriveStatus.TABLE_NAME, registro, null, null);
+        helper.currentDB.close();
+    }
 }

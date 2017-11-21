@@ -61,9 +61,12 @@ public class cancion extends item implements Serializable {
                                 seccion = new seccion(nombre);
                                 contenido = "";
                             }else {
-                                contenido += " " + linea + "\n";
+                                contenido += linea + "\n";
                                 break;
                             }
+                        default:
+                            contenido += " " + linea + "\n";
+                            break;
                     }
                 }
             }

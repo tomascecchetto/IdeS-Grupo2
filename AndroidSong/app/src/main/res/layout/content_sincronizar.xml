@@ -75,23 +75,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Conflictos:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-            <TextView
-                android:id="@+id/sincronizar_log_conflict"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/textView13"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Importados:"
+                android:text="Log de importación"
                 android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
             <TextView
