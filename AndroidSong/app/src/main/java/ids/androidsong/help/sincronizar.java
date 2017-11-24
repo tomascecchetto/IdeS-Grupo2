@@ -46,7 +46,6 @@ import ids.androidsong.object.cancionDrive;
 import ids.androidsong.object.driveStatus;
 import ids.androidsong.object.opciones;
 import ids.androidsong.object.cancion;
-import ids.androidsong.ui.dummy.DummyContent;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -127,12 +126,11 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         }
         if (parent == null) parent = "root";
         carpetaPrincipal = folder;
-        FileList result = getDriveService().files().list()
+        List<File> fullResult = getFullResult(getDriveService().files().list()
                 .setQ("title='" + folder + "' and trashed=false and mimeType='application/vnd.google-apps.folder' and '" + parent + "' in parents")
-                .setFields("items(id, title)")
-                .execute();
-        if (result.getItems().size() > 0) {
-            folderId = result.getItems().get(0).getId();
+                .setFields("nextPageToken, items(id, title)"));
+        if (fullResult.size() > 0) {
+            folderId = fullResult.get(0).getId();
             if (subFolders != null)
                 folderId = getFolder(folderId, subFolders);
         } else {
@@ -192,12 +190,11 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         private String getSongsFolder() throws Exception{
             String folder = getFolder(null,new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCPATH,defaultPath));
             carpetasDriveId.put("Principal",folder);
-            FileList result = getDriveService().files().list()
+            List<File> fullResult = getFullResult(getDriveService().files().list()
                     .setQ("trashed=false and mimeType = 'application/vnd.google-apps.folder' and '" + folder + "' in parents")
-                    .setFields("items(id, title, mimeType)")
-                    .execute();
-            if (result.getItems().size() > 0)
-                for (File item: result.getItems()) {
+                    .setFields("nextPageToken, items(id, title, mimeType)"));
+            if (fullResult.size() > 0)
+                for (File item: fullResult) {
                     String nombreCarpeta = item.getTitle();
                     carpetasDriveId.put(nombreCarpeta, item.getId());
                 }
@@ -210,12 +207,11 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
             if (file == null) parent = "root";
             else parent = file;
             String nombreCarpeta = getDriveService().files().get(parent).execute().getTitle();
-            FileList result = getDriveService().files().list()
+            List<File> fullResult = getFullResult(getDriveService().files().list()
                     .setQ("trashed=false and '" + parent + "' in parents")
-                    .setFields("items(id, title, mimeType, modifiedDate, parents)")
-                    .execute();
-            if (result.getItems().size() > 0) {
-                for (File item : result.getItems()) {
+                    .setFields("nextPageToken, items(id, title, mimeType, modifiedDate, parents)"));
+            if (fullResult.size() > 0) {
+                for (File item : fullResult) {
                     if (item.getMimeType().equals("application/vnd.google-apps.folder")) {
                         publishProgress(getLog("sync", "\nEncontré la carpeta " + item.getTitle()));
                         procesarCarpeta(item.getId());
@@ -295,9 +291,13 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
             String folder = getSongsFolder();
             new driveStatus().borrarProcesado();
             procesarCarpeta(folder);
+            App.closeDB();
             procesarNuevosLocalADrive();
+            App.closeDB();
             procesarBajaSimultanea();
+            App.closeDB();
             procesarDriveBorrado();
+            App.closeDB();
         }
 
         @Override
@@ -341,6 +341,17 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
                 syncLog.setText(syncLog.getText() + "\nRequest cancelled.");
             }
         }
+    }
+
+    @NonNull
+    private List<File> getFullResult(Drive.Files.List request) throws IOException {
+        List<File> fullResult = new ArrayList<File>();
+        do {
+            FileList result = request.execute();
+            fullResult.addAll(result.getItems());
+            request.setPageToken(result.getNextPageToken());
+        } while (request.getPageToken() != null && request.getPageToken().length() > 0);
+        return fullResult;
     }
 
     private void bajaDriveALocal(driveStatus status) {

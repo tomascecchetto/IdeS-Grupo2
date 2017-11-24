@@ -120,7 +120,7 @@ public class aSDbHelper extends SQLiteOpenHelper {
 
         // Open the database
         String myPath = DATABASE_PATH + DATABASE_NAME;
-        currentDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+        currentDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READWRITE);
     }
 
     @Override

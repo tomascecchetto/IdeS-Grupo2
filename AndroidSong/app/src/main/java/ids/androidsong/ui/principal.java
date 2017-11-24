@@ -132,6 +132,11 @@ public class principal extends AppCompatActivity
          startActivity(intent);
     }
 
+    private void abrirPapelera() {
+        Intent intent = new Intent(con,papelera.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -178,6 +183,8 @@ public class principal extends AppCompatActivity
             abrirImportador();
         } else if (id == R.id.nav_sync) {
             abrirSincronizador();
+        } else if (id == R.id.nav_trash) {
+            abrirPapelera();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -293,7 +300,7 @@ public class principal extends AppCompatActivity
         protected Void doInBackground(Void... params) {
             try {
                 aSDbHelper helper = new aSDbHelper(con);
-                helper.openDataBase();
+                helper.openWriteDataBase();
                 helper.currentDB.close();
             } catch (Exception e) {}
             return null;

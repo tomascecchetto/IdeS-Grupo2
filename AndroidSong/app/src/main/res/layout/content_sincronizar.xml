@@ -14,7 +14,7 @@
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Directorio de importación"
+        android:text="Directorio de Sincronización"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
     <LinearLayout
@@ -81,7 +81,7 @@
                 android:id="@+id/textView13"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Log de importación"
+                android:text="Log de Sincronización"
                 android:textAppearance="@android:style/TextAppearance.Material.Title" />
 
             <TextView

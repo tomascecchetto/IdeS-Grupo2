@@ -78,7 +78,7 @@ public class coleccion {
     private int getLastOrden(){
         int size;
         aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openDataBase();
+        helper.openWriteDataBase();
         String[] arguments = {
                 Integer.toString(getId())
         };
@@ -98,7 +98,7 @@ public class coleccion {
         registro.put(aSDbContract.ItemsColecciones.COLUMN_NAME_ORDEN, getLastOrden()+1);
         registro.put(aSDbContract.ItemsColecciones.COLUMN_NAME_ITEMID, itemId);
         helper.currentDB.insert(aSDbContract.ItemsColecciones.TABLE_NAME, null, registro);
-        helper.currentDB.close();
+        //helper.currentDB.close();
     }
 
     public void removeItem(int itemId){
@@ -107,7 +107,7 @@ public class coleccion {
 
         helper.currentDB.delete(aSDbContract.ItemsColecciones.TABLE_NAME, aSDbContract.ItemsColecciones.COLUMN_NAME_COLECCIONID + "=" + getId() + " AND " +
                 aSDbContract.ItemsColecciones.COLUMN_NAME_ITEMID + "=" + itemId, null);
-        helper.currentDB.close();
+        //helper.currentDB.close();
     }
 
 }

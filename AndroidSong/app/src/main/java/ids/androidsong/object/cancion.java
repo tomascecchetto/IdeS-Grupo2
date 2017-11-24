@@ -87,7 +87,11 @@ public class cancion extends item implements Serializable {
     }
 
     public ArrayList<item> get(String carpeta){
-        return getByCarpeta(Enum.itemTipo.CANCION.name(),carpeta);
+        return getByCarpeta(Enum.itemTipo.CANCION.name(),carpeta,true);
+    }
+
+    public ArrayList<item> getBajas(){
+        return getByCarpeta(Enum.itemTipo.CANCION.name(),FILTRO_CARPETA_TODAS,false);
     }
 
     public void alta(){

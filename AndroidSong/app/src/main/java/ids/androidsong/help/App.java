@@ -1,6 +1,7 @@
 package ids.androidsong.help;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
 import java.io.File;
@@ -15,6 +16,7 @@ public class App {
 
     private static Context con;
     private static boolean set = false;
+    private static aSDbHelper helper;
 
     public static Context getContext(){
         return con;
@@ -24,52 +26,28 @@ public class App {
         con = pcon;
     }
 
-    public static void load(Context pcon){
-        if (!set) {
+    public static aSDbHelper getDBHelper(){
+        if (helper == null){
+            helper = new aSDbHelper(getContext());
+        }
+        return helper;
+    }
+
+    public static SQLiteDatabase getOpenDB(){
+        if (getDBHelper().currentDB == null){
             try {
-                setContext(pcon);
-                checkFolders();
-                checkFavoritos();
-                set = true;
+                getDBHelper().createDataBase();
+                getDBHelper().openWriteDataBase();
             } catch (Exception e) {
             }
+        } else if (!getDBHelper().currentDB.isOpen()){
+            getDBHelper().openWriteDataBase();
         }
+        return getDBHelper().currentDB;
     }
 
-    private static void checkFolders(){
-        final String OpenSong = Environment.getExternalStorageDirectory() + "/" + con.getString(R.string.OpenSongFolder);
-        File dir = new File(OpenSong);
-        File subs;
-
-        if(!dir.exists() || !dir.isDirectory()) {
-            dir.mkdir();
-            subs = new File(OpenSong + "/Songs");
-            subs.mkdir();
-            subs = new File(OpenSong + "/Sets");
-            subs.mkdir();
-            subs = new File(OpenSong + "/Backgrounds");
-            subs.mkdir();
-            subs = new File(OpenSong + "/Settings");
-            subs.mkdir();
-        }
-    }
-
-    private static void checkFavoritos() {
-        boolean fav = true;
-        try {
-            con.openFileInput("favoritos.xml");
-        }
-        catch (Exception e){
-            fav=false;
-        }
-        if (!fav){
-            try{
-                OutputStreamWriter osw = new OutputStreamWriter(con.openFileOutput("favoritos.xml", con.MODE_PRIVATE));
-                osw.write("<favoritos></favoritos>");
-                osw.flush();
-                osw.close();
-            }
-            catch (Exception e) {}
-        }
+    public static void closeDB(){
+        if (getDBHelper().currentDB != null)
+            if (getDBHelper().currentDB.isOpen()) getDBHelper().currentDB.close();
     }
 }

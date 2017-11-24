@@ -66,7 +66,7 @@ public class opciones {
 
     public Boolean getBool(String nombre) throws Exception{
         aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openDataBase();
+        helper.openWriteDataBase();
         String filter = aSDbContract.Opciones.COLUMN_NAME_NOMBRE + "= \"" + nombre + "\"";
         Cursor c = helper.currentDB.query(aSDbContract.Opciones.TABLE_NAME, null, filter, null, null, null, null);
         if (c.moveToFirst()) {
@@ -100,7 +100,7 @@ public class opciones {
 
     public String getString(String nombre, String defaultValue) throws Exception{
         aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openDataBase();
+        helper.openWriteDataBase();
         String filter = aSDbContract.Opciones.COLUMN_NAME_NOMBRE + "= \"" + nombre + "\"";
         Cursor c = helper.currentDB.query(aSDbContract.Opciones.TABLE_NAME, null, filter, null, null, null, null);
         if (c.moveToFirst()) {

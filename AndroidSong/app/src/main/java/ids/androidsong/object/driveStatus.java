@@ -24,6 +24,7 @@ public class driveStatus {
     private item item;
     private String titulo;
     private String carpeta;
+    private int procesado;
 
     public driveStatus(int id, String local, String drive){
         this.itemId = id;
@@ -98,11 +99,15 @@ public class driveStatus {
         this.titulo = titulo;
     }
 
+    public int getProcesado() {
+        return procesado;
+    }
+
+    public void setProcesado(int procesado) {
+        this.procesado = procesado;
+    }
+
     public void alta() {
-
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_ITEMID, getItemId());
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_TITULO, getTitulo());
@@ -111,37 +116,36 @@ public class driveStatus {
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT, getDriveDT());
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO, 0);
 
+        App.getOpenDB().insert(aSDbContract.DriveStatus.TABLE_NAME, null, registro);
+        //helper.currentDB.close();
+    }
 
-        helper.currentDB.insert(aSDbContract.DriveStatus.TABLE_NAME, null, registro);
-        helper.currentDB.close();
+    public void eliminar() {
+        App.getOpenDB().delete(aSDbContract.DriveStatus.TABLE_NAME, aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + "=" + getItemId(), null);
+        //helper.currentDB.close();
     }
 
     public void baja() {
-
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
-        helper.currentDB.delete(aSDbContract.DriveStatus.TABLE_NAME, aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + "=" + getItemId(), null);
-        helper.currentDB.close();
+        setLocalDT(null);
+        ContentValues registro = new ContentValues();
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT, getLocalDT());
+        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO, 0);
+        App.getOpenDB().update(aSDbContract.DriveStatus.TABLE_NAME, registro, aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + "=" + getItemId(), null);
+        //helper.currentDB.close();
     }
 
     public void modificacion() {
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT, getLocalDT());
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT, getDriveDT());
 
-        helper.currentDB.update(aSDbContract.DriveStatus.TABLE_NAME, registro, aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + "=" + getItemId(), null);
-        helper.currentDB.close();
+        App.getOpenDB().update(aSDbContract.DriveStatus.TABLE_NAME, registro, aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + "=" + getItemId(), null);
+        //helper.currentDB.close();
     }
 
     public void fill(){
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openDataBase();
         String filter = aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + "=" + getItemId();
-        Cursor c = helper.currentDB.query(aSDbContract.DriveStatus.TABLE_NAME, null, filter, null, null, null, null);
+        Cursor c = App.getOpenDB().query(aSDbContract.DriveStatus.TABLE_NAME, null, filter, null, null, null, null);
         if (c.moveToFirst()) {
             String local = c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT));
             setLocalDT(local);
@@ -155,13 +159,12 @@ public class driveStatus {
     public void get(){
         String filter = aSDbContract.DriveStatus.COLUMN_NAME_TITULO + " = \"" + getTitulo() +
                 "\" AND " + aSDbContract.DriveStatus.COLUMN_NAME_CARPETA + " = \"" + getCarpeta() + "\"";
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openDataBase();
-        Cursor c = helper.currentDB.query(aSDbContract.DriveStatus.TABLE_NAME, null, filter, null, null, null, null);
+        Cursor c = App.getOpenDB().query(aSDbContract.DriveStatus.TABLE_NAME, null, filter, null, null, null, null);
         if (c.moveToFirst()) {
             setItemId(c.getInt(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_ITEMID)));
             setLocalDT(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT)));
             setDriveDT(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT)));
+            setProcesado(c.getInt(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO)));
         }
         c.close();
     }
@@ -184,10 +187,8 @@ public class driveStatus {
 
     @NonNull
     private ArrayList<driveStatus> get(String filter) {
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
         ArrayList<driveStatus> statuses = new ArrayList<>();
-        Cursor c = helper.currentDB.query(aSDbContract.DriveStatus.TABLE_NAME, null, filter, null, null, null, null);
+        Cursor c = App.getOpenDB().query(aSDbContract.DriveStatus.TABLE_NAME, null, filter, null, null, null, null);
         if (c.moveToFirst()) {
             do {
                 driveStatus status = new driveStatus();
@@ -206,36 +207,29 @@ public class driveStatus {
     public void bajaLocal(){
         fill();
         if (getDriveDT() == null)
-            baja();
+            eliminar();
         else {
-            setLocalDT(null);
-            modificacion();
+            baja();
         }
     }
 
     public void marcarProcesado(){
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO, 1);
         String filtro = aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + " = " + getItemId();
 
-        helper.currentDB.update(aSDbContract.DriveStatus.TABLE_NAME, registro, filtro, null);
-        helper.currentDB.close();
+        App.getOpenDB().update(aSDbContract.DriveStatus.TABLE_NAME, registro, filtro, null);
+        //helper.currentDB.close();
     }
 
     public void borrarProcesado(){
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
         String filter = aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO + " = 1 AND " +
-                aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT + "= NULL";
-        helper.currentDB.delete(aSDbContract.DriveStatus.TABLE_NAME,filter,null);
+                aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT + " is null";
+        App.getOpenDB().delete(aSDbContract.DriveStatus.TABLE_NAME,filter,null);
 
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_PROCESADO, 0);
-        helper.currentDB.update(aSDbContract.DriveStatus.TABLE_NAME, registro, null, null);
-        helper.currentDB.close();
+        App.getOpenDB().update(aSDbContract.DriveStatus.TABLE_NAME, registro, null, null);
+        //helper.currentDB.close();
     }
 }

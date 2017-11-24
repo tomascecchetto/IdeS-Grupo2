@@ -29,6 +29,8 @@ public class item {
     private ArrayList<seccion> secciones = new ArrayList<>();
     private ArrayList<atributo> atributos = new ArrayList<>();
     protected final String FILTRO_CARPETA_TODAS = "Todas";
+    protected final String FILTRO_ITEM_ACTIVO = " AND " + aSDbContract.Items.COLUMN_NAME_FECHABAJA + " is null";
+    protected final String FILTRO_ITEM_BAJA = " AND " + aSDbContract.Items.COLUMN_NAME_FECHABAJA + " is not null";
     private String fechaModificacion;
 
     public item(int i, String t, int c){
@@ -108,9 +110,6 @@ public class item {
 
     public void alta(String tipo) {
 
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
         int carpeta = (new carpeta()).get(getCarpeta());
         fechaModificacion = new GregorianCalendar().getTime().toString();
         ContentValues registro = new ContentValues();
@@ -119,8 +118,8 @@ public class item {
         registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID, carpeta);
         registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, getFechaModificacion());
 
-        setId((int)helper.currentDB.insert(aSDbContract.Items.TABLE_NAME, null, registro));
-        helper.currentDB.close();
+        setId((int)App.getOpenDB().insert(aSDbContract.Items.TABLE_NAME, null, registro));
+        //helper.currentDB.close();
 
         new driveStatus(this).alta();
 
@@ -131,30 +130,10 @@ public class item {
 
     }
 
-    public item get(item item){
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        try {
-            helper.createDataBase();
-            helper.openWriteDataBase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String sortOrder = aSDbContract.Items.COLUMN_NAME_TITULO + " ASC";
-        String filter = aSDbContract.Items.COLUMN_NAME_ID + "=" + Integer.toString(item.getId());
-        Cursor c = helper.currentDB.query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
-        c.moveToFirst();
-        item.setTipo(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TIPO)));
-        item.setSecciones(new seccion().get(item));
-        item.setAtributos(new atributo().get(item));
-        return item;
-    }
-
     public void fillId(){
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
         String filter = aSDbContract.Items.COLUMN_NAME_TITULO + "=\"" + getTitulo() + "\" AND " +
-                aSDbContract.Items.COLUMN_NAME_CARPETAID + "=" + new carpeta().get(getCarpeta());
-        Cursor c = helper.currentDB.query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, null);
+                aSDbContract.Items.COLUMN_NAME_CARPETAID + "=" + new carpeta().get(getCarpeta()) + FILTRO_ITEM_ACTIVO;
+        Cursor c = App.getOpenDB().query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, null);
         if (c.moveToFirst())
             setId(c.getInt(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_ID)));
         else
@@ -163,16 +142,9 @@ public class item {
     }
 
     public void fill(){
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        try {
-            helper.createDataBase();
-            helper.openWriteDataBase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         String sortOrder = aSDbContract.Items.COLUMN_NAME_TITULO + " ASC";
         String filter = aSDbContract.Items.COLUMN_NAME_ID + "=" + Integer.toString(getId());
-        Cursor c = helper.currentDB.query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
+        Cursor c = App.getOpenDB().query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
         c.moveToFirst();
         setTitulo(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TITULO)));
         setTipo(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TIPO)));
@@ -180,30 +152,31 @@ public class item {
         setSecciones(new seccion().get(this));
         setAtributos(new atributo().get(this));
         setFechaModificacion(c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION)));
+        c.close();
     }
 
     protected ArrayList<item> get(String tipo){
-        return getByCarpeta(tipo,FILTRO_CARPETA_TODAS);
+        return getByCarpeta(tipo,FILTRO_CARPETA_TODAS, true);
+    }
+
+    protected ArrayList<item> getBajas(String tipo, String carpeta){
+        return getByCarpeta(tipo,carpeta,false);
     }
 
     @NonNull
-    protected ArrayList<item> getByCarpeta(String tipo, String carpeta) {
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        try {
-            helper.createDataBase();
-            helper.openWriteDataBase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    protected ArrayList<item> getByCarpeta(String tipo, String carpeta, boolean activo) {
         ArrayList<item> items = new ArrayList<>();
         String sortOrder = aSDbContract.Items.COLUMN_NAME_TITULO + " ASC";
         String filter;
-        if (carpeta.equals(FILTRO_CARPETA_TODAS)) {
+        if (carpeta.equals(FILTRO_CARPETA_TODAS))
             filter = aSDbContract.Items.COLUMN_NAME_TIPO + "= \"" + tipo + "\"";
-        } else {
+        else
             filter = aSDbContract.Items.COLUMN_NAME_TIPO + "= \"" + tipo + "\" AND " + aSDbContract.Items.COLUMN_NAME_CARPETAID + "=" + (new carpeta().get(carpeta));
-        }
-        Cursor c = helper.currentDB.query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
+        if (activo)
+            filter = filter + FILTRO_ITEM_ACTIVO;
+        else
+            filter = filter + FILTRO_ITEM_BAJA;
+        Cursor c = App.getOpenDB().query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
         if (c.moveToFirst()) {
         do {
             items.add(new item(
@@ -218,9 +191,6 @@ public class item {
     }
 
     public void modificacion() {
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
         int carpeta = (new carpeta()).get(getCarpeta());
         fechaModificacion = new GregorianCalendar().getTime().toString();
         ContentValues registro = new ContentValues();
@@ -228,33 +198,51 @@ public class item {
         registro.put(aSDbContract.Items.COLUMN_NAME_TIPO, tipo);
         registro.put(aSDbContract.Items.COLUMN_NAME_CARPETAID, carpeta);
         registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, fechaModificacion);
-        helper.currentDB.update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
-        helper.currentDB.close();
+        App.getOpenDB().update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
+        //helper.currentDB.close();
+    }
+
+    public void eliminar() {
+        App.getOpenDB().delete(aSDbContract.Items.TABLE_NAME, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
+    }
+
+    public void restaurar(){
+        ContentValues registro = new ContentValues();
+        registro.putNull(aSDbContract.Items.COLUMN_NAME_FECHABAJA);
+        App.getOpenDB().update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
+
+        driveStatus status = new driveStatus(getTitulo(),getCarpeta());
+        status.get();
+        if (status.getItemId() != 0){
+            if (status.getProcesado() != 0) {
+                status.setDriveDT(null);
+            }
+            status.setLocalDT(getFechaModificacion());
+            status.modificacion();
+        } else {
+            status.setItem(this);
+            status.alta();
+        }
+
     }
 
     public void baja() {
-
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
+        String fechaBaja = new GregorianCalendar().getTime().toString();
+        ContentValues registro = new ContentValues();
+        registro.put(aSDbContract.Items.COLUMN_NAME_FECHABAJA, fechaBaja);
+        App.getOpenDB().update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
         new driveStatus(this).bajaLocal();
-
-        helper.currentDB.delete(aSDbContract.Items.TABLE_NAME, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
-        helper.currentDB.close();
-
-
+        //helper.currentDB.close();
     }
 
     public void modificarContenido(){
         new seccion().baja(this);
         for (seccion s: secciones) { s.alta(this); }
 
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
         fechaModificacion = new GregorianCalendar().getTime().toString();
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, fechaModificacion);
-        helper.currentDB.update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
-        helper.currentDB.close();
+        App.getOpenDB().update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
+        //helper.currentDB.close();
     }
 }

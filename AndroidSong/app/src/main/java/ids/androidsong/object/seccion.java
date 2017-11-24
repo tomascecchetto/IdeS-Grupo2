@@ -82,47 +82,34 @@ public class seccion {
 
     public void alta(item i) {
 
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Secciones.COLUMN_NAME_ITEMID, i.getId());
         registro.put(aSDbContract.Secciones.COLUMN_NAME_NOMBRE, getNombre());
         registro.put(aSDbContract.Secciones.COLUMN_NAME_CONTENIDO, getContenido());
 
-        helper.currentDB.insert(aSDbContract.Secciones.TABLE_NAME, null, registro);
-        helper.currentDB.close();
+        App.getOpenDB().insert(aSDbContract.Secciones.TABLE_NAME, null, registro);
+        //helper.currentDB.close();
     }
 
     public void baja(item i) {
-
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
-        helper.currentDB.delete(aSDbContract.Secciones.TABLE_NAME, aSDbContract.Secciones.COLUMN_NAME_ITEMID + "=" + i.getId(), null);
-        helper.currentDB.close();
+        App.getOpenDB().delete(aSDbContract.Secciones.TABLE_NAME, aSDbContract.Secciones.COLUMN_NAME_ITEMID + "=" + i.getId(), null);
+        //helper.currentDB.close();
     }
 
     public void modificacion(seccion s) {
-
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
-
-        ContentValues registro = new ContentValues();
+ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Secciones.COLUMN_NAME_NOMBRE, s.getNombre());
         registro.put(aSDbContract.Secciones.COLUMN_NAME_CONTENIDO, s.getContenido());
 
-        helper.currentDB.update(aSDbContract.Secciones.TABLE_NAME, registro, aSDbContract.Secciones.COLUMN_NAME_ID + "=" + s.getId(), null);
-        helper.currentDB.close();
+        App.getOpenDB().update(aSDbContract.Secciones.TABLE_NAME, registro, aSDbContract.Secciones.COLUMN_NAME_ID + "=" + s.getId(), null);
+        //helper.currentDB.close();
     }
 
     public ArrayList<seccion> get(item item){
-        aSDbHelper helper = new aSDbHelper(App.getContext());
-        helper.openWriteDataBase();
         ArrayList<seccion> secciones = new ArrayList<>();
         String sortOrder = aSDbContract.Secciones.COLUMN_NAME_ID + " ASC";
         String filter = aSDbContract.Secciones.COLUMN_NAME_ITEMID + "=" + item.getId();
-        Cursor c = helper.currentDB.query(aSDbContract.Secciones.TABLE_NAME, null, filter, null, null, null, sortOrder);
+        Cursor c = App.getOpenDB().query(aSDbContract.Secciones.TABLE_NAME, null, filter, null, null, null, sortOrder);
         c.moveToFirst();
         do {
             secciones.add(new seccion(
