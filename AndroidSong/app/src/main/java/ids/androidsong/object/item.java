@@ -190,6 +190,28 @@ public class item {
         return items;
     }
 
+    @NonNull
+    protected ArrayList<item> getByTitulo(String tipo, String filtro) {
+        ArrayList<item> items = new ArrayList<>();
+        String sortOrder = aSDbContract.Items.COLUMN_NAME_TITULO + " ASC";
+        String filter;
+        filter = aSDbContract.Items.COLUMN_NAME_TIPO + "= \"" + tipo + "\"";
+        filter = filter + FILTRO_ITEM_ACTIVO;
+        filter = filter + " AND " + aSDbContract.Items.COLUMN_NAME_TITULO + " LIKE \"%" + filtro + "%\"";
+        Cursor c = App.getOpenDB().query(aSDbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
+        if (c.moveToFirst()) {
+            do {
+                items.add(new item(
+                        c.getInt(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_ID)),
+                        c.getString(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_TITULO)),
+                        c.getInt(c.getColumnIndex(aSDbContract.Items.COLUMN_NAME_CARPETAID))
+                ));
+            } while (c.moveToNext());
+        }
+        c.close();
+        return items;
+    }
+
     public void modificacion() {
         int carpeta = (new carpeta()).get(getCarpeta());
         fechaModificacion = new GregorianCalendar().getTime().toString();

@@ -20,7 +20,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,10 +27,16 @@
             android:name=".ui.cancionLista"
             android:label="@string/title_cancionmusico_list"
             android:parentActivityName=".ui.principal"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ids.androidsong.ui.principal" />
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/cancion_lista_search" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.cancionDetalle"

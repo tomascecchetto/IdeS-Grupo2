@@ -94,6 +94,10 @@ public class cancion extends item implements Serializable {
         return getByCarpeta(Enum.itemTipo.CANCION.name(),FILTRO_CARPETA_TODAS,false);
     }
 
+    public ArrayList<item> buscar(String filtro){
+        return getByTitulo(Enum.itemTipo.CANCION.name(),filtro);
+    }
+
     public void alta(){
         super.alta(Enum.itemTipo.CANCION.name());
     }
