@@ -41,10 +41,12 @@ public class AltaUnitTest {
         /*Pide canciones dummy y las inserta*/
         ArrayList<cancion> canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
         for (cancion cancion : canciones) {
+            cancion.alta();
         }
     }
 
     @Test
+    public void Cancion_Alta(){
         int cantidad = new cancion().get().size();
         assertTrue( cantidad == CANTIDAD_CANCIONES_DUMMY);
     }
