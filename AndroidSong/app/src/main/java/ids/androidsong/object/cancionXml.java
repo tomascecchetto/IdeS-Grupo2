@@ -1,6 +1,8 @@
 package ids.androidsong.object;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -14,6 +16,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import static ids.androidsong.help.xml.AddChild;
+import static ids.androidsong.help.xml.AddRootChild;
+import static ids.androidsong.help.xml.ExistsNode;
+import static ids.androidsong.help.xml.FindNode;
+import static ids.androidsong.help.xml.GetChilds;
 import static ids.androidsong.help.xml.GetValue;
 import static ids.androidsong.help.xml.SetValue;
 import static ids.androidsong.help.xml.getRawDocument;
@@ -30,23 +37,8 @@ import ids.androidsong.help.Enum;
 
 public class cancionXml extends cancion {
     protected String path;
-    protected String author = "";
-    protected String copyright = "";
-    protected String hymn_number = "";
-    protected String presentation = "";
-    protected String ccli = "";
-    protected String capo = "";
-    protected boolean printCapo = false;
-    protected String key = "";
-    protected String aka = "";
-    protected String key_line = "";
-    protected String user1 = "";
-    protected String user2 = "";
-    protected String user3 = "";
-    protected String theme = "";
-    protected String tempo = "";
-    protected String time_sig = "";
-    protected String lyrics = "";
+
+    private String APP_ATRIBUTOS_NODO = "AndroidSong_attributes";
 
     public cancionXml(){
 
@@ -77,12 +69,6 @@ public class cancionXml extends cancion {
         catch (Exception e){}
     }
 
-    private void GetCancionError() {
-        titulo = "Error";
-        author = "";
-        lyrics = "Error al cargar la canción";
-    }
-
     protected Document getDocument()
             throws ParserConfigurationException, SAXException, IOException {
         InputStream is = new FileInputStream(new File(path));
@@ -94,13 +80,16 @@ public class cancionXml extends cancion {
     private void CargarNodos(Document xml){
         llenarSecciones(GetValue(xml,"lyrics"));
         setTipo(Enum.itemTipo.CANCION.name());
-        getAtributos().add(new atributo("autor",GetValue(xml,"author")));
-        getAtributos().add(new atributo("interprete",GetValue(xml,"copyright")));
-        getAtributos().add(new atributo("numeroHimno",GetValue(xml,"hymn_number")));
-        getAtributos().add(new atributo("presentacion",GetValue(xml,"presentation")));
-        getAtributos().add(new atributo("transporte",GetValue(xml,"capo")));
-        getAtributos().add(new atributo("tono",GetValue(xml,"key")));
-        getAtributos().add(new atributo("tempo",GetValue(xml,"tempo")));
+        int i;
+        for (i = 0; i<Enum.atributo.values().length; i++){
+            getAtributos().add(new atributo(Enum.atributo.values()[i].name(),GetValue(xml,Enum.atributoXml.values()[i].name())));
+        }
+        Element[] atributosUsuario = GetChilds(APP_ATRIBUTOS_NODO,xml);
+        if (atributosUsuario.length > 0) {
+            for (Element element : atributosUsuario) {
+                getAtributos().add(new atributo(element.getTagName(), element.getTextContent()));
+            }
+        }
     }
 
     protected File toXml(){
@@ -130,23 +119,16 @@ public class cancionXml extends cancion {
     protected void LoadCancion(Document dom){
         SetValue("title",getTitulo(),dom);
         SetValue("lyrics",getLetra(),dom);
-        for (atributo atributo:getAtributos()){
-            switch (atributo.getNombre()){
-                case "autor":
-                    SetValue("author",atributo.getValor(),dom);
-                    break;
-                case "interprete":
-                    SetValue("copyright",atributo.getValor(),dom);
-                    break;
-                case "presentacion":
-                    SetValue("presentation",atributo.getValor(),dom);
-                    break;
-                case "tono":
-                    SetValue("key",atributo.getValor(),dom);
-                    break;
-                case "transporte":
-                    SetValue("capo",atributo.getValor(),dom);
-                    break;
+        if (!ExistsNode(APP_ATRIBUTOS_NODO,dom))
+            AddRootChild(APP_ATRIBUTOS_NODO,dom);
+        for (atributo a:getAtributos()){
+            try {
+                Enum.atributo atributo = Enum.atributo.valueOf(a.getNombre());
+                SetValue(Enum.atributoXml.values()[atributo.ordinal()].name(),a.getValor(),dom);
+            } catch (IllegalArgumentException e) {
+                if (!FindNode(a.getNombre(),a.getValor(),dom)){
+                    AddChild(APP_ATRIBUTOS_NODO,a.getNombre(),a.getValor(),dom);
+                }
             }
         }
     }

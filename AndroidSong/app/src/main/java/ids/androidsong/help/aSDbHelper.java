@@ -22,7 +22,7 @@ public class aSDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "androidSongDB";
-    private static String DATABASE_PATH = "/data/user/0/ids.androidsong/databases/";
+    private static String DATABASE_PATH = String.valueOf(App.getContext().getDatabasePath(DATABASE_NAME));
     private final Context con;
     public SQLiteDatabase currentDB;
 
@@ -150,41 +150,11 @@ public class aSDbHelper extends SQLiteOpenHelper {
         databaseOutputStream.close();
     }
 
-/*    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(aSDbContract.Carpetas.TABLE_CREATE);
-        db.execSQL(aSDbContract.Colecciones.TABLE_CREATE);
-        db.execSQL(aSDbContract.Items.TABLE_CREATE);
-        db.execSQL(aSDbContract.Atributos.TABLE_CREATE);
-        db.execSQL(aSDbContract.AtributosUsuario.TABLE_CREATE);
-        db.execSQL(aSDbContract.ItemsColecciones.TABLE_CREATE);
-        db.execSQL(aSDbContract.Opciones.TABLE_CREATE);
-        db.execSQL(aSDbContract.Secciones.TABLE_CREATE);
-        STATE_NEW = true;
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(aSDbContract.Atributos.TABLE_DROP);
-        db.execSQL(aSDbContract.AtributosUsuario.TABLE_DROP);
-        db.execSQL(aSDbContract.Carpetas.TABLE_DROP);
-        db.execSQL(aSDbContract.Colecciones.TABLE_DROP);
-        db.execSQL(aSDbContract.Items.TABLE_DROP);
-        db.execSQL(aSDbContract.ItemsColecciones.TABLE_DROP);
-        db.execSQL(aSDbContract.Opciones.TABLE_DROP);
-        db.execSQL(aSDbContract.Secciones.TABLE_DROP);
-        STATE_NEW = true;
-        onCreate(db);
-    }
-
-    public void initDB(SQLiteDatabase db) {
-        if (STATE_NEW) {
-            db.execSQL(aSDbContract.Carpetas.TABLE_INIT);
-            db.execSQL(aSDbContract.Opciones.TABLE_INIT);
-        }
-    }*/
-
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
+    }
+
+    public void clearDb() throws IOException {
+        copyDataBase();
     }
 }

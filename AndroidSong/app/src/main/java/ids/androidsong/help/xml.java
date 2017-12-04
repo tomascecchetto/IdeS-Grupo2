@@ -52,16 +52,23 @@ public class xml {
         nodo.setTextContent(valor);
     }
 
-    public static Node FindNode(String tag, String valor, Document dom)
-    {
-        Node ret = null;
-        int i;
+    public static boolean ExistsNode(String tag, Document dom) {
+        boolean ret = false;
         Element e = dom.getDocumentElement();
         NodeList lista = e.getElementsByTagName(tag);
-        for (i=0; i< lista.getLength(); i++) {
-            if (lista.item(i).getTextContent().contentEquals(valor)){
-                ret=lista.item(i);
-            }
+        if (lista.getLength() > 0){
+            ret = true;
+        }
+        return ret;
+    }
+
+    public static boolean FindNode(String tag, String valor, Document dom) {
+        boolean ret = false;
+        Element e = dom.getDocumentElement();
+        NodeList lista = e.getElementsByTagName(tag);
+        if (lista.getLength() > 0){
+            lista.item(0).setTextContent(valor);
+            ret = true;
         }
         return ret;
     }
@@ -89,11 +96,12 @@ public class xml {
     public static Element[] GetChilds(String tag, Element e)
     {
         NodeList lista = e.getElementsByTagName(tag);
-        Element[] elementos = new Element[lista.getLength()];
+        NodeList hijos = lista.item(0).getChildNodes();
+        Element[] elementos = new Element[hijos.getLength()];
         int i;
-        if (elementos.length>0) {
+        if (hijos.getLength()>0) {
             for (i = 0; i < elementos.length; i++) {
-                elementos[i] = (Element) lista.item(i);
+                elementos[i] = (Element) hijos.item(i);
             }
         }
         return elementos;
@@ -119,5 +127,20 @@ public class xml {
             dom = db.parse(is);
         } catch (Exception e) {}
         return dom;
+    }
+
+    public static void AddChild(String parent, String name, String value, Document dom){
+        Element e = dom.getDocumentElement();
+        NodeList lista = e.getElementsByTagName(parent);
+        Node nodo = lista.item(0);
+        Element nuevo = dom.createElement(name);
+        nuevo.setTextContent(value);
+        nodo.appendChild(nuevo);
+    }
+
+    public static void AddRootChild(String name, Document dom){
+        Element e = dom.getDocumentElement();
+        Element nuevo = dom.createElement(name);
+        e.appendChild(nuevo);
     }
 }

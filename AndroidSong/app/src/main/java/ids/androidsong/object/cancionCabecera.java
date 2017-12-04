@@ -25,7 +25,7 @@ public class cancionCabecera extends fileCabecera {
     public Element getFavorito(){
         Document dom = null;
         try {
-            dom = getRawDocument(R.raw.favorito);
+            dom = getRawDocument(R.raw.atributo);
             SetValue("titulo",titulo,dom);
             SetValue("dir",getDir(),dom);
             SetValue("carpeta",carpeta,dom);

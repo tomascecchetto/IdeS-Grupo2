@@ -267,4 +267,15 @@ public class item {
         App.getOpenDB().update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
         //helper.currentDB.close();
     }
+
+    public void modificarAtributos(){
+        new atributo().baja(this);
+        for (atributo a: atributos) { a.alta(this); }
+
+        fechaModificacion = new GregorianCalendar().getTime().toString();
+        ContentValues registro = new ContentValues();
+        registro.put(aSDbContract.Items.COLUMN_NAME_FECHAMODIFICACION, fechaModificacion);
+        App.getOpenDB().update(aSDbContract.Items.TABLE_NAME, registro, aSDbContract.Items.COLUMN_NAME_ID + "=" + getId(), null);
+        //helper.currentDB.close();
+    }
 }

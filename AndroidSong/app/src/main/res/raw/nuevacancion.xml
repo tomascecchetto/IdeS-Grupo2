@@ -17,6 +17,7 @@
   <tempo></tempo>
   <time_sig></time_sig>
   <lyrics></lyrics>
+  <AndroidSong_attributes></AndroidSong_attributes>
   <linked_songs/>
   <backgrounds resize="screen" keep_aspect="false" link="false" background_as_text="false"/>
 </song>

@@ -109,18 +109,26 @@ public class cancionDetalle extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void mostrarAtributos(View view){
+        Intent intent = new Intent(this, atributos.class);
+        intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID, itemId);
+        startActivity(intent);
+    }
+
     private void mostrarOpciones() {
         ImageButton modificarAcordesSostenido = findViewById(R.id.cancion_detalle_sharp);
         ImageButton modificarAcordesBemol = findViewById(R.id.cancion_detalle_flat);
         ImageButton tamanioLetraMenor = findViewById(R.id.cancion_detalle_menor);
         ImageButton tamanioLetraMayor = findViewById(R.id.cancion_detalle_mayor);
         ImageButton mostrarEdicion = findViewById(R.id.cancion_detalle_editar);
+        ImageButton mostrarAtributos = findViewById(R.id.cancion_detalle_info);
         if (opciones){
             modificarAcordesSostenido.setVisibility(View.GONE);
             modificarAcordesBemol.setVisibility(View.GONE);
             tamanioLetraMenor.setVisibility(View.GONE);
             tamanioLetraMayor.setVisibility(View.GONE);
             mostrarEdicion.setVisibility(View.GONE);
+            mostrarAtributos.setVisibility(View.GONE);
             opciones = false;
         } else {
             modificarAcordesSostenido.setVisibility(View.VISIBLE);
@@ -128,6 +136,7 @@ public class cancionDetalle extends AppCompatActivity {
             tamanioLetraMenor.setVisibility(View.VISIBLE);
             tamanioLetraMayor.setVisibility(View.VISIBLE);
             mostrarEdicion.setVisibility(View.VISIBLE);
+            mostrarAtributos.setVisibility(View.VISIBLE);
             opciones = true;
         }
     }

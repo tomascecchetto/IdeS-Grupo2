@@ -1,9 +1,12 @@
 package ids.androidsong.object;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
+
+import javax.annotation.Nullable;
 
 import ids.androidsong.help.Enum;
 
@@ -104,10 +107,50 @@ public class cancion extends item implements Serializable {
 
     public String getLetra(){
         String letra = "";
+        String nombreAnterior = "";
         for (seccion sec : getSecciones()){
-            letra = letra + "[" + sec.getNombre() + "]\n";
+            if (!nombreAnterior.equals(sec.getNombre()))
+                letra = letra + "[" + sec.getNombre() + "]\n";
+            else
+                letra = letra + " ||";
             letra = letra + sec.getContenido() + "\n";
         }
         return letra;
+    }
+
+    public String getAtributosTexto(){
+        String atributos = "";
+        for (atributo a : getAtributos()){
+            atributos = atributos + a.getNombre() + ", ";
+            atributos = atributos + a.getValor() + "\n";
+        }
+        return atributos;
+    }
+
+    public void llenarAtributos(String atributos) {
+        String[] atributo;
+        StringReader reader = new StringReader(atributos);
+        BufferedReader br = new BufferedReader(reader);
+        String linea;
+        try {
+            while ((linea = br.readLine()) != null) {
+                if (linea.length() > 0) {
+                    atributo = linea.split(",");
+                    atributo[1]= linea.substring(atributo[0].length()+1);
+                    atributo[1]= atributo[1].trim();
+                    this.getAtributos().add(new atributo(atributo[0],atributo[1]));
+                }
+            }
+        } catch (IOException e) {}
+    }
+
+    public atributo getAtributo(String nombre){
+        atributo a = new atributo(nombre,null);
+        for (atributo at: getAtributos()){
+            if (at.getNombre().equals(nombre)){
+                a = at;
+            }
+        }
+        return a;
     }
 }

@@ -66,8 +66,8 @@ public class atributo {
         //helper.currentDB.close();
     }
 
-    public void baja(atributo a) {
-        App.getOpenDB().delete(aSDbContract.Atributos.TABLE_NAME, aSDbContract.Atributos.COLUMN_NAME_ID + "=" + a.getId(), null);
+    public void baja(item i) {
+        App.getOpenDB().delete(aSDbContract.Atributos.TABLE_NAME, aSDbContract.Atributos.COLUMN_NAME_ITEMID + "=" + i.getId(), null);
         //helper.currentDB.close();
     }
 

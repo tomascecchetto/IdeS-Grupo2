@@ -17,10 +17,19 @@ public final class Enum {
     }
 
     public enum atributo {
-        presentacion(0),autor(1),transporte(2),interprete(3),tono(4);
+        presentacion(0),autor(1),transporte(2),interprete(3),tono(4),himno_numero(5),titulo_alternativo(6),user1(7),user2(8),user3(9);
 
         int a;
         atributo(int i){
+            this.a=i;
+        }
+    }
+
+    public enum atributoXml {
+        presentation(0),author(1),capo(2),copyright(3),key(4),hymn_number(5),aka(6),user1(7),user2(8),user3(9);
+
+        int a;
+        atributoXml(int i){
             this.a=i;
         }
     }

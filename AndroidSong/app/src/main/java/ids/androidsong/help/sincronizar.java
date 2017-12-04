@@ -402,6 +402,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
     private void actualizarDriveALocal(cancionDrive cancion, driveStatus status) {
         cancion.fill();
         cancion.modificarContenido();
+        cancion.modificarAtributos();
         status.setLocalDT(cancion.getFechaModificacion());
         status.setDriveDT(cancion.getDriveFile().getModifiedDate().toString());
         status.modificacion();
