@@ -65,8 +65,8 @@ public class cancion extends item implements Serializable {
                                 contenido = "";
                             }else {
                                 contenido += linea + "\n";
-                                break;
                             }
+                            break;
                         default:
                             contenido += " " + linea + "\n";
                             break;
@@ -109,10 +109,12 @@ public class cancion extends item implements Serializable {
         String letra = "";
         String nombreAnterior = "";
         for (seccion sec : getSecciones()){
-            if (!nombreAnterior.equals(sec.getNombre()))
+            if (!nombreAnterior.equals(sec.getNombre())) {
                 letra = letra + "[" + sec.getNombre() + "]\n";
+                nombreAnterior = sec.getNombre();
+            }
             else
-                letra = letra + " ||";
+                letra = letra + " ||\n";
             letra = letra + sec.getContenido() + "\n";
         }
         return letra;

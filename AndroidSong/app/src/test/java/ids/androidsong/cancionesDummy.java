@@ -18,7 +18,8 @@ public class cancionesDummy {
     private String CARPETA_DUMMY = "Principal";
     private String ATRIBUTO_DUMMY = "Dummy ";
     private String SECCION_NOMBRE_DUMMY = "V";
-    private String SECCION_CONTENIDO_DUMMY = "Contenido Dummy ";
+    private String SECCION_CONTENIDO_DUMMY = ". C    F#      G\n" +
+                                             " Contenido Dummy ";
 
     public cancionesDummy(int c){
         cantidadInterna = c;
@@ -62,10 +63,10 @@ public class cancionesDummy {
         ArrayList<seccion> secciones = new ArrayList<>();
         int j;
         int k = cantidadInterna == 0 ? i : cantidadInterna;
-        for (j=0;j<k;j++){
+        for (j=1;j<=k;j++){
             String contenidoDummy = "";
             int l;
-            for (l=0;l<j;l++){
+            for (l=1;l<=j;l++){
                 contenidoDummy = contenidoDummy + SECCION_CONTENIDO_DUMMY + Integer.toString(l) + "\n";
             }
             secciones.add(new seccion(SECCION_NOMBRE_DUMMY + Integer.toString(j),contenidoDummy));

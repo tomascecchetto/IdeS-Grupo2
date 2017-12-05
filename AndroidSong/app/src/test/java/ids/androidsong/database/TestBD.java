@@ -1,4 +1,4 @@
-package ids.androidsong.database;
+/*package ids.androidsong.database;
 
 
 
@@ -11,9 +11,9 @@ import ids.androidsong.help.aSDbHelper;
 import ids.androidsong.object.carpeta;
 
 
-/**
+*//**
  * Created by Brian on 27/11/2017.
- */
+ *//*
 
 public class TestBD extends AndroidTestCase {
     aSDbHelper bd;
@@ -40,4 +40,4 @@ public class TestBD extends AndroidTestCase {
 
     }
 
-}
+}*/
