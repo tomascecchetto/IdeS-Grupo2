@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import ids.androidsong.help.App;
 import ids.androidsong.object.cancion;
 import ids.androidsong.object.driveStatus;
+import ids.androidsong.ui.papelera;
 
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static org.junit.Assert.*;
@@ -34,6 +35,8 @@ import static org.junit.Assert.*;
 public class BajaUnitTest {
 
     private int CANTIDAD_CANCIONES_DUMMY = 5;
+    private cancion cancion;
+    ArrayList<cancion> canciones;
 
     @Before
     //Esto se ejecuta SIEMPRE antes de los test
@@ -42,7 +45,25 @@ public class BajaUnitTest {
         App.setContext(RuntimeEnvironment.application);
         App.getOpenDB();
         //Dar de alta algunas canciones para la prueba acá.
+        ArrayList<cancion> canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
+        for (cancion cancion : canciones) {
+            cancion.alta();
+        }
     }
+    @Test
+    public void Cancion_Baja(){
+        for (cancion cancion:canciones){
+            cancion.baja();
+        }
+        int cantidad = canciones.size();
+        assertTrue( cantidad ==0);
+        papelera papelera = new papelera();
+        int cantidadPapelera =  papelera.getItemCount();
+        assertTrue( cantidadPapelera ==CANTIDAD_CANCIONES_DUMMY);
+    }
+
+
+
 
     @After
     /*Esto se ejecuta SIEMPRE después del último test
@@ -56,8 +77,5 @@ public class BajaUnitTest {
         }
     }
 
-    @Test
-    public void Cancion_Eliminar(){
-        assertTrue(true);
-    }
+
 }
