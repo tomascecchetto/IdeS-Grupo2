@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import ids.androidsong.help.App;
 import ids.androidsong.object.cancion;
 import ids.androidsong.object.driveStatus;
+import ids.androidsong.object.item;
 
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static org.junit.Assert.*;
@@ -36,17 +37,34 @@ public class BuscarUnitTest {
     private int CANTIDAD_CANCIONES_DUMMY = 20;
 
     @Before
-    //Esto se ejecuta SIEMPRE antes de los test
     public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
         App.setContext(RuntimeEnvironment.application);
-        App.getOpenDB();
-        //Dar de alta algunas canciones para la prueba acá.
+        ArrayList<cancion> canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
+        for (cancion cancion : canciones) {
+            cancion.alta();
+        }
+    }
+
+    @Test
+    public void Cancion_BuscarNinguno(){
+        ArrayList<item> lista = new cancion().buscar("25");
+        assertTrue(lista.size() == 0);
+    }
+
+    @Test
+    public void Cancion_BuscarUno(){
+        ArrayList<item> lista = new cancion().buscar("13");
+        assertTrue(lista.size() == 1);
+    }
+
+    @Test
+    public void Cancion_BuscarVarios(){
+        ArrayList<item> lista = new cancion().buscar("5");
+        assertTrue(lista.size() == 2);
     }
 
     @After
-    /*Esto se ejecuta SIEMPRE después del último test
-    * Acá borramos la BD para el siguiente test*/
     public void finalize(){
         try {
             App.closeDB();
@@ -54,10 +72,5 @@ public class BuscarUnitTest {
         } catch (Exception e) {
             System.out.print("Error restaurando BD\n");
         }
-    }
-
-    @Test
-    public void Cancion_Buscar(){
-        assertTrue(true);
     }
 }

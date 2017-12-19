@@ -448,7 +448,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         status.setItem(cancion);
         status.setDriveDT(cancion.getDriveFile().getModifiedDate().toString());
         status.setLocalDT(cancion.getFechaModificacion());
-        status.modificacion();
+        status.alta();
         status.marcarProcesado();
     }
 

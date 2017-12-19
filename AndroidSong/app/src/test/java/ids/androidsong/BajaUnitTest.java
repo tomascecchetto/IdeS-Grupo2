@@ -34,19 +34,112 @@ import static org.junit.Assert.*;
 public class BajaUnitTest {
 
     private int CANTIDAD_CANCIONES_DUMMY = 5;
+    private String DRIVE_HASH = "DriveHash";
+    ArrayList<cancion> canciones;
 
     @Before
-    //Esto se ejecuta SIEMPRE antes de los test
     public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
         App.setContext(RuntimeEnvironment.application);
         App.getOpenDB();
-        //Dar de alta algunas canciones para la prueba acá.
+        canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
+        for (cancion cancion : canciones) {
+            cancion.alta();
+        }
+    }
+
+
+
+    @Test
+    public void Cancion_BajaNoSincronizado_Status(){
+        cancion cancion = canciones.get(0);
+        cancion.baja();
+        driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        status.get();
+        assertNull(status.getItemId());
+    }
+
+    @Test
+    public void Cancion_BajaSincronizado_Status(){
+        cancion cancion = canciones.get(0);
+        driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        status.fill();
+        status.setDriveDT(DRIVE_HASH);
+        status.modificacion();
+        cancion.baja();
+        status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        status.get();
+        assertTrue(status.getDriveDT().equals(DRIVE_HASH) && status.getLocalDT() == null);
+    }
+
+    @Test
+    public void Cancion_Baja_Papelera(){
+        cancion cancion0 = canciones.get(0);
+        cancion0.baja();
+        cancion cancion1 = canciones.get(1);
+        cancion1.baja();
+        assertTrue((new cancion()).getBajas().size() == 2);
+    }
+
+    @Test
+    public void Cancion_Baja_Lista(){
+        cancion cancion0 = canciones.get(0);
+        cancion0.baja();
+        cancion cancion1 = canciones.get(1);
+        cancion1.baja();
+        assertTrue((new cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-2);
+    }
+
+    @Test
+    public void Cancion_RestaurarNoSincronizado_Status(){
+        cancion cancion = canciones.get(0);
+        cancion.baja();
+        cancion.restaurar();
+        driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        status.get();
+        assertTrue(status.getItemId() > 0 && status.getLocalDT() != null && status.getDriveDT() == null);
+    }
+
+    @Test
+    public void Cancion_RestaurarSincronizado_Status(){
+        cancion cancion = canciones.get(0);
+        driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        status.fill();
+        status.setDriveDT(DRIVE_HASH);
+        status.modificacion();
+        cancion.baja();
+        cancion.restaurar();
+        status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        status.get();
+        assertTrue(status.getLocalDT() != null);
+    }
+
+    @Test
+    public void Cancion_Restaurar_Papelera(){
+        cancion cancion0 = canciones.get(0);
+        cancion0.baja();
+        cancion cancion1 = canciones.get(1);
+        cancion1.baja();
+        cancion1.restaurar();
+        assertTrue((new cancion()).getBajas().size() == 1);
+    }
+
+    @Test
+    public void Cancion_Restaurar_Lista(){
+        cancion cancion0 = canciones.get(0);
+        cancion0.baja();
+        cancion cancion1 = canciones.get(1);
+        cancion1.baja();
+        cancion1.restaurar();
+        assertTrue((new cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-1);
+    }
+
+    @Test
+    public void Cancion_Eliminar(){
+        assertTrue(true);
     }
 
     @After
-    /*Esto se ejecuta SIEMPRE después del último test
-    * Acá borramos la BD para el siguiente test*/
     public void finalize(){
         try {
             App.closeDB();
@@ -54,10 +147,5 @@ public class BajaUnitTest {
         } catch (Exception e) {
             System.out.print("Error restaurando BD\n");
         }
-    }
-
-    @Test
-    public void Cancion_Eliminar(){
-        assertTrue(true);
     }
 }

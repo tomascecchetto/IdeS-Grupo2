@@ -32,10 +32,10 @@ public class ConversionesUnitTest {
     private cancion cancion;
 
     @Before
-    //Esto se ejecuta SIEMPRE antes de los test
     public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
         App.setContext(RuntimeEnvironment.application);
+        App.getOpenDB();
         /*Pide canciones dummy y las inserta*/
         ArrayList<cancion> canciones = new cancionesDummy(CANTIDAD_SECCIONES_DUMMY).getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
         cancion = canciones.get(0);
@@ -61,8 +61,6 @@ public class ConversionesUnitTest {
     }
 
     @After
-    /*Esto se ejecuta SIEMPRE después del test
-    * Acá borramos la BD para el siguiente test*/
     public void finalize(){
         try {
             App.closeDB();

@@ -26,14 +26,14 @@ public class App {
         con = pcon;
     }
 
-    public static aSDbHelper getDBHelper(){
+    public static synchronized aSDbHelper getDBHelper(){
         if (helper == null){
             helper = new aSDbHelper(getContext());
         }
         return helper;
     }
 
-    public static SQLiteDatabase getOpenDB(){
+    public static synchronized SQLiteDatabase getOpenDB(){
         if (getDBHelper().currentDB == null){
             try {
                 getDBHelper().createDataBase();

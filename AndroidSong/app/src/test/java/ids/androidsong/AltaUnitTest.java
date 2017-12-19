@@ -1,6 +1,7 @@
 package ids.androidsong;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,42 +27,79 @@ import static org.junit.Assert.*;
 public class AltaUnitTest {
 
     private int CANTIDAD_CANCIONES_DUMMY = 5;
+    private int CANTIDAD_SECCIONES_DUMMY = 3;
+    private ArrayList<cancion> canciones;
 
     @Before
-    //Esto se ejecuta SIEMPRE antes de los test
     public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
         App.setContext(RuntimeEnvironment.application);
+        App.getOpenDB();
         /*Pide canciones dummy y las inserta*/
-        ArrayList<cancion> canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
-        for (cancion cancion : canciones) {
-            cancion.alta();
-        }
+        canciones = new cancionesDummy(CANTIDAD_SECCIONES_DUMMY).getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
+
     }
 
     @Test
     public void Cancion_Alta(){
+        for (cancion cancion : canciones) {
+            cancion.alta();
+        }
         int cantidad = new cancion().get().size();
         assertTrue( cantidad == CANTIDAD_CANCIONES_DUMMY);
     }
 
     @Test
+    public void Cancion_Secciones(){
+        for (cancion cancion : canciones) {
+            cancion.alta();
+        }
+        boolean result = true;
+        cancion cancionGuardada;
+        for(cancion c : canciones){
+            cancionGuardada = new cancion(c.getId());
+            cancionGuardada.fill();
+            if (c.getSecciones().size() != cancionGuardada.getSecciones().size())
+                result = false;
+        }
+        assertTrue(result);
+    }
+
+    @Test
+    public void Cancion_Atributos(){
+        for (cancion cancion : canciones) {
+            cancion.alta();
+        }
+        boolean result = true;
+        cancion cancionGuardada;
+        for(cancion c : canciones){
+            cancionGuardada = new cancion(c.getId());
+            cancionGuardada.fill();
+            if (c.getAtributos().size() != cancionGuardada.getAtributos().size())
+                result = false;
+        }
+        assertTrue(result);
+    }
+
+    @Test
     public void DriveStatus_getNuevos() throws Exception {
+        for (cancion cancion : canciones) {
+            cancion.alta();
+        }
         ArrayList<driveStatus> lista = new driveStatus().getNuevos();
         assertTrue(lista.size() == CANTIDAD_CANCIONES_DUMMY);
     }
 
     @After
-    /*Esto se ejecuta SIEMPRE después del último test
-    * Acá borramos la BD para el siguiente test*/
     public void finalize(){
         try {
-            App.closeDB();
             App.getDBHelper().clearDb();
+            App.closeDB();
         } catch (Exception e) {
             System.out.print("Error restaurando BD\n");
         }
     }
+
 /*
     private void resetSingleton(Class clazz, String fieldName) {
         Field instance;

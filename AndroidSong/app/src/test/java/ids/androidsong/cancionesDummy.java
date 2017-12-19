@@ -20,6 +20,7 @@ public class cancionesDummy {
     private String SECCION_NOMBRE_DUMMY = "V";
     private String SECCION_CONTENIDO_DUMMY = ". C    F#      G\n" +
                                              " Contenido Dummy ";
+    private int delta;
 
     public cancionesDummy(int c){
         cantidadInterna = c;
@@ -29,18 +30,23 @@ public class cancionesDummy {
         cantidadInterna = 0;
     }
 
+    public ArrayList<cancion> getCancionesDummy(int cantidad) {
+        return getCancionesDummy(cantidad, CARPETA_DUMMY);
+    }
+
     //El método recibe un parámetro para la cantidad de canciones esperadas
-    public ArrayList<cancion> getCancionesDummy(int cantidad){
+    public ArrayList<cancion> getCancionesDummy(int cantidad, String carpeta){
         ArrayList<cancion> canciones = new ArrayList<>();
         int i;
         for (i=0;i<cantidad;i++){
             cancion cancion = new cancion();
-            cancion.setTitulo(TITULO_DUMMY + Integer.toString(i));
-            cancion.setCarpeta(CARPETA_DUMMY);
+            cancion.setTitulo(TITULO_DUMMY + Integer.toString(i + delta));
+            cancion.setCarpeta(carpeta);
             cancion.setAtributos(getAtributosDummy(i));
             cancion.setSecciones(getSeccionesDummy(i));
             canciones.add(cancion);
         }
+        delta += cantidad;
         return canciones;
     }
 
@@ -49,12 +55,12 @@ public class cancionesDummy {
         int j;
         //Los atributos predefinidos se cargan todos
         for (j = 0; j< Enum.atributo.values().length; j++){
-            atributos.add(new atributo(Enum.atributo.values()[i].name(),ATRIBUTO_DUMMY + Enum.atributo.values()[i].name()));
+            atributos.add(new atributo(Enum.atributo.values()[j].name(),ATRIBUTO_DUMMY + Enum.atributo.values()[j].name()));
         }
         //Luego se generan atributos custom par cada canción
         int k = cantidadInterna == 0 ? i : cantidadInterna;
         for (j=0;j<k;j++){
-            atributos.add(new atributo(ATRIBUTO_DUMMY + Integer.toString(j),ATRIBUTO_DUMMY + Integer.toString(j)));
+            atributos.add(new atributo(ATRIBUTO_DUMMY + Integer.toString(j + delta),ATRIBUTO_DUMMY + Integer.toString(j + delta)));
         }
         return atributos;
     }
@@ -67,9 +73,9 @@ public class cancionesDummy {
             String contenidoDummy = "";
             int l;
             for (l=1;l<=j;l++){
-                contenidoDummy = contenidoDummy + SECCION_CONTENIDO_DUMMY + Integer.toString(l) + "\n";
+                contenidoDummy = contenidoDummy + SECCION_CONTENIDO_DUMMY + Integer.toString(l + delta) + "\n";
             }
-            secciones.add(new seccion(SECCION_NOMBRE_DUMMY + Integer.toString(j),contenidoDummy));
+            secciones.add(new seccion(SECCION_NOMBRE_DUMMY + Integer.toString(j + delta),contenidoDummy));
         }
         return secciones;
     }

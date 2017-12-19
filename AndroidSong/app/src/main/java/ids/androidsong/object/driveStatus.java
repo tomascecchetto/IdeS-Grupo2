@@ -137,7 +137,10 @@ public class driveStatus {
     public void modificacion() {
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT, getLocalDT());
-        registro.put(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT, getDriveDT());
+        if (getDriveDT() == null)
+            registro.putNull(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT);
+        else
+            registro.put(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT, getDriveDT());
 
         App.getOpenDB().update(aSDbContract.DriveStatus.TABLE_NAME, registro, aSDbContract.DriveStatus.COLUMN_NAME_ITEMID + "=" + getItemId(), null);
         //helper.currentDB.close();
