@@ -11,10 +11,9 @@ import android.view.MenuItem;
 import android.widget.ImageButton;
 
 import ids.androidsong.R;
-import ids.androidsong.adapter.listaSecciones;
 
 /**
- * An activity representing a single cancionMusico detail screen. This
+ * An activity representing a single cancion detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a {@link cancionLista}.
@@ -31,17 +30,17 @@ public class cancionDetalle extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cancion_detalle);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        Toolbar toolbar = findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
         itemId = getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /*Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
                 itemId = getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0);
-                Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
+                Intent intent = new Intent(getApplication().getBaseContext(),fullscreenCancion.class);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID,itemId);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_CAPO,capo);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_FUENTE,fontSize);

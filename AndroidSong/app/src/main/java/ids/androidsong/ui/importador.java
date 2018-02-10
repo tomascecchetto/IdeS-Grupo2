@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -38,11 +37,11 @@ public class importador extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_importador);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         con = this;
-        path = (TextView) findViewById(R.id.importar_text_path);
-        ToggleButton sobreescribir = (ToggleButton) findViewById(R.id.importar_button_override);
+        path = findViewById(R.id.importar_text_path);
+        ToggleButton sobreescribir = findViewById(R.id.importar_button_override);
         permisos.solicitarLocal(this);
         try {
             path.setText(new opciones().getString(aSDbContract.Opciones.OPT_NAME_IMPORTPATH,importar.defaultPath));
@@ -69,7 +68,7 @@ public class importador extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
                 public void onClick(View view) {
@@ -99,7 +98,7 @@ public class importador extends AppCompatActivity {
                 new alert.InputRunnable() {
                     @Override
                     public void run(String text) throws Exception {
-                        path.setText((CharSequence) text);
+                        path.setText(text);
                         new opciones(aSDbContract.Opciones.OPT_NAME_IMPORTPATH,text).modificacion();
                     }
                 },
@@ -114,8 +113,8 @@ public class importador extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            syncLog = (TextView) findViewById(R.id.importar_log_sync);
-            confLog = (TextView) findViewById(R.id.importar_log_conflict);
+            syncLog = findViewById(R.id.importar_log_sync);
+            confLog = findViewById(R.id.importar_log_conflict);
         }
 
         @Override
@@ -156,9 +155,9 @@ public class importador extends AppCompatActivity {
         @Override
         protected void onProgressUpdate (String[]... values){
             if (values[0][0].equals("sync")) syncLog.setText(
-                    syncLog.getText() + "\n" + values[0][1]);
+                    String.format("%s\n%s", syncLog.getText(), values[0][1]));
             else confLog.setText(
-                    confLog.getText() + "\n" + values[0][1]);
+                    String.format("%s\n%s", confLog.getText(), values[0][1]));
         }
 
         @Override

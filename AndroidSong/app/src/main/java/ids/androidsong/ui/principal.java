@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -24,7 +24,6 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ids.androidsong.R;
@@ -32,10 +31,8 @@ import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
 import ids.androidsong.help.aSDbHelper;
 import ids.androidsong.help.alert;
-import ids.androidsong.help.importar;
 import ids.androidsong.help.permisos;
 import ids.androidsong.object.cancion;
-import ids.androidsong.object.cancionXml;
 import ids.androidsong.object.coleccion;
 import ids.androidsong.object.item;
 import ids.androidsong.object.opciones;
@@ -43,7 +40,7 @@ import ids.androidsong.object.opciones;
 public class principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    protected Context con = this;
+    protected final Context con = this;
     NavigationView navigationView;
     protected int itemId;
     SimpleItemRecyclerViewAdapter adapter;
@@ -53,13 +50,13 @@ public class principal extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         App.setContext(con);
 
         permisos.solicitarCuenta(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,13 +66,13 @@ public class principal extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         recyclerView = findViewById(R.id.favoritos_lista);
@@ -92,7 +89,8 @@ public class principal extends AppCompatActivity
 
     private void leerOpciones() {
         Menu menu=navigationView.getMenu();
-        Switch switchAcordes =(Switch) MenuItemCompat.getActionView(menu.findItem(R.id.switch_acordes)).findViewById(R.id.mostrar_acordes_switch);
+        Switch switchAcordes =
+                menu.findItem(R.id.switch_acordes).getActionView().findViewById(R.id.mostrar_acordes_switch);
         try {
             boolean value = (new opciones()).getBool(aSDbContract.Opciones.OPT_NAME_MOSTRARACORDES);
             switchAcordes.setChecked(value);
@@ -139,7 +137,7 @@ public class principal extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -164,7 +162,7 @@ public class principal extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -180,7 +178,7 @@ public class principal extends AppCompatActivity
             abrirPapelera();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -251,8 +249,8 @@ public class principal extends AppCompatActivity
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                iTitulo = (TextView) view.findViewById(R.id.favoritos_lista_item_titulo);
-                iCarpeta = (TextView) view.findViewById(R.id.favoritos_lista_item_carpeta);
+                iTitulo = view.findViewById(R.id.favoritos_lista_item_titulo);
+                iCarpeta = view.findViewById(R.id.favoritos_lista_item_carpeta);
             }
 
             @Override
@@ -276,7 +274,7 @@ public class principal extends AppCompatActivity
             alert.SimpleAlert(con,
                     new alert.SimpleRunnable(){
                         @Override
-                        public void run() throws Exception {
+                        public void run(){
                             favoritos.removeItem(itemId);
                             setupRecyclerView((RecyclerView) recyclerView);
                             Snackbar.make(recyclerView, "Removido de Favoritos", Snackbar.LENGTH_LONG)
@@ -295,7 +293,9 @@ public class principal extends AppCompatActivity
                 aSDbHelper helper = new aSDbHelper(con);
                 helper.openWriteDataBase();
                 helper.currentDB.close();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+                Log.e("Error",e.getMessage());
+            }
             return null;
         }
 

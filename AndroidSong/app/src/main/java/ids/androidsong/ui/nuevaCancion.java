@@ -28,11 +28,11 @@ public class nuevaCancion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_cancion);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         con = this;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +47,7 @@ public class nuevaCancion extends AppCompatActivity {
     }
 
     private void setupCarpetas() {
-        Spinner spinner = (Spinner)findViewById(R.id.nueva_cancion_carpeta);
+        Spinner spinner = findViewById(R.id.nueva_cancion_carpeta);
         String[] carpetas = (new carpeta()).get().toArray(new String[0]);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item,
@@ -57,20 +57,20 @@ public class nuevaCancion extends AppCompatActivity {
 
     public void GuardarCancion(View view) {
         cancion cancion = new cancion();
-        Spinner carpeta = (Spinner)findViewById(R.id.nueva_cancion_carpeta);
+        Spinner carpeta = findViewById(R.id.nueva_cancion_carpeta);
         cancion.setCarpeta(carpeta.getSelectedItem().toString());
-        EditText titulo = (EditText)findViewById(R.id.nueva_cancion_titulo);
+        EditText titulo = findViewById(R.id.nueva_cancion_titulo);
         cancion.setTitulo(titulo.getText().toString());
-        EditText autor = (EditText)findViewById(R.id.nueva_cancion_autor);
+        EditText autor = findViewById(R.id.nueva_cancion_autor);
         cancion.getAtributos().add(new atributo(Enum.atributo.autor.toString(),autor.getText().toString()));
         cancion.getAtributos().add(new atributo(Enum.atributo.interprete.toString(),autor.getText().toString()));
-        EditText presentacion = (EditText)findViewById(R.id.nueva_cancion_presentacion);
+        EditText presentacion = findViewById(R.id.nueva_cancion_presentacion);
         cancion.getAtributos().add(new atributo(Enum.atributo.presentacion.toString(),presentacion.getText().toString()));
-        EditText tono = (EditText)findViewById(R.id.nueva_cancion_tono);
+        EditText tono = findViewById(R.id.nueva_cancion_tono);
         cancion.getAtributos().add(new atributo(Enum.atributo.tono.toString(),tono.getText().toString()));
-        EditText transporte = (EditText)findViewById(R.id.nueva_cancion_transporte);
+        EditText transporte = findViewById(R.id.nueva_cancion_transporte);
         cancion.getAtributos().add(new atributo(Enum.atributo.transporte.toString(),transporte.getText().toString()));
-        EditText letra = (EditText)findViewById(R.id.nueva_cancion_letra);
+        EditText letra = findViewById(R.id.nueva_cancion_letra);
         cancion.llenarSecciones(letra.getText().toString());
         cancion.alta();
         Snackbar.make(view, "Canción " + cancion.getTitulo() + "creada con éxito.", Snackbar.LENGTH_LONG)
@@ -93,7 +93,7 @@ public class nuevaCancion extends AppCompatActivity {
                             nombre = "[" + text + "]\n";
                         else
                             nombre = "||\n";
-                        EditText et = (EditText) findViewById(R.id.nueva_cancion_letra);
+                        EditText et = findViewById(R.id.nueva_cancion_letra);
                         int start = Math.max(et.getSelectionStart(), 0);
                         int end = Math.max(et.getSelectionEnd(), 0);
                         et.getText().replace(Math.min(start, end), Math.max(start, end),

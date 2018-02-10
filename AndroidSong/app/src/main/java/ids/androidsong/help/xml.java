@@ -1,6 +1,7 @@
 package ids.androidsong.help;
 
 import android.content.res.Resources;
+import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -125,7 +126,9 @@ public class xml {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             db = factory.newDocumentBuilder();
             dom = db.parse(is);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            Log.e("Error", "GetInternalDocument: ", e);
+        }
         return dom;
     }
 

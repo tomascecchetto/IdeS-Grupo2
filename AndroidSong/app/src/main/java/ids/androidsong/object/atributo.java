@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
-import ids.androidsong.help.aSDbHelper;
 
 /**
  * Created by ALAN on 01/10/2017.

@@ -3,16 +3,10 @@ package ids.androidsong.object;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
-import android.text.format.Time;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
-import ids.androidsong.help.aSDbHelper;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**

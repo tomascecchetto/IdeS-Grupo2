@@ -2,7 +2,6 @@ package ids.androidsong.object;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -26,6 +25,8 @@ import static ids.androidsong.help.xml.SetValue;
 import static ids.androidsong.help.xml.getRawDocument;
 import static ids.androidsong.help.xml.getStringFromDocument;
 
+import android.util.Log;
+
 import ids.androidsong.R;
 import ids.androidsong.help.App;
 import ids.androidsong.help.Enum;
@@ -38,7 +39,7 @@ import ids.androidsong.help.Enum;
 public class cancionXml extends cancion {
     protected String path;
 
-    private String APP_ATRIBUTOS_NODO = "AndroidSong_attributes";
+    private final String APP_ATRIBUTOS_NODO = "AndroidSong_attributes";
 
     public cancionXml(){
 
@@ -58,6 +59,7 @@ public class cancionXml extends cancion {
             BuildCancion(dom);
             fillId();
         } catch (Exception e) {
+            Log.e("Error",e.getMessage());
         }
     }
 
@@ -66,7 +68,9 @@ public class cancionXml extends cancion {
         {
             CargarNodos(dom);
         }
-        catch (Exception e){}
+        catch (Exception e){
+            Log.e("Error",e.getMessage());
+        }
     }
 
     protected Document getDocument()
@@ -96,7 +100,9 @@ public class cancionXml extends cancion {
         Document dom = null;
         try {
             dom = getRawDocument(R.raw.nuevacancion);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            Log.e("Error",e.getMessage());
+        }
         LoadCancion(dom);
         return grabar(dom);
     }
@@ -108,10 +114,12 @@ public class cancionXml extends cancion {
             String contenido = getStringFromDocument(dom);
             OutputStreamWriter osw = new OutputStreamWriter(
                     new FileOutputStream(file));
+            assert contenido != null;
             osw.write(contenido);
             osw.flush();
             osw.close();
         } catch (Exception e) {
+            Log.e("Error",e.getMessage());
         }
         return file;
     }

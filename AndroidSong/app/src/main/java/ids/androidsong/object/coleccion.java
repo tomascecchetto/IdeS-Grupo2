@@ -2,8 +2,6 @@ package ids.androidsong.object;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import ids.androidsong.help.App;
@@ -53,12 +51,8 @@ public class coleccion {
 
     protected void getByColeccion() {
         aSDbHelper helper = new aSDbHelper(App.getContext());
-        try {
-            helper.createDataBase();
-            helper.openWriteDataBase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        helper.createDataBase();
+        helper.openWriteDataBase();
         ArrayList<item> itemsdb = new ArrayList<>();
         String[] proyection = {aSDbContract.ItemsColecciones.COLUMN_NAME_ITEMID};
         String sortOrder = aSDbContract.ItemsColecciones.COLUMN_NAME_ORDEN + " ASC";
@@ -79,10 +73,11 @@ public class coleccion {
         int size;
         aSDbHelper helper = new aSDbHelper(App.getContext());
         helper.openWriteDataBase();
+        String sqlQuery = "SELECT MAX(orden) AS ORDEN FROM ItemsColecciones where coleccionId = ?";
         String[] arguments = {
                 Integer.toString(getId())
         };
-        Cursor c = helper.currentDB.rawQuery("SELECT MAX(orden) AS ORDEN FROM ItemsColecciones where coleccionId = ?", arguments);
+        Cursor c = helper.currentDB.rawQuery(sqlQuery, arguments);
         if (c.moveToFirst()) size = c.getInt(c.getColumnIndex("ORDEN"));
         else size = 0;
         c.close();

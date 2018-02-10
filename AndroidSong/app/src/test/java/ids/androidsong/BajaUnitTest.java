@@ -56,14 +56,14 @@ public class BajaUnitTest {
         cancion.baja();
         driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
         status.get();
-        assertNull(status.getItemId());
+        assertEquals(0,status.getItemId());
     }
 
     @Test
     public void Cancion_BajaSincronizado_Status(){
         cancion cancion = canciones.get(0);
         driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
-        status.fill();
+        status.setItem(cancion);
         status.setDriveDT(DRIVE_HASH);
         status.modificacion();
         cancion.baja();
@@ -135,8 +135,13 @@ public class BajaUnitTest {
     }
 
     @Test
-    public void Cancion_Eliminar(){
-        assertTrue(true);
+    public void Cancion_Eliminar() {
+        cancion cancion0 = canciones.get(0);
+        cancion0.baja();
+        cancion cancion1 = canciones.get(1);
+        cancion1.baja();
+        cancion1.eliminar();
+        assertTrue((new cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-2 && (new cancion()).getBajas().size() == 1);
     }
 
     @After

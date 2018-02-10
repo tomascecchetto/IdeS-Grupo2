@@ -39,7 +39,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import ids.androidsong.R;
 import ids.androidsong.object.cancionDrive;
@@ -58,23 +57,23 @@ import static android.app.Activity.RESULT_OK;
 
 public class sincronizar implements EasyPermissions.PermissionCallbacks {
 
-    public static String defaultPath = App.getContext().getString(R.string.OpenSongFolder) + "/" +
+    public static final String defaultPath = App.getContext().getString(R.string.OpenSongFolder) + "/" +
             App.getContext().getString(R.string.SongsFolder);
-    boolean existeLocal;
+    private boolean existeLocal;
     boolean existeStatus;
-    Activity con;
-    GoogleAccountCredential mCredential;
-    ProgressDialog mProgress;
-    public TextView syncLog;
-    public TextView confLog;
-    com.google.api.services.drive.Drive mService = null;
-    Map<String, String> carpetasDriveId = new HashMap<String, String>();
-    String carpetaPrincipal;
+    private final Activity con;
+    private final GoogleAccountCredential mCredential;
+    private final ProgressDialog mProgress;
+    private final TextView syncLog;
+    private TextView confLog;
+    private com.google.api.services.drive.Drive mService = null;
+    private final Map<String, String> carpetasDriveId = new HashMap<>();
+    private String carpetaPrincipal;
 
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_AUTHORIZATION = 1001;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
+    private static final int REQUEST_ACCOUNT_PICKER = 1000;
+    private static final int REQUEST_AUTHORIZATION = 1001;
+    private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
     private static final String BUTTON_TEXT = "Call Drive API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
@@ -114,9 +113,9 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
     }
 
     private String getFolder(String parent, String path)  throws IOException {
-        String folderId = "";
-        String folder = "";
-        String subFolders= "";
+        String folderId;
+        String folder;
+        String subFolders;
         if (path.contains("/")) {
             folder = path.substring(0, path.indexOf("/"));
             subFolders = path.substring(path.indexOf("/") + 1);
@@ -140,9 +139,9 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
     }
 
     private String createFolder(String parent, String path)  throws IOException {
-        String folderId = "";
-        String folder = "";
-        String subFolders= "";
+        String folderId;
+        String folder;
+        String subFolders;
         if (path.contains("/")) {
             folder = path.substring(0, path.indexOf("/"));
             subFolders = path.substring(path.indexOf("/") + 1);
@@ -309,9 +308,9 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         @Override
         protected void onProgressUpdate (String[]... values){
             if (values[0][0].equals("sync")) syncLog.setText(
-                    syncLog.getText() + "\n" + values[0][1]);
+                    String.format("%s\n%s", syncLog.getText(), values[0][1]));
             else confLog.setText(
-                    confLog.getText() + "\n" + values[0][1]);
+                    String.format("%s\n%s", confLog.getText(), values[0][1]));
         }
 
         private String[] getLog(String tipo, String mensaje){
@@ -325,9 +324,9 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         protected void onPostExecute(String output) {
             mProgress.hide();
             if (output == null) {
-                syncLog.setText("No se pudo conectar a Drive");
+                syncLog.setText(R.string.Error_con_Drive);
             } else {
-                syncLog.setText(syncLog.getText() + output);
+                syncLog.setText(String.format("%s%s", syncLog.getText(), output));
             }
         }
 
@@ -335,17 +334,16 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         protected void onCancelled() {
             mProgress.hide();
             if (mLastError != null) {
-                    syncLog.setText("The following error occurred:\n"
-                            + mLastError.getMessage());
+                    syncLog.setText(String.format("The following error occurred:\n%s", mLastError.getMessage()));
             } else {
-                syncLog.setText(syncLog.getText() + "\nRequest cancelled.");
+                syncLog.setText(String.format("%s\nRequest cancelled.", syncLog.getText()));
             }
         }
     }
 
     @NonNull
     private List<File> getFullResult(Drive.Files.List request) throws IOException {
-        List<File> fullResult = new ArrayList<File>();
+        List<File> fullResult = new ArrayList<>();
         do {
             FileList result = request.execute();
             fullResult.addAll(result.getItems());
@@ -494,7 +492,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (! isDeviceOnline()) {
-            syncLog.setText("No network connection available.");
+            syncLog.setText(R.string.Error_sin_red);
         } else {
             new MakeRequestTask().execute();
         }
@@ -514,9 +512,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    syncLog.setText(
-                            "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.");
+                    syncLog.setText(con.getString(R.string.Error_Google_Services));
                 } else {
                     getDriveConnection();
                 }
@@ -552,6 +548,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
     private boolean isDeviceOnline() {
         ConnectivityManager connMgr =
                 (ConnectivityManager) con.getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert connMgr != null;
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }
@@ -671,7 +668,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
          * Fetch a list of up to 10 file names and IDs.
          * @return List of Strings describing files, or an empty list if no files
          *         found.
-         * @throws IOException
+         * @throws IOException En caso de fallar la descarga.
          */
         private String getDataFromApi() throws IOException {
             String fileInfo = "";
@@ -696,7 +693,7 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
         protected void onPostExecute(String output) {
             mProgress.hide();
             if (output == null) {
-                syncLog.setText("No se pudo conectar a Drive");
+                syncLog.setText(R.string.Error_con_Drive);
             }
         }
 
@@ -713,11 +710,11 @@ public class sincronizar implements EasyPermissions.PermissionCallbacks {
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             sincronizar.REQUEST_AUTHORIZATION);
                 } else {
-                    syncLog.setText("The following error occurred:\n"
-                            + mLastError.getMessage());
+                    syncLog.setText(String.format("The following error occurred:\n%s",
+                            mLastError.getMessage()));
                 }
             } else {
-                syncLog.setText("Request cancelled.");
+                syncLog.setText(R.string.Conexion_cancelada);
             }
         }
     }

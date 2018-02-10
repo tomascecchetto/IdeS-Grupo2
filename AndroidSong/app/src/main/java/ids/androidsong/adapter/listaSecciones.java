@@ -2,38 +2,29 @@ package ids.androidsong.adapter;
 
 import android.app.Activity;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.List;
 
 import ids.androidsong.R;
-import ids.androidsong.help.tonalidad;
-import ids.androidsong.object.cancion;
-import ids.androidsong.object.cancionCabecera;
-import ids.androidsong.object.item;
 import ids.androidsong.object.seccion;
-import ids.androidsong.ui.cancionLista;
 
 /**
  * Created by ALAN on 19/10/2017.
+ * Pantalla para mostrar el contenido de una canción dividida en secciones.
  */
 
 public class listaSecciones  extends RecyclerView.Adapter<listaSecciones.ViewHolder>
 {
     Activity contexto;
-    ArrayList<seccion> lista;
-    int fontSize;
-    int capo;
+    private final ArrayList<seccion> lista;
+    private final int fontSize;
+    private final int capo;
 
     public listaSecciones(ArrayList<seccion> secciones, int c, int f) {
         lista = secciones;
@@ -113,9 +104,9 @@ public class listaSecciones  extends RecyclerView.Adapter<listaSecciones.ViewHol
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            titulo = (TextView) view.findViewById(R.id.seccion_titulo);
-            nombre = (TextView) view.findViewById(R.id.seccion_nombre);
-            contenido = (TextView) view.findViewById(R.id.seccion_contenido);
+            titulo = view.findViewById(R.id.seccion_titulo);
+            nombre = view.findViewById(R.id.seccion_nombre);
+            contenido = view.findViewById(R.id.seccion_contenido);
         }
     }
 }

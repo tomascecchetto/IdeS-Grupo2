@@ -70,7 +70,7 @@
                 android:value="ids.androidsong.ui.principal" />
         </activity>
         <activity
-            android:name=".ui.FullscreenCancion"
+            android:name=".ui.fullscreenCancion"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen_cancion"
             android:parentActivityName=".ui.cancionLista"

@@ -3,7 +3,6 @@ package ids.androidsong.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,7 +28,7 @@ public class editarCancion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_cancion);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         con = this;
 
@@ -37,7 +36,7 @@ public class editarCancion extends AppCompatActivity {
         cancion.fill();
         setTitle("Editar \"" + cancion.getTitulo() + "\"");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,7 +68,7 @@ public class editarCancion extends AppCompatActivity {
                             nombre = "[" + text + "]\n";
                         else
                             nombre = "||\n";
-                        EditText et = (EditText) findViewById(R.id.editar_cancion_letra);
+                        EditText et = findViewById(R.id.editar_cancion_letra);
                         int start = Math.max(et.getSelectionStart(), 0);
                         int end = Math.max(et.getSelectionEnd(), 0);
                         et.getText().replace(Math.min(start, end), Math.max(start, end),

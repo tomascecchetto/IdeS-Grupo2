@@ -1,9 +1,7 @@
 package ids.androidsong.adapter;
 
 import android.app.Activity;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +11,11 @@ import java.util.ArrayList;
 
 import ids.androidsong.R;
 import ids.androidsong.object.atributo;
-import ids.androidsong.object.seccion;
 
 public class listaAtributos extends RecyclerView.Adapter<listaAtributos.ViewHolder>
 {
     Activity contexto;
-    ArrayList<atributo> lista;
+    final ArrayList<atributo> lista;
 
     public listaAtributos(ArrayList<atributo> atributo) {
         lista = atributo;

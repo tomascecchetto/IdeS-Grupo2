@@ -4,11 +4,8 @@ import android.os.Environment;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 
 import ids.androidsong.R;
-import ids.androidsong.object.atributo;
 import ids.androidsong.object.cancionXml;
 import ids.androidsong.object.opciones;
 
@@ -19,14 +16,13 @@ import ids.androidsong.object.opciones;
 
 public class importar {
 
-    public static String defaultPath = Environment.getExternalStorageDirectory() + "/" +
+    public static final String defaultPath = Environment.getExternalStorageDirectory() + "/" +
             App.getContext().getString(R.string.OpenSongFolder) + "/" +
             App.getContext().getString(R.string.SongsFolder);
 
     public ArrayList<cancionXml> getCanciones (){
-        ArrayList<cancionXml> canciones = getCabeceras(
+        return getCabeceras(
                 (new File(getImportPath())).listFiles());
-        return canciones;
     }
 
     private String getImportPath(){
@@ -42,7 +38,7 @@ public class importar {
     }
 
     private ArrayList<cancionXml> getCabeceras(File[] archivos){
-                ArrayList<cancionXml> resultado = new ArrayList<cancionXml>();
+                ArrayList<cancionXml> resultado = new ArrayList<>();
                 String ultimaCarpeta;
                 try {
                     for (File archivo : archivos){

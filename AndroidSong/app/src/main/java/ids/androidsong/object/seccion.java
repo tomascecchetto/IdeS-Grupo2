@@ -2,7 +2,7 @@ package ids.androidsong.object;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -10,10 +10,7 @@ import java.util.ArrayList;
 
 import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
-import ids.androidsong.help.aSDbHelper;
 import ids.androidsong.help.tonalidad;
-
-import static ids.androidsong.help.App.getContext;
 
 /**
  * Created by ALAN on 01/10/2017.
@@ -40,7 +37,7 @@ public class seccion {
         this.nombre = n;
     }
 
-    public seccion(){};
+    public seccion(){}
 
     public int getId() {
         return Id;
@@ -123,7 +120,7 @@ ContentValues registro = new ContentValues();
     }
 
     public String formatearContenido (boolean chords, int capo) {
-        String formated = "";
+        StringBuilder formated = new StringBuilder();
         StringReader reader = new StringReader(contenido);
         BufferedReader br = new BufferedReader(reader);
         String linea;
@@ -136,42 +133,44 @@ ContentValues registro = new ContentValues();
                         if (chords) {
                             linea = tonalidad.getLineaTonos(linea, capo);
                             linea = linea.replaceAll(" ", "&nbsp;");
-                            formated += "<b>" + linea.substring(1) + "</b><br/>";
+                            formated.append("<b>").append(linea.substring(1)).append("</b><br/>");
                         }
                         break;
                     case ' ':
                         if (linea.length() > 2) {
-                            formated += linea.substring(1) + "<br/>";
+                            formated.append(linea.substring(1)).append("<br/>");
                         } else {
-                            formated += linea + "&nbsp;<br/>";
+                            formated.append(linea).append("&nbsp;<br/>");
                         }
                         break;
                     default:
-                        formated += linea + "<br/>";
+                        formated.append(linea).append("<br/>");
                         break;
                 }
             } else {
-                formated += "<br/>";
+                formated.append("<br/>");
             }
         }
         catch (Exception e){
-            formated += "Error al cargar.<br/>";
+            formated.append("Error al cargar.<br/>");
         }
         if (getNombre().charAt(0) == 'C')
-            formated = "<i>" + formated + "</i>";
-        return formated;
+            formated = new StringBuilder("<i>" + formated + "</i>");
+        return formated.toString();
     }
 
     public int maxCaracteres(){
         BufferedReader textReader = new BufferedReader(new StringReader(contenido));
         int i = 0;
-        String linea = "";
+        String linea;
         try {
             while ((linea = textReader.readLine()) != null) {
                 i = linea.length() > i ? linea.length() : i;
             }
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            Log.e("Error",e.getMessage());
+        }
         return i;
     }
 }

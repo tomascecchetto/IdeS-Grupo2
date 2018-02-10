@@ -6,7 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class aSDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "androidSongDB";
-    private static String DATABASE_PATH = String.valueOf(App.getContext().getDatabasePath(DATABASE_NAME));
+    private static final String DATABASE_PATH = String.valueOf(App.getContext().getDatabasePath(DATABASE_NAME));
     private final Context con;
     public SQLiteDatabase currentDB;
 
@@ -48,12 +48,12 @@ public class aSDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createDataBase() throws IOException {
+    public void createDataBase(){
 
         boolean dbExist = checkDataBase();
 
         if (dbExist) {
-            // Si existe, no haemos nada!
+            Log.e("Info", "Accesso a una BD existente.");
         } else {
             // Llamando a este método se crea la base de datos vacía en la ruta
             // por defecto del sistema de nuestra aplicación por lo que
@@ -120,7 +120,8 @@ public class aSDbHelper extends SQLiteOpenHelper {
 
         // Open the database
         String myPath = DATABASE_PATH + DATABASE_NAME;
-        currentDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READWRITE);
+        currentDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS);
+        currentDB.execSQL(aSDbContract.CONSTRAINS_ON);
     }
 
     @Override
@@ -138,10 +139,9 @@ public class aSDbHelper extends SQLiteOpenHelper {
         InputStream databaseInputStream;
 
         byte[] buffer = new byte[1024];
-        int length;
 
         databaseInputStream = con.getAssets().open("androidSongDB.db");
-        while ((length = databaseInputStream.read(buffer)) > 0) {
+        while (databaseInputStream.read(buffer) > 0) {
             databaseOutputStream.write(buffer);
         }
 

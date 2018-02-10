@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context="ids.androidsong.ui.FullscreenCancion">
+    tools:context="ids.androidsong.ui.fullscreenCancion">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -18,7 +18,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="ids.androidsong.ui.FullscreenCancion"
+        tools:context="ids.androidsong.ui.fullscreenCancion"
         tools:listitem="@layout/lista_secciones" />
 
     <!-- This FrameLayout insets its children based on system windows using

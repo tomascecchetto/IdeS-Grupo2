@@ -5,11 +5,9 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
-import ids.androidsong.help.aSDbHelper;
 
 /**
  * Created by ALAN on 06/11/2017.
@@ -197,7 +195,7 @@ public class driveStatus {
                 driveStatus status = new driveStatus();
                 status.setDriveDT(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_DRIVEDT)));
                 status.setLocalDT(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_LOCALDT)));
-                status.setItemId(c.getInt(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_ITEMID)));;
+                status.setItemId(c.getInt(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_ITEMID)));
                 status.setTitulo(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_TITULO)));
                 status.setCarpeta(c.getString(c.getColumnIndex(aSDbContract.DriveStatus.COLUMN_NAME_CARPETA)));
                 statuses.add(status);
@@ -209,7 +207,7 @@ public class driveStatus {
 
     public void bajaLocal(){
         fill();
-        if (getDriveDT() == null)
+        if (getDriveDT() == null || getDriveDT().equals("NULL"))
             eliminar();
         else {
             baja();

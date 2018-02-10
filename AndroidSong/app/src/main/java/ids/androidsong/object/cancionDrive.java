@@ -1,6 +1,8 @@
 package ids.androidsong.object;
 
 
+import android.util.Log;
+
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.ParentReference;
@@ -11,11 +13,8 @@ import org.xml.sax.SAXException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
+import java.util.Collections;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -91,7 +90,9 @@ public class cancionDrive extends cancionXml {
         Document dom = null;
         try {
             dom = getDocument();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            Log.e("Error",e.getMessage());
+        }
         LoadCancion(dom);
         return grabar(dom);
     }
@@ -121,7 +122,7 @@ public class cancionDrive extends cancionXml {
         body.setTitle(getTitulo());
 
         body.setParents(
-                Arrays.asList(new ParentReference().setId(currentParent)));
+                Collections.singletonList(new ParentReference().setId(currentParent)));
 
         java.io.File fileContent = super.toXml();
         FileContent mediaContent = new FileContent(null, fileContent);

@@ -23,4 +23,10 @@
     <string name="title_activity_sincronizar">Sincronizar con Drive</string>
     <string name="title_activity_papelera">Papelera</string>
     <string name="title_activity_atributos">Atributos</string>
+    <string name="Error_con_Drive">No se pudo conectar a Drive</string>
+    <string name="Error_sin_red">No network connection available.</string>
+    <string name="Conexion_cancelada">Solicitud cancelada.</string>
+    <string name="Error_Google_Services">Esta aplicación requiere Google Play Services. Por favor,
+        instale Google Play Services y reinicie la app.
+    </string>
 </resources>

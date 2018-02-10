@@ -6,14 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import ids.androidsong.R;
 import ids.androidsong.adapter.listaAtributos;
-import ids.androidsong.adapter.listaSecciones;
 import ids.androidsong.object.cancion;
-
-import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_ID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -22,7 +18,6 @@ public class atributosListaFragment extends Fragment {
 
     private cancion cancion;
     private int itemId;
-    private RecyclerView atributos;
 
     public atributosListaFragment() {
     }
@@ -46,7 +41,7 @@ public class atributosListaFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.atributos_lista, container, false);
         if (itemId > 0) {
-            atributos = root.findViewById(R.id.lista_atributos);
+            RecyclerView atributos = root.findViewById(R.id.lista_atributos);
             atributos.setAdapter(new listaAtributos(cancion.getAtributos()));
         }
         return root;

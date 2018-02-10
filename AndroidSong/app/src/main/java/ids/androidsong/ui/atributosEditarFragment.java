@@ -1,8 +1,6 @@
 package ids.androidsong.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +12,6 @@ import java.util.ArrayList;
 import ids.androidsong.R;
 import ids.androidsong.object.atributo;
 import ids.androidsong.object.cancion;
-
-import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_ID;
 
 public class atributosEditarFragment extends Fragment {
 

@@ -14,7 +14,7 @@ import ids.androidsong.adapter.listaSecciones;
 import ids.androidsong.object.cancion;
 
 /**
- * A fragment representing a single cancionMusico detail screen.
+ * A fragment representing a single cancion detail screen.
  * This fragment is either contained in a {@link cancionLista}
  * in two-pane mode (on tablets) or a {@link cancionDetalle}
  * on handsets.
@@ -59,7 +59,7 @@ public class cancionDetalleFragment extends Fragment {
             cancion.fill();
 
             Activity activity = this.getActivity();
-            appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            appBarLayout = activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(cancion.getTitulo());
             }

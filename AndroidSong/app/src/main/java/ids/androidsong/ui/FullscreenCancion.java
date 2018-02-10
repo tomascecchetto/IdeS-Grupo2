@@ -10,8 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import ids.androidsong.R;
 import ids.androidsong.adapter.listaSecciones;
@@ -25,9 +23,7 @@ import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_ID;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class FullscreenCancion extends AppCompatActivity {
-
-    private cancion cancion;
+public class fullscreenCancion extends AppCompatActivity {
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -94,6 +90,7 @@ public class FullscreenCancion extends AppCompatActivity {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (AUTO_HIDE) {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS);
+                view.performClick();
             }
             return false;
         }
@@ -103,7 +100,8 @@ public class FullscreenCancion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        cancion = new cancion(getIntent().getIntExtra(ARG_ITEM_ID,0));
+        ids.androidsong.object.cancion cancion = new cancion(
+                getIntent().getIntExtra(ARG_ITEM_ID, 0));
         int capo = getIntent().getIntExtra(ARG_ITEM_CAPO,0);
         int fuente = getIntent().getIntExtra(ARG_ITEM_FUENTE,0);
         cancion.fill();
@@ -116,7 +114,7 @@ public class FullscreenCancion extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mContentView = (RecyclerView)findViewById(R.id.cancion_fullscreen_secciones);
+        mContentView = findViewById(R.id.cancion_fullscreen_secciones);
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);

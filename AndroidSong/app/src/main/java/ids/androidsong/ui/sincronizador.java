@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +17,6 @@ import android.widget.ToggleButton;
 import ids.androidsong.R;
 import ids.androidsong.help.aSDbContract;
 import ids.androidsong.help.alert;
-import ids.androidsong.help.permisos;
 import ids.androidsong.help.sincronizar;
 import ids.androidsong.object.opciones;
 
@@ -36,12 +34,12 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sincronizar);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         con = this;
-        path = (TextView) findViewById(R.id.sincronizar_text_path);
-        ToggleButton sobreescribir = (ToggleButton) findViewById(R.id.sincronizar_button_override);
+        path = findViewById(R.id.sincronizar_text_path);
+        ToggleButton sobreescribir = findViewById(R.id.sincronizar_button_override);
         try {
             path.setText(new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCPATH, sincronizar.defaultPath));
             sobreescritura = new opciones().getBool(aSDbContract.Opciones.OPT_NAME_SYNCOVERRIDE);
@@ -67,7 +65,7 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,7 +100,7 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
                             text = text.substring(1);
                         if (text.charAt(text.length()-1) == '/')
                             text = text.substring(0,text.length()-1);
-                        path.setText((CharSequence) text);
+                        path.setText(text);
                         new opciones(aSDbContract.Opciones.OPT_NAME_SYNCPATH, text).modificacion();
                     }
                 },

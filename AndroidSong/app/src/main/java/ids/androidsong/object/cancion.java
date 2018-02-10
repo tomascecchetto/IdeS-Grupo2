@@ -1,12 +1,13 @@
 package ids.androidsong.object;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 
-import javax.annotation.Nullable;
 
 import ids.androidsong.help.Enum;
 
@@ -29,8 +30,8 @@ public class cancion extends item implements Serializable {
 
     public void llenarSecciones(String letra){
         String nombre = "";
-        String contenido = "";
-        seccion seccion = new seccion(nombre,contenido);
+        StringBuilder contenido = new StringBuilder();
+        seccion seccion = new seccion(nombre, contenido.toString());
         StringReader reader = new StringReader(letra);
         BufferedReader br = new BufferedReader(reader);
         String linea;
@@ -42,7 +43,7 @@ public class cancion extends item implements Serializable {
                     Character caracter = linea.charAt(0);
                     switch (caracter){
                         case '.':
-                            contenido += linea + "\n";
+                            contenido.append(linea).append("\n");
                             break;
                         case '[':
                             nombre = linea.substring(1,linea.indexOf("]"));
@@ -51,36 +52,36 @@ public class cancion extends item implements Serializable {
                                 primeralinea = false;
                             }
                             else {
-                                seccion.setContenido(contenido);
+                                seccion.setContenido(contenido.toString());
                                 this.getSecciones().add(seccion);
                                 seccion = new seccion(nombre);
-                                contenido = "";
+                                contenido = new StringBuilder();
                             }
                             break;
                         case ' ':
                             if (linea.equals(" ||")) {
-                                seccion.setContenido(contenido);
+                                seccion.setContenido(contenido.toString());
                                 this.getSecciones().add(seccion);
                                 seccion = new seccion(nombre);
-                                contenido = "";
+                                contenido = new StringBuilder();
                             }else {
-                                contenido += linea + "\n";
+                                contenido.append(linea).append("\n");
                             }
                             break;
                         default:
-                            contenido += " " + linea + "\n";
+                            contenido.append(" ").append(linea).append("\n");
                             break;
                     }
                 }
             }
             if (seccion.getNombre().equals(""))
                 seccion.setNombre("V1");
-            seccion.setContenido(contenido);
+            seccion.setContenido(contenido.toString());
             this.getSecciones().add(seccion);
         }
         catch (Exception e){
-            contenido += "Error al cargar.";
-            seccion.setContenido(contenido);
+            contenido.append("Error al cargar.");
+            seccion.setContenido(contenido.toString());
             this.getSecciones().add(seccion);
         }
     }
@@ -106,27 +107,27 @@ public class cancion extends item implements Serializable {
     }
 
     public String getLetra(){
-        String letra = "";
+        StringBuilder letra = new StringBuilder();
         String nombreAnterior = "";
         for (seccion sec : getSecciones()){
             if (!nombreAnterior.equals(sec.getNombre())) {
-                letra = letra + "[" + sec.getNombre() + "]\n";
+                letra.append("[").append(sec.getNombre()).append("]\n");
                 nombreAnterior = sec.getNombre();
             }
             else
-                letra = letra + " ||\n";
-            letra = letra + sec.getContenido() + "\n";
+                letra.append(" ||\n");
+            letra.append(sec.getContenido()).append("\n");
         }
-        return letra;
+        return letra.toString();
     }
 
     public String getAtributosTexto(){
-        String atributos = "";
+        StringBuilder atributos = new StringBuilder();
         for (atributo a : getAtributos()){
-            atributos = atributos + a.getNombre() + ", ";
-            atributos = atributos + a.getValor() + "\n";
+            atributos.append(a.getNombre()).append(", ");
+            atributos.append(a.getValor()).append("\n");
         }
-        return atributos;
+        return atributos.toString();
     }
 
     public void llenarAtributos(String atributos) {
@@ -143,7 +144,9 @@ public class cancion extends item implements Serializable {
                     this.getAtributos().add(new atributo(atributo[0],atributo[1]));
                 }
             }
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            Log.e("Error",e.getMessage());
+        }
     }
 
     public atributo getAtributo(String nombre){

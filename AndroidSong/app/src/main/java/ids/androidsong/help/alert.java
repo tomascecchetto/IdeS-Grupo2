@@ -7,8 +7,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import ids.androidsong.R;
-import ids.androidsong.object.cancion;
-import ids.androidsong.object.cancionCabecera;
 
 
 /**
@@ -96,7 +94,7 @@ public class alert {
     }
 
     public interface SimpleRunnable {
-        void run() throws Exception;
+        void run();
     }
 
 }

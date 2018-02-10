@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -24,12 +24,12 @@ public class atributos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_atributos);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         itemId = getIntent().getIntExtra(cancionDetalleFragment.ARG_ITEM_ID,0);
         con = this;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,6 +41,8 @@ public class atributos extends AppCompatActivity {
                     View focus = ((Activity)con).getCurrentFocus();
                     if (focus != null){
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                        assert imm != null;
                         imm.hideSoftInputFromWindow(focus.getWindowToken(),0);
                     }
                     mostrarLista();
@@ -48,7 +50,12 @@ public class atributos extends AppCompatActivity {
                 }
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            assert getSupportActionBar() != null;
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e("Error",e.getMessage());
+        }
 
         if (savedInstanceState == null) {
             mostrarLista();

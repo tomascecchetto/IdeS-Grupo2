@@ -55,29 +55,31 @@ public class ModificacionUnitTest {
         }
     }
 
-
-
     @Test
     public void Cancion_ModificarSecciones(){
         cancion cancion = canciones.get(0);
+        cancion.fill();
+        cancion cancionTestigo = new cancion(cancion.getId());
+        cancionTestigo.fill();
         String letra = cancion.getLetra() +
-                "[T]\n Contenido tag de prueba";
+                "\n[T]\n Contenido tag de prueba";
         cancion.setSecciones(new ArrayList<seccion>());
         cancion.llenarSecciones(letra);
-        cancion.modificacion();
+        cancion.modificarContenido();
         cancion cancionModificada = new cancion(cancion.getId());
         cancionModificada.fill();
-        assertTrue(cancion.getSecciones().size()+1 == cancionModificada.getSecciones().size());
+        assertTrue(cancionTestigo.getSecciones().size()+1 == cancionModificada.getSecciones().size());
     }
 
     @Test
     public void Cancion_ModificarSecciones_Status(){
         cancion cancion = canciones.get(0);
+        cancion.fill();
         String letra = cancion.getLetra() +
-                "[T]\n Contenido tag de prueba";
+                "\n[T]\n Contenido tag de prueba";
         cancion.setSecciones(new ArrayList<seccion>());
         cancion.llenarSecciones(letra);
-        cancion.modificacion();
+        cancion.modificarContenido();
         driveStatus status = new driveStatus(cancion);
         status.fill();
         assertTrue(!status.getLocalDT().equals(cancion.getFechaModificacion()));
@@ -86,14 +88,16 @@ public class ModificacionUnitTest {
     @Test
     public void Cancion_ModificarAtributos(){
         cancion cancion = canciones.get(0);
+        cancion cancionTestigo = new cancion(cancion.getId());
+        cancionTestigo.fill();
         String atributos = cancion.getAtributosTexto() +
-                "Atributo de Prueba, Contenido de prueba";
+                "Atributo de Prueba, Contenido de prueba\n";
         cancion.setAtributos(new ArrayList<atributo>());
         cancion.llenarAtributos(atributos);
         cancion.modificarAtributos();
         cancion cancionModificada = new cancion(cancion.getId());
         cancionModificada.fill();
-        assertTrue(cancion.getAtributos().size()+1 == cancionModificada.getAtributos().size());
+        assertTrue(cancionTestigo.getAtributos().size()+1 == cancionModificada.getAtributos().size());
     }
 
     @Test

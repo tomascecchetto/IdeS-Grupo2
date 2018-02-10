@@ -2,12 +2,7 @@ package ids.androidsong.help;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
-
-import java.io.File;
-import java.io.OutputStreamWriter;
-
-import ids.androidsong.R;
+import android.util.Log;
 
 /**
  * Context Holder
@@ -15,7 +10,6 @@ import ids.androidsong.R;
 public class App {
 
     private static Context con;
-    private static boolean set = false;
     private static aSDbHelper helper;
 
     public static Context getContext(){
@@ -39,6 +33,7 @@ public class App {
                 getDBHelper().createDataBase();
                 getDBHelper().openWriteDataBase();
             } catch (Exception e) {
+                Log.e("Error",e.getMessage());
             }
         } else if (!getDBHelper().currentDB.isOpen()){
             getDBHelper().openWriteDataBase();

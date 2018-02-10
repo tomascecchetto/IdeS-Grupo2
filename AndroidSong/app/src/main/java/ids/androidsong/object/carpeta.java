@@ -3,15 +3,10 @@ package ids.androidsong.object;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
-import ids.androidsong.help.aSDbHelper;
-
-import static ids.androidsong.help.App.getContext;
 
 /**
  * Created by ALAN on 03/10/2017.
@@ -65,7 +60,7 @@ public class carpeta {
     }
 
     public String get(int id){
-        String carpeta = "";
+        String carpeta;
         String[] projection = { aSDbContract.Carpetas.COLUMN_NAME_NOMBRE };
         Cursor c = App.getOpenDB().query(aSDbContract.Carpetas.TABLE_NAME, projection, aSDbContract.Carpetas.COLUMN_NAME_ID + " = " + Integer.toString(id), null, null, null, null);
         c.moveToFirst();

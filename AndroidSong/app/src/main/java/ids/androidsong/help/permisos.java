@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 
 /**
  * Created by ALAN on 30/10/2017.
+ * Clase que encapsula las solicitudes de permisos en la app.
  */
 
 public class permisos {
@@ -22,7 +23,7 @@ public class permisos {
         solicitar(activity,Manifest.permission.ACCESS_NETWORK_STATE,3);
     }
 
-    public static void solicitar(Activity activity, String permission, int id){
+    private static void solicitar(Activity activity, String permission, int id){
         if (ContextCompat.checkSelfPermission(activity,
                 permission)
                 != PackageManager.PERMISSION_GRANTED) {

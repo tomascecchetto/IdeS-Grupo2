@@ -3,8 +3,6 @@ package ids.androidsong.object;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.util.ArrayList;
-
 import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
 import ids.androidsong.help.aSDbHelper;
@@ -24,7 +22,7 @@ public class opciones {
         this.valor=v;
     }
 
-    public opciones(){};
+    public opciones(){}
 
     public String getNombre() {
         return nombre;

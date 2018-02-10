@@ -99,16 +99,4 @@ public class AltaUnitTest {
             System.out.print("Error restaurando BD\n");
         }
     }
-
-/*
-    private void resetSingleton(Class clazz, String fieldName) {
-        Field instance;
-        try {
-            instance = clazz.getDeclaredField(fieldName);
-            instance.setAccessible(true);
-            instance.set(null, null);
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
-    }*/
 }

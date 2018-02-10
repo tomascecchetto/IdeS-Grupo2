@@ -1,7 +1,6 @@
 package ids.androidsong.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -9,11 +8,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import junit.framework.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +23,12 @@ import java.util.List;
 import ids.androidsong.R;
 import ids.androidsong.help.alert;
 import ids.androidsong.object.cancion;
-import ids.androidsong.object.coleccion;
 import ids.androidsong.object.item;
 
 public class papelera extends AppCompatActivity {
 
     protected int itemId;
-    protected Context con = this;
+    protected final Context con = this;
     protected SimpleItemRecyclerViewAdapter adapter;
     protected View recyclerView;
 
@@ -35,18 +36,22 @@ public class papelera extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_papelera);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 vaciarPapelera(view);
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        try {
+            Assert.assertNotNull(getSupportActionBar());
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            Log.e("Error",e.getMessage());
+        }
         recyclerView = findViewById(R.id.papelera_lista);
         assert recyclerView != null;
     }
@@ -61,7 +66,7 @@ public class papelera extends AppCompatActivity {
         alert.SimpleAlert(con,
                 new alert.SimpleRunnable(){
                     @Override
-                    public void run() throws Exception {
+                    public void run(){
                         ArrayList<item> canciones = new cancion().getBajas();
                         if (canciones.size() > 0)
                             for (item cancion:canciones){
@@ -161,7 +166,7 @@ public class papelera extends AppCompatActivity {
             alert.SimpleAlert(con,
                     new alert.SimpleRunnable(){
                         @Override
-                        public void run() throws Exception {
+                        public void run() {
                             cancion.restaurar();
                             setupRecyclerView((RecyclerView) recyclerView);
                             Snackbar.make(recyclerView, "Restaurada", Snackbar.LENGTH_LONG)
@@ -177,7 +182,7 @@ public class papelera extends AppCompatActivity {
             alert.SimpleAlert(con,
                     new alert.SimpleRunnable(){
                         @Override
-                        public void run() throws Exception {
+                        public void run() {
                             cancion.eliminar();
                             setupRecyclerView((RecyclerView) recyclerView);
                             Snackbar.make(recyclerView, "Eliminada", Snackbar.LENGTH_LONG)

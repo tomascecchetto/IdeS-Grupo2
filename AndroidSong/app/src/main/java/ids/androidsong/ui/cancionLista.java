@@ -71,11 +71,11 @@ public class cancionLista extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cancion_lista);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +83,7 @@ public class cancionLista extends AppCompatActivity {
                     Snackbar.make(view, "Seleccione una canción primero", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 else {
-                Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
+                Intent intent = new Intent(getApplication().getBaseContext(),fullscreenCancion.class);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_ID,itemId);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_CAPO,capo);
                 intent.putExtra(cancionDetalleFragment.ARG_ITEM_FUENTE,fontSize);
@@ -127,6 +127,7 @@ public class cancionLista extends AppCompatActivity {
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.search).getActionView();
+        assert searchManager != null;
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         return true;
@@ -143,7 +144,7 @@ public class cancionLista extends AppCompatActivity {
     }
 
     private void setupCarpetas() {
-        spinnerCarpetas = (Spinner)findViewById(R.id.cancion_lista_carpeta);
+        spinnerCarpetas = findViewById(R.id.cancion_lista_carpeta);
         ArrayList<String> carpetas = (new carpeta()).get();
         carpetas.add("Todas");
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
@@ -280,8 +281,8 @@ public class cancionLista extends AppCompatActivity {
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                iTitulo = (TextView) view.findViewById(R.id.cancion_lista_item_titulo);
-                iCarpeta = (TextView) view.findViewById(R.id.cancion_lista_item_carpeta);
+                iTitulo = view.findViewById(R.id.cancion_lista_item_titulo);
+                iCarpeta = view.findViewById(R.id.cancion_lista_item_carpeta);
             }
 
             @Override
@@ -313,7 +314,7 @@ public class cancionLista extends AppCompatActivity {
             final cancion cancion = new cancion(itemId);
             cancion.fill();
             final Spinner input = new Spinner(con);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(con,android.R.layout.simple_spinner_item,(new carpeta()).get().toArray(new String[0]));
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(con,android.R.layout.simple_spinner_item,(new carpeta()).get().toArray(new String[0]));
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             input.setAdapter(adapter);
             alert.SpinnerAlert(con,
@@ -333,7 +334,7 @@ public class cancionLista extends AppCompatActivity {
             final cancion cancion = new cancion(itemId);
             cancion.fill();
             final Spinner input = new Spinner(con);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(con,android.R.layout.simple_spinner_item,(new carpeta()).get().toArray(new String[0]));
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(con,android.R.layout.simple_spinner_item,(new carpeta()).get().toArray(new String[0]));
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             input.setAdapter(adapter);
             alert.SpinnerAlert(con,
@@ -378,7 +379,7 @@ public class cancionLista extends AppCompatActivity {
             alert.SimpleAlert(con,
                     new alert.SimpleRunnable(){
                         @Override
-                        public void run() throws Exception {
+                        public void run() {
                             cancion.baja();
                             setupRecyclerView((RecyclerView) recyclerView);
                         }
