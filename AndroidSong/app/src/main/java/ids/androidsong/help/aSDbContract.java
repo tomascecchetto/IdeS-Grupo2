@@ -8,7 +8,9 @@ import android.provider.BaseColumns;
  */
 
 public final class aSDbContract {
-    private aSDbContract(){}
+    private aSDbContract() {
+        super();
+    }
 
     public static final String CONSTRAINS_ON = "PRAGMA foreign_keys = on";
 
@@ -26,6 +28,7 @@ public final class aSDbContract {
         public static final String COLUMN_NAME_NOMBRE = "nombre";
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class Colecciones implements BaseColumns {
         public static final String TABLE_NAME = "Colecciones";
         public static final String COLUMN_NAME_ID = "Id";

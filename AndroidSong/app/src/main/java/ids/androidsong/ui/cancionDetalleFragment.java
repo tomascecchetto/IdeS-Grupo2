@@ -42,6 +42,7 @@ public class cancionDetalleFragment extends Fragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public cancionDetalleFragment() {
+        super();
         if (appBarLayout != null) {
             appBarLayout.setTitle(cancion.getTitulo());
         }

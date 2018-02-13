@@ -16,9 +16,9 @@ import ids.androidsong.object.opciones;
 
 public class importar {
 
-    public static final String defaultPath = Environment.getExternalStorageDirectory() + "/" +
-            App.getContext().getString(R.string.OpenSongFolder) + "/" +
-            App.getContext().getString(R.string.SongsFolder);
+    public static final String DEFAULT_PATH = Environment.getExternalStorageDirectory() + "/" +
+            App.GetContext().getString(R.string.OpenSongFolder) + "/" +
+            App.GetContext().getString(R.string.SongsFolder);
 
     public ArrayList<cancionXml> getCanciones (){
         return getCabeceras(
@@ -30,7 +30,7 @@ public class importar {
         try {
             path =(new opciones()).getString(
                     aSDbContract.Opciones.OPT_NAME_IMPORTPATH,
-                    defaultPath);
+                    DEFAULT_PATH);
         } catch (Exception e) {
             e.printStackTrace();
         }

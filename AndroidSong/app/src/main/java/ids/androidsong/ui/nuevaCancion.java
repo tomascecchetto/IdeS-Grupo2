@@ -103,6 +103,7 @@ public class nuevaCancion extends AppCompatActivity {
                 "Nueva Seccion");
     }
 
+    @SuppressWarnings("unused")
     public void agregarCarpeta(View view){
         final EditText input = new EditText(con);
         input.setHint("Nombre de la carpeta");

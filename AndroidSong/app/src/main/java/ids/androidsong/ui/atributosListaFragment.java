@@ -20,6 +20,7 @@ public class atributosListaFragment extends Fragment {
     private int itemId;
 
     public atributosListaFragment() {
+        super();
     }
 
     public void setItemId(int i) {

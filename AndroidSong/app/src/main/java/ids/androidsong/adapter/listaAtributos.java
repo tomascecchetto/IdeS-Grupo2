@@ -15,9 +15,10 @@ import ids.androidsong.object.atributo;
 public class listaAtributos extends RecyclerView.Adapter<listaAtributos.ViewHolder>
 {
     Activity contexto;
-    final ArrayList<atributo> lista;
+    private final ArrayList<atributo> lista;
 
     public listaAtributos(ArrayList<atributo> atributo) {
+        super();
         lista = atributo;
     }
 

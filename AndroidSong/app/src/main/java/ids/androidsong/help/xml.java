@@ -1,7 +1,6 @@
 package ids.androidsong.help;
 
 import android.content.res.Resources;
-import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,7 +26,7 @@ import javax.xml.transform.stream.StreamResult;
  */
 public class xml {
 
-    public static String getStringFromDocument(Document dom)
+    public static String GetStringFromDocument(Document dom)
     {
         try
         {
@@ -79,7 +78,7 @@ public class xml {
         return GetValue(e,tag);
     }
 
-    public static String GetValue(Element e, String tag){
+    private static String GetValue(Element e, String tag){
         NodeList lista = e.getElementsByTagName(tag);
         Node nodo = lista.item(0);
         if (nodo.hasChildNodes())
@@ -94,7 +93,7 @@ public class xml {
         return GetChilds(tag, e);
     }
 
-    public static Element[] GetChilds(String tag, Element e)
+    private static Element[] GetChilds(String tag, Element e)
     {
         NodeList lista = e.getElementsByTagName(tag);
         NodeList hijos = lista.item(0).getChildNodes();
@@ -108,28 +107,13 @@ public class xml {
         return elementos;
     }
 
-    public static Document getRawDocument (int rawId)
+    public static Document GetRawDocument(int rawId)
             throws ParserConfigurationException, SAXException, IOException {
-        Resources res = App.getContext().getResources();
+        Resources res = App.GetContext().getResources();
         InputStream is = res.openRawResource(rawId);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = factory.newDocumentBuilder();
         return db.parse(is);
-    }
-
-    public static Document GetInternalDocument (String name){
-        InputStream is;
-        DocumentBuilder db;
-        Document dom = null;
-        try {
-            is = App.getContext().openFileInput(name);
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            db = factory.newDocumentBuilder();
-            dom = db.parse(is);
-        } catch (Exception e) {
-            Log.e("Error", "GetInternalDocument: ", e);
-        }
-        return dom;
     }
 
     public static void AddChild(String parent, String name, String value, Document dom){

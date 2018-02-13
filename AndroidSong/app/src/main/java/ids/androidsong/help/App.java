@@ -9,40 +9,40 @@ import android.util.Log;
  */
 public class App {
 
-    private static Context con;
-    private static aSDbHelper helper;
+    private static Context  APP_CONTEXT;
+    private static aSDbHelper DB_HELPER;
 
-    public static Context getContext(){
-        return con;
+    public static Context GetContext(){
+        return APP_CONTEXT;
     }
 
-    public static void setContext(Context pcon){
-        con = pcon;
+    public static void SetContext(Context pcon){
+        APP_CONTEXT = pcon;
     }
 
-    public static synchronized aSDbHelper getDBHelper(){
-        if (helper == null){
-            helper = new aSDbHelper(getContext());
+    public static synchronized aSDbHelper GetDBHelper(){
+        if (DB_HELPER == null){
+            DB_HELPER = new aSDbHelper(GetContext());
         }
-        return helper;
+        return DB_HELPER;
     }
 
-    public static synchronized SQLiteDatabase getOpenDB(){
-        if (getDBHelper().currentDB == null){
+    public static synchronized SQLiteDatabase GetOpenDB(){
+        if (GetDBHelper().currentDB == null){
             try {
-                getDBHelper().createDataBase();
-                getDBHelper().openWriteDataBase();
+                GetDBHelper().createDataBase();
+                GetDBHelper().openWriteDataBase();
             } catch (Exception e) {
                 Log.e("Error",e.getMessage());
             }
-        } else if (!getDBHelper().currentDB.isOpen()){
-            getDBHelper().openWriteDataBase();
+        } else if (!GetDBHelper().currentDB.isOpen()){
+            GetDBHelper().openWriteDataBase();
         }
-        return getDBHelper().currentDB;
+        return GetDBHelper().currentDB;
     }
 
-    public static void closeDB(){
-        if (getDBHelper().currentDB != null)
-            if (getDBHelper().currentDB.isOpen()) getDBHelper().currentDB.close();
+    public static void CloseDB(){
+        if (GetDBHelper().currentDB != null)
+            if (GetDBHelper().currentDB.isOpen()) GetDBHelper().currentDB.close();
     }
 }

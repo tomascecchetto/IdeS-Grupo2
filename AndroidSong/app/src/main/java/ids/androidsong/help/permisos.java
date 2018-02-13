@@ -13,17 +13,17 @@ import android.support.v4.content.ContextCompat;
 
 public class permisos {
 
-    public static void solicitarLocal(Activity activity){
-        solicitar(activity,Manifest.permission.WRITE_EXTERNAL_STORAGE,0);
+    public static void SolicitarLocal(Activity activity){
+        Solicitar(activity,Manifest.permission.WRITE_EXTERNAL_STORAGE,0);
     }
 
-    public static void solicitarCuenta(Activity activity){
-        solicitar(activity,Manifest.permission.INTERNET,2);
-        solicitar(activity,Manifest.permission.GET_ACCOUNTS,1);
-        solicitar(activity,Manifest.permission.ACCESS_NETWORK_STATE,3);
+    public static void SolicitarCuenta(Activity activity){
+        Solicitar(activity,Manifest.permission.INTERNET,2);
+        Solicitar(activity,Manifest.permission.GET_ACCOUNTS,1);
+        Solicitar(activity,Manifest.permission.ACCESS_NETWORK_STATE,3);
     }
 
-    private static void solicitar(Activity activity, String permission, int id){
+    private static void Solicitar(Activity activity, String permission, int id){
         if (ContextCompat.checkSelfPermission(activity,
                 permission)
                 != PackageManager.PERMISSION_GRANTED) {

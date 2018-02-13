@@ -27,11 +27,12 @@ import ids.androidsong.object.opciones;
 
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
+@SuppressWarnings("unused")
 public class importador extends AppCompatActivity {
 
-    TextView path;
-    Context con;
-    boolean sobreescritura;
+    private TextView path;
+    private Context con;
+    private boolean sobreescritura;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +43,9 @@ public class importador extends AppCompatActivity {
         con = this;
         path = findViewById(R.id.importar_text_path);
         ToggleButton sobreescribir = findViewById(R.id.importar_button_override);
-        permisos.solicitarLocal(this);
+        permisos.SolicitarLocal(this);
         try {
-            path.setText(new opciones().getString(aSDbContract.Opciones.OPT_NAME_IMPORTPATH,importar.defaultPath));
+            path.setText(new opciones().getString(aSDbContract.Opciones.OPT_NAME_IMPORTPATH,importar.DEFAULT_PATH));
             sobreescritura=new opciones().getBool(aSDbContract.Opciones.OPT_NAME_IMPORTOVERRIDE);
             sobreescribir.setChecked(sobreescritura);
             sobreescribir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -138,8 +139,8 @@ public class importador extends AppCompatActivity {
                             publishProgress(getLog("sync", cancion.getTitulo() + " importada correctamente."));
                         }
                     }
-                } catch (Exception E) {
-                    publishProgress(getLog("conf", "Conflicto con " + cancion.getTitulo() + ": " + E.getMessage()));
+                } catch (Exception e) {
+                    publishProgress(getLog("conf", "Conflicto con " + cancion.getTitulo() + ": " + e.getMessage()));
                 }
             }
             return null;

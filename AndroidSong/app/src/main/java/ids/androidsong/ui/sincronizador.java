@@ -41,7 +41,7 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
         path = findViewById(R.id.sincronizar_text_path);
         ToggleButton sobreescribir = findViewById(R.id.sincronizar_button_override);
         try {
-            path.setText(new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCPATH, sincronizar.defaultPath));
+            path.setText(new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCPATH, sincronizar.DEFAULT_PATH));
             sobreescritura = new opciones().getBool(aSDbContract.Opciones.OPT_NAME_SYNCOVERRIDE);
             sobreescribir.setChecked(sobreescritura);
             sobreescribir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -87,6 +87,7 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
     }
 
 
+    @SuppressWarnings("unused")
     public void changePath(View view) {
         final EditText input = new EditText(con);
         input.setText(path.getText());

@@ -18,6 +18,7 @@ import ids.androidsong.R;
  * item details are presented side-by-side with a list of items
  * in a {@link cancionLista}.
  */
+@SuppressWarnings("unused")
 public class cancionDetalle extends AppCompatActivity {
 
     private cancionDetalleFragment fragment;
@@ -115,23 +116,23 @@ public class cancionDetalle extends AppCompatActivity {
     }
 
     private void mostrarOpciones() {
-        ImageButton modificarAcordesSostenido = findViewById(R.id.cancion_detalle_sharp);
-        ImageButton modificarAcordesBemol = findViewById(R.id.cancion_detalle_flat);
+        ImageButton modAcordesSostenido = findViewById(R.id.cancion_detalle_sharp);
+        ImageButton modAcordesBemol = findViewById(R.id.cancion_detalle_flat);
         ImageButton tamanioLetraMenor = findViewById(R.id.cancion_detalle_menor);
         ImageButton tamanioLetraMayor = findViewById(R.id.cancion_detalle_mayor);
         ImageButton mostrarEdicion = findViewById(R.id.cancion_detalle_editar);
         ImageButton mostrarAtributos = findViewById(R.id.cancion_detalle_info);
         if (opciones){
-            modificarAcordesSostenido.setVisibility(View.GONE);
-            modificarAcordesBemol.setVisibility(View.GONE);
+            modAcordesSostenido.setVisibility(View.GONE);
+            modAcordesBemol.setVisibility(View.GONE);
             tamanioLetraMenor.setVisibility(View.GONE);
             tamanioLetraMayor.setVisibility(View.GONE);
             mostrarEdicion.setVisibility(View.GONE);
             mostrarAtributos.setVisibility(View.GONE);
             opciones = false;
         } else {
-            modificarAcordesSostenido.setVisibility(View.VISIBLE);
-            modificarAcordesBemol.setVisibility(View.VISIBLE);
+            modAcordesSostenido.setVisibility(View.VISIBLE);
+            modAcordesBemol.setVisibility(View.VISIBLE);
             tamanioLetraMenor.setVisibility(View.VISIBLE);
             tamanioLetraMayor.setVisibility(View.VISIBLE);
             mostrarEdicion.setVisibility(View.VISIBLE);

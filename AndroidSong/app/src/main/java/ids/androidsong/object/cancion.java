@@ -18,16 +18,15 @@ import ids.androidsong.help.Enum;
 
 public class cancion extends item implements Serializable {
 
-    public cancion(int i, String t) {
-        super(i, t);
-    }
-
     public cancion(int i) {
         super(i);
     }
 
-    public cancion(){}
+    public cancion() {
+        super();
+    }
 
+    @SuppressWarnings("OverlyLongMethod")
     public void llenarSecciones(String letra){
         String nombre = "";
         StringBuilder contenido = new StringBuilder();
@@ -36,8 +35,7 @@ public class cancion extends item implements Serializable {
         BufferedReader br = new BufferedReader(reader);
         String linea;
         boolean primeralinea = true;
-        try
-        {
+        try {
             while ((linea = br.readLine()) != null){
                 if (linea.length()>0){
                     Character caracter = linea.charAt(0);
@@ -149,6 +147,7 @@ public class cancion extends item implements Serializable {
         }
     }
 
+    @SuppressWarnings("unused")
     public atributo getAtributo(String nombre){
         atributo a = new atributo(nombre,null);
         for (atributo at: getAtributos()){

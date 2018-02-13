@@ -20,9 +20,9 @@ import java.io.OutputStream;
 
 public class aSDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "androidSongDB";
-    private static final String DATABASE_PATH = String.valueOf(App.getContext().getDatabasePath(DATABASE_NAME));
+    private static final String DATABASE_PATH = String.valueOf(App.GetContext().getDatabasePath(DATABASE_NAME));
     private final Context con;
     public SQLiteDatabase currentDB;
 
@@ -53,7 +53,7 @@ public class aSDbHelper extends SQLiteOpenHelper {
         boolean dbExist = checkDataBase();
 
         if (dbExist) {
-            Log.e("Info", "Accesso a una BD existente.");
+            Log.e("Info", "Acceso a una BD existente.");
         } else {
             // Llamando a este método se crea la base de datos vacía en la ruta
             // por defecto del sistema de nuestra aplicación por lo que
@@ -107,13 +107,6 @@ public class aSDbHelper extends SQLiteOpenHelper {
         }
 
         return ret;
-    }
-
-    public void openDataBase() throws SQLException {
-
-        // Open the database
-        String myPath = DATABASE_PATH + DATABASE_NAME;
-        currentDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
 
     public void openWriteDataBase() throws SQLException {

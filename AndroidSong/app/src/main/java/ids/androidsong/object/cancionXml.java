@@ -22,8 +22,8 @@ import static ids.androidsong.help.xml.FindNode;
 import static ids.androidsong.help.xml.GetChilds;
 import static ids.androidsong.help.xml.GetValue;
 import static ids.androidsong.help.xml.SetValue;
-import static ids.androidsong.help.xml.getRawDocument;
-import static ids.androidsong.help.xml.getStringFromDocument;
+import static ids.androidsong.help.xml.GetRawDocument;
+import static ids.androidsong.help.xml.GetStringFromDocument;
 
 import android.util.Log;
 
@@ -37,15 +37,17 @@ import ids.androidsong.help.Enum;
  */
 
 public class cancionXml extends cancion {
-    protected String path;
+    private String path;
 
-    private final String APP_ATRIBUTOS_NODO = "AndroidSong_attributes";
+    private static final String APP_ATRIBUTOS_NODO = "AndroidSong_attributes";
 
-    public cancionXml(){
+    cancionXml() {
+        super();
 
     }
 
-    public cancionXml(String t, String p, String c){
+    public cancionXml(String t, String p, String c) {
+        super();
         this.titulo = t;
         this.path = p;
         this.carpeta = c;
@@ -73,7 +75,7 @@ public class cancionXml extends cancion {
         }
     }
 
-    protected Document getDocument()
+    Document getDocument()
             throws ParserConfigurationException, SAXException, IOException {
         InputStream is = new FileInputStream(new File(path));
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -96,10 +98,10 @@ public class cancionXml extends cancion {
         }
     }
 
-    protected File toXml(){
+    File toXml(){
         Document dom = null;
         try {
-            dom = getRawDocument(R.raw.nuevacancion);
+            dom = GetRawDocument(R.raw.nuevacancion);
         } catch (Exception e) {
             Log.e("Error",e.getMessage());
         }
@@ -107,11 +109,11 @@ public class cancionXml extends cancion {
         return grabar(dom);
     }
 
-    public File grabar(Document dom) {
+    File grabar(Document dom) {
         String nomarchivo = "/tempXml.txt";
-        File file = new File(App.getContext().getCacheDir().getAbsolutePath()+nomarchivo);
+        File file = new File(App.GetContext().getCacheDir().getAbsolutePath()+nomarchivo);
         try {
-            String contenido = getStringFromDocument(dom);
+            String contenido = GetStringFromDocument(dom);
             OutputStreamWriter osw = new OutputStreamWriter(
                     new FileOutputStream(file));
             assert contenido != null;
@@ -124,7 +126,7 @@ public class cancionXml extends cancion {
         return file;
     }
 
-    protected void LoadCancion(Document dom){
+    void LoadCancion(Document dom){
         SetValue("title",getTitulo(),dom);
         SetValue("lyrics",getLetra(),dom);
         if (!ExistsNode(APP_ATRIBUTOS_NODO,dom))

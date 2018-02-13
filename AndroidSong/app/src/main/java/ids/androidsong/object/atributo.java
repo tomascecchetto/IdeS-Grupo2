@@ -13,6 +13,7 @@ import ids.androidsong.help.aSDbContract;
  * Objeto para representar las tablas Atributos y AtributosUsuario
  */
 
+@SuppressWarnings("ALL")
 public class atributo {
     private int Id;
     private String nombre;
@@ -61,12 +62,12 @@ public class atributo {
         registro.put(aSDbContract.Atributos.COLUMN_NAME_NOMBRE, getNombre());
         registro.put(aSDbContract.Atributos.COLUMN_NAME_VALOR, getValor());
 
-        App.getOpenDB().insert(aSDbContract.Atributos.TABLE_NAME, null, registro);
+        App.GetOpenDB().insert(aSDbContract.Atributos.TABLE_NAME, null, registro);
         //helper.currentDB.close();
     }
 
     public void baja(item i) {
-        App.getOpenDB().delete(aSDbContract.Atributos.TABLE_NAME, aSDbContract.Atributos.COLUMN_NAME_ITEMID + "=" + i.getId(), null);
+        App.GetOpenDB().delete(aSDbContract.Atributos.TABLE_NAME, aSDbContract.Atributos.COLUMN_NAME_ITEMID + "=" + i.getId(), null);
         //helper.currentDB.close();
     }
 
@@ -75,7 +76,7 @@ public class atributo {
         registro.put(aSDbContract.Atributos.COLUMN_NAME_NOMBRE, a.getNombre());
         registro.put(aSDbContract.Atributos.COLUMN_NAME_VALOR, a.getValor());
 
-        App.getOpenDB().update(aSDbContract.Atributos.TABLE_NAME, registro, aSDbContract.Atributos.COLUMN_NAME_ID + "=" + a.getId(), null);
+        App.GetOpenDB().update(aSDbContract.Atributos.TABLE_NAME, registro, aSDbContract.Atributos.COLUMN_NAME_ID + "=" + a.getId(), null);
         //helper.currentDB.close();
     }
 
@@ -83,7 +84,7 @@ public class atributo {
         ArrayList<atributo> atributos = new ArrayList<>();
         String sortOrder = aSDbContract.Atributos.COLUMN_NAME_NOMBRE + " ASC";
         String filter = aSDbContract.Atributos.COLUMN_NAME_ITEMID + "=" + item.getId();
-        Cursor c = App.getOpenDB().query(aSDbContract.Atributos.TABLE_NAME, null, filter, null, null, null, sortOrder);
+        Cursor c = App.GetOpenDB().query(aSDbContract.Atributos.TABLE_NAME, null, filter, null, null, null, sortOrder);
         if (c.moveToFirst()) {
             do {
                 atributos.add(new atributo(

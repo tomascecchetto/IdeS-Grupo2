@@ -17,11 +17,14 @@ public class carpeta {
     private int Id;
     private String nombre;
 
-    public carpeta(String n){
+    public carpeta(String n) {
+        super();
         this.nombre = n;
     }
 
-    public carpeta(){}
+    public carpeta() {
+        super();
+    }
 
     public int getId() {
         return Id;
@@ -31,11 +34,11 @@ public class carpeta {
         Id = id;
     }
 
-    public String getNombre() {
+    private String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    private void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
@@ -43,14 +46,14 @@ public class carpeta {
         ContentValues registro = new ContentValues();
         registro.put(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE, getNombre());
         //helper.currentDB.close();
-        return (int) App.getOpenDB().insert(aSDbContract.Carpetas.TABLE_NAME, null, registro);
+        return (int) App.GetOpenDB().insert(aSDbContract.Carpetas.TABLE_NAME, null, registro);
     }
 
     public ArrayList<String> get(){
         ArrayList<String> carpetas = new ArrayList<>();
         String[] projection = { aSDbContract.Carpetas.COLUMN_NAME_ID,aSDbContract.Carpetas.COLUMN_NAME_NOMBRE };
         String sortOrder = aSDbContract.Carpetas.COLUMN_NAME_NOMBRE + " DESC";
-        Cursor c = App.getOpenDB().query(aSDbContract.Carpetas.TABLE_NAME, projection, null, null, null, null, sortOrder);
+        Cursor c = App.GetOpenDB().query(aSDbContract.Carpetas.TABLE_NAME, projection, null, null, null, null, sortOrder);
         c.moveToFirst();
         do {
             carpetas.add(c.getString(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE)));
@@ -62,7 +65,7 @@ public class carpeta {
     public String get(int id){
         String carpeta;
         String[] projection = { aSDbContract.Carpetas.COLUMN_NAME_NOMBRE };
-        Cursor c = App.getOpenDB().query(aSDbContract.Carpetas.TABLE_NAME, projection, aSDbContract.Carpetas.COLUMN_NAME_ID + " = " + Integer.toString(id), null, null, null, null);
+        Cursor c = App.GetOpenDB().query(aSDbContract.Carpetas.TABLE_NAME, projection, aSDbContract.Carpetas.COLUMN_NAME_ID + " = " + Integer.toString(id), null, null, null, null);
         c.moveToFirst();
         carpeta = c.getString(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_NOMBRE));
         c.close();
@@ -72,7 +75,7 @@ public class carpeta {
     public int get(String nombre){
         int carpetaId;
         String[] projection = { aSDbContract.Carpetas.COLUMN_NAME_ID };
-        Cursor c = App.getOpenDB().query(aSDbContract.Carpetas.TABLE_NAME, projection, aSDbContract.Carpetas.COLUMN_NAME_NOMBRE + "=\"" + nombre + "\"", null, null, null, null);
+        Cursor c = App.GetOpenDB().query(aSDbContract.Carpetas.TABLE_NAME, projection, aSDbContract.Carpetas.COLUMN_NAME_NOMBRE + "=\"" + nombre + "\"", null, null, null, null);
         if (c.moveToFirst())
             carpetaId = c.getInt(c.getColumnIndex(aSDbContract.Carpetas.COLUMN_NAME_ID));
         else {

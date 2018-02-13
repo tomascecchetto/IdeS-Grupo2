@@ -12,6 +12,7 @@ import ids.androidsong.help.aSDbHelper;
  * Objeto para representar la tabla opciones y gestionar las mismas.
  */
 
+@SuppressWarnings("ALL")
 public class opciones {
     private String nombre;
     private String tipo;
@@ -50,7 +51,7 @@ public class opciones {
 
     public void alta() {
 
-        aSDbHelper helper = new aSDbHelper(App.getContext());
+        aSDbHelper helper = new aSDbHelper(App.GetContext());
         helper.openWriteDataBase();
 
         ContentValues registro = new ContentValues();
@@ -63,7 +64,7 @@ public class opciones {
     }
 
     public Boolean getBool(String nombre) throws Exception{
-        aSDbHelper helper = new aSDbHelper(App.getContext());
+        aSDbHelper helper = new aSDbHelper(App.GetContext());
         helper.openWriteDataBase();
         String filter = aSDbContract.Opciones.COLUMN_NAME_NOMBRE + "= \"" + nombre + "\"";
         Cursor c = helper.currentDB.query(aSDbContract.Opciones.TABLE_NAME, null, filter, null, null, null, null);
@@ -84,7 +85,7 @@ public class opciones {
     }
 
     public void modificacion() throws Exception {
-        aSDbHelper helper = new aSDbHelper(App.getContext());
+        aSDbHelper helper = new aSDbHelper(App.GetContext());
         helper.openWriteDataBase();
 
         ContentValues registro = new ContentValues();
@@ -97,7 +98,7 @@ public class opciones {
     }
 
     public String getString(String nombre, String defaultValue) throws Exception{
-        aSDbHelper helper = new aSDbHelper(App.getContext());
+        aSDbHelper helper = new aSDbHelper(App.GetContext());
         helper.openWriteDataBase();
         String filter = aSDbContract.Opciones.COLUMN_NAME_NOMBRE + "= \"" + nombre + "\"";
         Cursor c = helper.currentDB.query(aSDbContract.Opciones.TABLE_NAME, null, filter, null, null, null, null);

@@ -11,9 +11,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 
 import ids.androidsong.help.App;
-import ids.androidsong.object.atributo;
 import ids.androidsong.object.cancion;
-import ids.androidsong.object.driveStatus;
 import ids.androidsong.object.seccion;
 
 import static org.junit.Assert.*;
@@ -34,8 +32,8 @@ public class ConversionesUnitTest {
     @Before
     public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
-        App.setContext(RuntimeEnvironment.application);
-        App.getOpenDB();
+        App.SetContext(RuntimeEnvironment.application);
+        App.GetOpenDB();
         /*Pide canciones dummy y las inserta*/
         ArrayList<cancion> canciones = new cancionesDummy(CANTIDAD_SECCIONES_DUMMY).getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
         cancion = canciones.get(0);
@@ -63,8 +61,8 @@ public class ConversionesUnitTest {
     @After
     public void finalize(){
         try {
-            App.closeDB();
-            App.getDBHelper().clearDb();
+            App.CloseDB();
+            App.GetDBHelper().clearDb();
         } catch (Exception e) {
             System.out.print("Error restaurando BD\n");
         }

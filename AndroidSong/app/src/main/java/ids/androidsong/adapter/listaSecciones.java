@@ -27,6 +27,7 @@ public class listaSecciones  extends RecyclerView.Adapter<listaSecciones.ViewHol
     private final int capo;
 
     public listaSecciones(ArrayList<seccion> secciones, int c, int f) {
+        super();
         lista = secciones;
         this.capo = c;
         this.fontSize = f;
@@ -55,14 +56,6 @@ public class listaSecciones  extends RecyclerView.Adapter<listaSecciones.ViewHol
                 break;
         }
         return title;
-    }
-
-    private int getTextSize(seccion item, View view){
-        int width = view.getMeasuredWidth();
-        int slong;
-        slong = width/item.maxCaracteres()*9/5;
-
-        return slong;
     }
 
 

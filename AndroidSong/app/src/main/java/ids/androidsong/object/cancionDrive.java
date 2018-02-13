@@ -27,11 +27,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class cancionDrive extends cancionXml {
 
-    com.google.api.services.drive.Drive driveService = null;
+    private com.google.api.services.drive.Drive driveService = null;
     private String driveId;
     private com.google.api.services.drive.model.File driveFile;
 
     public cancionDrive(com.google.api.services.drive.model.File f, Drive s, String c) {
+        super();
         this.driveService = s;
         this.driveFile = f;
         this.driveId = f.getId();
@@ -39,7 +40,8 @@ public class cancionDrive extends cancionXml {
         this.carpeta = c;
     }
 
-    public cancionDrive(item item){
+    public cancionDrive(item item) {
+        super();
         this.setId(item.getId());
         this.setCarpeta(item.getCarpeta());
         this.setTitulo(item.getTitulo());
@@ -47,7 +49,15 @@ public class cancionDrive extends cancionXml {
         this.setAtributos(item.getAtributos());
     }
 
-    public String getDriveId() {
+    public String getFechaDrive(){
+        String fecha = getDriveFile().getModifiedDate().toString();
+        if (fecha.equals("") || fecha == null) {
+            fecha = getDriveFile().getCreatedDate().toString();
+        }
+        return fecha;
+    }
+
+    private String getDriveId() {
         return driveId;
     }
 
@@ -59,7 +69,7 @@ public class cancionDrive extends cancionXml {
         return driveFile;
     }
 
-    public void setDriveFile(com.google.api.services.drive.model.File driveFile) {
+    private void setDriveFile(com.google.api.services.drive.model.File driveFile) {
         this.driveFile = driveFile;
     }
     public void setDriveService(Drive service){
@@ -75,7 +85,7 @@ public class cancionDrive extends cancionXml {
     }
 
     @Override
-    protected Document getDocument()
+    Document getDocument()
             throws ParserConfigurationException, SAXException, IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         driveService.files().get(getDriveId())
@@ -86,7 +96,7 @@ public class cancionDrive extends cancionXml {
     }
 
     @Override
-    protected File toXml(){
+    File toXml(){
         Document dom = null;
         try {
             dom = getDocument();

@@ -1,7 +1,5 @@
 package ids.androidsong;
 
-import android.test.mock.MockContext;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,15 +8,12 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import ids.androidsong.help.App;
 import ids.androidsong.object.cancion;
-import ids.androidsong.object.driveStatus;
 import ids.androidsong.object.item;
 
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static org.junit.Assert.*;
 
 /**
@@ -39,7 +34,7 @@ public class BuscarUnitTest {
     @Before
     public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
-        App.setContext(RuntimeEnvironment.application);
+        App.SetContext(RuntimeEnvironment.application);
         ArrayList<cancion> canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
         for (cancion cancion : canciones) {
             cancion.alta();
@@ -67,8 +62,8 @@ public class BuscarUnitTest {
     @After
     public void finalize(){
         try {
-            App.closeDB();
-            App.getDBHelper().clearDb();
+            App.CloseDB();
+            App.GetDBHelper().clearDb();
         } catch (Exception e) {
             System.out.print("Error restaurando BD\n");
         }

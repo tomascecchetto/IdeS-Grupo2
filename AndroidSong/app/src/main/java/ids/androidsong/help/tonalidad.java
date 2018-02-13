@@ -6,17 +6,17 @@ package ids.androidsong.help;
 public enum tonalidad {
     A(0),Bb(1),B(2),C(3),Cs(4),D(5),Eb(6),E(7),F(8),Fs(9),G(10),Ab(11);
 
-    int t;
+    final int t;
 
     tonalidad(int i){
         this.t=i;
     }
 
-    public int getValue (){
+    private int getValue(){
         return t;
     }
 
-    private static int getNivel (String tono){
+    private static int GetNivel(String tono){
         int nivel = -1;
         if (tono.length() == 2){
             if (tono.charAt(1)=='#'){
@@ -31,10 +31,10 @@ public enum tonalidad {
         return nivel;
     }
 
-    private static String getTono(int nivel){
+    private static String GetTono(int nivel){
         String tono = "";
         for (tonalidad ton : tonalidad.values()){
-            if (ton.getValue() == mod(nivel,12)){
+            if (ton.getValue() == Mod(nivel,12)){
                 tono = ton.name();
             }
         }
@@ -46,11 +46,11 @@ public enum tonalidad {
         return tono;
     }
 
-    public static String getNuevoTono (String tono, int semitonos){
+    private static String GetNuevoTono(String tono, int semitonos){
         String nuevoTono;
-        int actual = getNivel(tono);
+        int actual = GetNivel(tono);
         if (actual > -1){
-            nuevoTono = getTono(actual+semitonos);
+            nuevoTono = GetTono(actual+semitonos);
         }
         else
         {
@@ -59,13 +59,13 @@ public enum tonalidad {
         return nuevoTono;
     }
 
-    private static int mod(int x, int y)
+    private static int Mod(int x, int y)
     {
         int result = x % y;
         return result < 0? result + y : result;
     }
 
-    public static String getLineaTonos (String linea, int semitonos){
+    public static String GetLineaTonos(String linea, int semitonos){
         int i; int j;
         String nuevoTono;
         try {
@@ -80,7 +80,7 @@ public enum tonalidad {
                         }
                     }
                     String tono = linea.substring(i,i+j);
-                    nuevoTono = getNuevoTono(tono,semitonos);
+                    nuevoTono = GetNuevoTono(tono,semitonos);
                     linea = linea.substring(0,i)+nuevoTono+linea.substring(i+j);
                 }
             }

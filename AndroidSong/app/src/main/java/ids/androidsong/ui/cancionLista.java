@@ -49,6 +49,7 @@ import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
+@SuppressWarnings("unused")
 public class cancionLista extends AppCompatActivity {
 
     /**
@@ -56,12 +57,12 @@ public class cancionLista extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
-    Context con;
-    public int itemId = 0;
-    SimpleItemRecyclerViewAdapter adapter;
-    View recyclerView;
-    Spinner spinnerCarpetas;
-    cancionDetalleFragment fragment;
+    private Context con;
+    private int itemId = 0;
+    private SimpleItemRecyclerViewAdapter adapter;
+    private View recyclerView;
+    private Spinner spinnerCarpetas;
+    private cancionDetalleFragment fragment;
     private int capo = 0;
     private int fontSize = 16;
     private boolean opciones = true;
@@ -196,6 +197,7 @@ public class cancionLista extends AppCompatActivity {
         private final List<item> canciones;
 
         public SimpleItemRecyclerViewAdapter(List<item> items) {
+            super();
             canciones = items;
         }
 
@@ -350,7 +352,7 @@ public class cancionLista extends AppCompatActivity {
                     "Mover " + cancion.getTitulo() + " a la carpeta:");
         }
 
-        protected void renombrarCancion() {
+        void renombrarCancion() {
             final EditText input = new EditText(con);
             final cancion cancion = new cancion(itemId);
             cancion.fill();
@@ -431,23 +433,23 @@ public class cancionLista extends AppCompatActivity {
     }
 
     private void mostrarOpciones() {
-        ImageButton modificarAcordesSostenido = findViewById(R.id.cancion_detalle_sharp);
-        ImageButton modificarAcordesBemol = findViewById(R.id.cancion_detalle_flat);
+        ImageButton modAcordesSostenido = findViewById(R.id.cancion_detalle_sharp);
+        ImageButton modAcordesBemol = findViewById(R.id.cancion_detalle_flat);
         ImageButton tamanioLetraMenor = findViewById(R.id.cancion_detalle_menor);
         ImageButton tamanioLetraMayor = findViewById(R.id.cancion_detalle_mayor);
         ImageButton mostrarEdicion = findViewById(R.id.cancion_detalle_editar);
         ImageButton mostrarAtributos = findViewById(R.id.cancion_detalle_info);
         if (opciones){
-            modificarAcordesSostenido.setVisibility(View.GONE);
-            modificarAcordesBemol.setVisibility(View.GONE);
+            modAcordesSostenido.setVisibility(View.GONE);
+            modAcordesBemol.setVisibility(View.GONE);
             tamanioLetraMenor.setVisibility(View.GONE);
             tamanioLetraMayor.setVisibility(View.GONE);
             mostrarEdicion.setVisibility(View.GONE);
             mostrarAtributos.setVisibility(View.GONE);
             opciones = false;
         } else {
-            modificarAcordesSostenido.setVisibility(View.VISIBLE);
-            modificarAcordesBemol.setVisibility(View.VISIBLE);
+            modAcordesSostenido.setVisibility(View.VISIBLE);
+            modAcordesBemol.setVisibility(View.VISIBLE);
             tamanioLetraMenor.setVisibility(View.VISIBLE);
             tamanioLetraMayor.setVisibility(View.VISIBLE);
             mostrarEdicion.setVisibility(View.VISIBLE);

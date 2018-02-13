@@ -2,7 +2,6 @@ package ids.androidsong.object;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -22,25 +21,26 @@ public class seccion {
     private String nombre;
     private String contenido;
 
-    public seccion(int i, String n, String c) {
+    private seccion(int i, String n, String c) {
+        super();
         this.Id = i;
         this.nombre = n;
         this.contenido = c;
     }
 
     public seccion(String n, String c) {
+        super();
         this.nombre = n;
         this.contenido = c;
     }
 
     public seccion(String n) {
+        super();
         this.nombre = n;
     }
 
-    public seccion(){}
-
-    public int getId() {
-        return Id;
+    public seccion() {
+        super();
     }
 
     public void setId(int id) {
@@ -84,21 +84,12 @@ public class seccion {
         registro.put(aSDbContract.Secciones.COLUMN_NAME_NOMBRE, getNombre());
         registro.put(aSDbContract.Secciones.COLUMN_NAME_CONTENIDO, getContenido());
 
-        App.getOpenDB().insert(aSDbContract.Secciones.TABLE_NAME, null, registro);
+        App.GetOpenDB().insert(aSDbContract.Secciones.TABLE_NAME, null, registro);
         //helper.currentDB.close();
     }
 
     public void baja(item i) {
-        App.getOpenDB().delete(aSDbContract.Secciones.TABLE_NAME, aSDbContract.Secciones.COLUMN_NAME_ITEMID + "=" + i.getId(), null);
-        //helper.currentDB.close();
-    }
-
-    public void modificacion(seccion s) {
-ContentValues registro = new ContentValues();
-        registro.put(aSDbContract.Secciones.COLUMN_NAME_NOMBRE, s.getNombre());
-        registro.put(aSDbContract.Secciones.COLUMN_NAME_CONTENIDO, s.getContenido());
-
-        App.getOpenDB().update(aSDbContract.Secciones.TABLE_NAME, registro, aSDbContract.Secciones.COLUMN_NAME_ID + "=" + s.getId(), null);
+        App.GetOpenDB().delete(aSDbContract.Secciones.TABLE_NAME, aSDbContract.Secciones.COLUMN_NAME_ITEMID + "=" + i.getId(), null);
         //helper.currentDB.close();
     }
 
@@ -106,7 +97,7 @@ ContentValues registro = new ContentValues();
         ArrayList<seccion> secciones = new ArrayList<>();
         String sortOrder = aSDbContract.Secciones.COLUMN_NAME_ID + " ASC";
         String filter = aSDbContract.Secciones.COLUMN_NAME_ITEMID + "=" + item.getId();
-        Cursor c = App.getOpenDB().query(aSDbContract.Secciones.TABLE_NAME, null, filter, null, null, null, sortOrder);
+        Cursor c = App.GetOpenDB().query(aSDbContract.Secciones.TABLE_NAME, null, filter, null, null, null, sortOrder);
         c.moveToFirst();
         do {
             secciones.add(new seccion(
@@ -119,7 +110,7 @@ ContentValues registro = new ContentValues();
         return secciones;
     }
 
-    public String formatearContenido (boolean chords, int capo) {
+    private String formatearContenido(boolean chords, int capo) {
         StringBuilder formated = new StringBuilder();
         StringReader reader = new StringReader(contenido);
         BufferedReader br = new BufferedReader(reader);
@@ -131,7 +122,7 @@ ContentValues registro = new ContentValues();
                 switch (caracter) {
                     case '.':
                         if (chords) {
-                            linea = tonalidad.getLineaTonos(linea, capo);
+                            linea = tonalidad.GetLineaTonos(linea, capo);
                             linea = linea.replaceAll(" ", "&nbsp;");
                             formated.append("<b>").append(linea.substring(1)).append("</b><br/>");
                         }
@@ -159,18 +150,4 @@ ContentValues registro = new ContentValues();
         return formated.toString();
     }
 
-    public int maxCaracteres(){
-        BufferedReader textReader = new BufferedReader(new StringReader(contenido));
-        int i = 0;
-        String linea;
-        try {
-            while ((linea = textReader.readLine()) != null) {
-                i = linea.length() > i ? linea.length() : i;
-            }
-        }
-        catch (Exception e) {
-            Log.e("Error",e.getMessage());
-        }
-        return i;
-    }
 }

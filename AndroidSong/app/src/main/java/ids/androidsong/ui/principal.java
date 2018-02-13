@@ -40,11 +40,10 @@ import ids.androidsong.object.opciones;
 public class principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    protected final Context con = this;
-    NavigationView navigationView;
-    protected int itemId;
-    SimpleItemRecyclerViewAdapter adapter;
-    View recyclerView;
+    private final Context con = this;
+    private NavigationView navigationView;
+    private int itemId;
+    private View recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +51,9 @@ public class principal extends AppCompatActivity
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        App.setContext(con);
+        App.SetContext(con);
 
-        permisos.solicitarCuenta(this);
+        permisos.SolicitarCuenta(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +184,8 @@ public class principal extends AppCompatActivity
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         //Inicializa la lista
-        adapter = new principal.SimpleItemRecyclerViewAdapter((new coleccion(0)).getItems());
+        SimpleItemRecyclerViewAdapter adapter = new SimpleItemRecyclerViewAdapter(
+                (new coleccion(0)).getItems());
         recyclerView.setAdapter(null);
         recyclerView.setAdapter(adapter);
     }
@@ -197,6 +197,7 @@ public class principal extends AppCompatActivity
         private final List<item> canciones;
 
         public SimpleItemRecyclerViewAdapter(List<item> items) {
+            super();
             canciones = items;
         }
 

@@ -20,6 +20,7 @@ public class atributosEditarFragment extends Fragment {
     private View root;
 
     public atributosEditarFragment() {
+        super();
     }
 
     public void setItemId(int i) {

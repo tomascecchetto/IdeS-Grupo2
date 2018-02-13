@@ -27,10 +27,9 @@ import ids.androidsong.object.item;
 
 public class papelera extends AppCompatActivity {
 
-    protected int itemId;
-    protected final Context con = this;
-    protected SimpleItemRecyclerViewAdapter adapter;
-    protected View recyclerView;
+    private int itemId;
+    private final Context con = this;
+    private View recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +61,7 @@ public class papelera extends AppCompatActivity {
         setupRecyclerView((RecyclerView) recyclerView);
     }
 
+    @SuppressWarnings("unused")
     public void vaciarPapelera(View view){
         alert.SimpleAlert(con,
                 new alert.SimpleRunnable(){
@@ -83,7 +83,8 @@ public class papelera extends AppCompatActivity {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         //Inicializa la lista
-        adapter = new papelera.SimpleItemRecyclerViewAdapter(new cancion().getBajas());
+        SimpleItemRecyclerViewAdapter adapter = new SimpleItemRecyclerViewAdapter(
+                new cancion().getBajas());
         recyclerView.setAdapter(null);
         recyclerView.setAdapter(adapter);
     }
@@ -95,6 +96,7 @@ public class papelera extends AppCompatActivity {
         private final List<item> canciones;
 
         public SimpleItemRecyclerViewAdapter(List<item> items) {
+            super();
             canciones = items;
         }
 

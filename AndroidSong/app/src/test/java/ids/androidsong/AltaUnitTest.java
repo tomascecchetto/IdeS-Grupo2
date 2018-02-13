@@ -1,7 +1,6 @@
 package ids.androidsong;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,8 +32,8 @@ public class AltaUnitTest {
     @Before
     public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
-        App.setContext(RuntimeEnvironment.application);
-        App.getOpenDB();
+        App.SetContext(RuntimeEnvironment.application);
+        App.GetOpenDB();
         /*Pide canciones dummy y las inserta*/
         canciones = new cancionesDummy(CANTIDAD_SECCIONES_DUMMY).getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
 
@@ -93,8 +92,8 @@ public class AltaUnitTest {
     @After
     public void finalize(){
         try {
-            App.getDBHelper().clearDb();
-            App.closeDB();
+            App.GetDBHelper().clearDb();
+            App.CloseDB();
         } catch (Exception e) {
             System.out.print("Error restaurando BD\n");
         }

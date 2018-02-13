@@ -18,11 +18,12 @@ public class coleccion {
     private String nombre;
     private ArrayList<item> items = new ArrayList<>();
 
-    public coleccion(int i){
+    public coleccion(int i) {
+        super();
         this.Id = i;
     }
 
-    public int getId() {
+    private int getId() {
         return Id;
     }
 
@@ -45,12 +46,12 @@ public class coleccion {
         return items;
     }
 
-    public void setItems(ArrayList<item> items) {
+    private void setItems(ArrayList<item> items) {
         this.items = items;
     }
 
-    protected void getByColeccion() {
-        aSDbHelper helper = new aSDbHelper(App.getContext());
+    private void getByColeccion() {
+        aSDbHelper helper = new aSDbHelper(App.GetContext());
         helper.createDataBase();
         helper.openWriteDataBase();
         ArrayList<item> itemsdb = new ArrayList<>();
@@ -71,7 +72,7 @@ public class coleccion {
 
     private int getLastOrden(){
         int size;
-        aSDbHelper helper = new aSDbHelper(App.getContext());
+        aSDbHelper helper = new aSDbHelper(App.GetContext());
         helper.openWriteDataBase();
         String sqlQuery = "SELECT MAX(orden) AS ORDEN FROM ItemsColecciones where coleccionId = ?";
         String[] arguments = {
@@ -85,7 +86,7 @@ public class coleccion {
     }
 
     public void addItem(int itemId){
-        aSDbHelper helper = new aSDbHelper(App.getContext());
+        aSDbHelper helper = new aSDbHelper(App.GetContext());
         helper.openWriteDataBase();
 
         ContentValues registro = new ContentValues();
@@ -97,7 +98,7 @@ public class coleccion {
     }
 
     public void removeItem(int itemId){
-        aSDbHelper helper = new aSDbHelper(App.getContext());
+        aSDbHelper helper = new aSDbHelper(App.GetContext());
         helper.openWriteDataBase();
 
         helper.currentDB.delete(aSDbContract.ItemsColecciones.TABLE_NAME, aSDbContract.ItemsColecciones.COLUMN_NAME_COLECCIONID + "=" + getId() + " AND " +

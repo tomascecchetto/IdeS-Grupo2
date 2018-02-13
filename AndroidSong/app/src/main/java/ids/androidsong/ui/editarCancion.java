@@ -20,9 +20,10 @@ import ids.androidsong.object.seccion;
 
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
+@SuppressWarnings("unused")
 public class editarCancion extends AppCompatActivity {
     private cancion cancion;
-    Context con;
+    private Context con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class editarCancion extends AppCompatActivity {
     }
 
     private void seccion() {
-        EditText input = new EditText(App.getContext());
+        EditText input = new EditText(App.GetContext());
         input.setText("C");
         input.setSelection(1);
         alert.TextViewAlert(con,
