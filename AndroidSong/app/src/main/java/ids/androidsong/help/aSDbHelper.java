@@ -77,8 +77,7 @@ public class aSDbHelper extends SQLiteOpenHelper {
         Cursor cur = null;
 
         try {
-            String myPath = DATABASE_PATH + DATABASE_NAME;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            checkDB = SQLiteDatabase.openDatabase(DATABASE_PATH, null, SQLiteDatabase.OPEN_READONLY);
             String[] projection = {
                     aSDbContract.Carpetas.COLUMN_NAME_NOMBRE
             };
@@ -112,8 +111,7 @@ public class aSDbHelper extends SQLiteOpenHelper {
     public void openWriteDataBase() throws SQLException {
 
         // Open the database
-        String myPath = DATABASE_PATH + DATABASE_NAME;
-        currentDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS);
+        currentDB = SQLiteDatabase.openDatabase(DATABASE_PATH, null, SQLiteDatabase.NO_LOCALIZED_COLLATORS);
         currentDB.execSQL(aSDbContract.CONSTRAINS_ON);
     }
 
@@ -128,7 +126,7 @@ public class aSDbHelper extends SQLiteOpenHelper {
 
     private void copyDataBase() throws IOException {
 
-        OutputStream databaseOutputStream = new FileOutputStream("" + DATABASE_PATH + DATABASE_NAME);
+        OutputStream databaseOutputStream = new FileOutputStream("" + DATABASE_PATH);
         InputStream databaseInputStream;
 
         byte[] buffer = new byte[1024];

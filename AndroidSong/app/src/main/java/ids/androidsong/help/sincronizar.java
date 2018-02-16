@@ -416,10 +416,9 @@ public class sincronizar{
     private void nuevoDriveALocal(cancionDrive cancion, driveStatus status) {
         cancion.fill();
         cancion.alta();
-        driveStatus nuevoStatus = new driveStatus(cancion);
-        nuevoStatus.setDriveDT(cancion.getFechaDrive());
-        nuevoStatus.setLocalDT(cancion.getFechaModificacion());
-        nuevoStatus.alta();
-        nuevoStatus.marcarProcesado();
+        status.setItem(cancion);
+        status.setDriveDT(cancion.getFechaDrive());
+        status.modificacion();
+        status.marcarProcesado();
     }
 }
