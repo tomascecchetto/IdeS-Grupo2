@@ -51,7 +51,7 @@ public class cancionDrive extends cancionXml {
 
     public String getFechaDrive(){
         String fecha = getDriveFile().getModifiedDate().toString();
-        if (fecha.equals("") || fecha == null) {
+        if (fecha.equals("")) {
             fecha = getDriveFile().getCreatedDate().toString();
         }
         return fecha;
