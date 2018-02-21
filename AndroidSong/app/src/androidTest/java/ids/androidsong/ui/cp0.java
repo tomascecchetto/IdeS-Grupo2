@@ -75,7 +75,7 @@ public class cp0 {
 
     }
 
-    /*@After
+    @After
     public void destroy(){
         try {
             App.GetDBHelper().clearDb();
@@ -83,5 +83,5 @@ public class cp0 {
         } catch (Exception e) {
             System.out.print("Error restaurando BD\n");
         }
-    }*/
+    }
 }
