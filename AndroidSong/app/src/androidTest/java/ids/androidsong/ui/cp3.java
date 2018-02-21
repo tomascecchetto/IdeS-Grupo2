@@ -26,18 +26,40 @@ import android.widget.TextView;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+
 import ids.androidsong.R;
+import ids.androidsong.cancionesDummy;
+import ids.androidsong.help.App;
+import ids.androidsong.object.cancion;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class cp3 {
 
+    private static  int CANTIDAD_CANCIONES_DUMMY = 2;
+    private static int CANTIDAD_SECCIONES_DUMMY = 3;
+
     @Rule
     public ActivityTestRule<principal> mActivityTestRule = new ActivityTestRule<>(principal.class);
+
+    @Before
+    public void setup(){
+        /*Pide canciones dummy y las inserta*/
+        ArrayList<cancion> canciones = new ArrayList<>();
+        cancionesDummy cancionesDummy = new cancionesDummy(CANTIDAD_SECCIONES_DUMMY);
+        canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY));
+        canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY,"Pruebas"));
+        for (cancion c : canciones){
+            c.alta();
+        }
+    }
 
     @Test
     public void cp3_1() {
@@ -264,6 +286,16 @@ public class cp3 {
         ViewInteraction editText = onView(
                 allOf(withId(R.id.editar_cancion_letra)));
         editText.check(matches(isDisplayed()));
+    }
+
+    @After
+    public void destroy(){
+        try {
+            App.GetDBHelper().clearDb();
+            App.CloseDB();
+        } catch (Exception e) {
+            System.out.print("Error restaurando BD\n");
+        }
     }
 
     private static Matcher<View> childAtPosition(
