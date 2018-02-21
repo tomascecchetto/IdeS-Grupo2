@@ -20,6 +20,17 @@
         android:text="@string/nueva_cancion_guardar"
         android:layout_alignParentBottom="true"/>
 
+    <TextView
+        android:id="@+id/nueva_cancion_validacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/nueva_cancion_guardar"
+        android:text="Prueba"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="visible"
+        tools:background="@color/common_google_signin_btn_text_light_default"/>
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"

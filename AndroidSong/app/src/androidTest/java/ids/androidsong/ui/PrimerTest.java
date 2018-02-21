@@ -75,78 +75,33 @@ public class PrimerTest {
         navigationMenuItemView.perform(click());
 
         ViewInteraction appCompatImageButton2 = onView(
-                allOf(withId(R.id.importar_button_path),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.LinearLayout")),
-                                        1),
-                                1),
-                        isDisplayed()));
+                allOf(withId(R.id.importar_button_path)));
         appCompatImageButton2.perform(click());
 
         ViewInteraction editText = onView(
-                allOf(withText("/storage/emulated/0/OpenSong/Songs"),
-                        childAtPosition(
-                                allOf(withId(android.R.id.custom),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.FrameLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
+                allOf(withText("/storage/emulated/0/AndroidSong/Songs")));
         editText.perform(click());
 
         ViewInteraction editText2 = onView(
-                allOf(withText("/storage/emulated/0/OpenSong/Songs"),
-                        childAtPosition(
-                                allOf(withId(android.R.id.custom),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.FrameLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
+                allOf(withText("/storage/emulated/0/AndroidSong/Songs")));
         editText2.perform(replaceText("/storage/emulated/0/Downloads"));
 
         ViewInteraction editText3 = onView(
-                allOf(withText("/storage/emulated/0/Downloads"),
-                        childAtPosition(
-                                allOf(withId(android.R.id.custom),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.FrameLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
+                allOf(withText("/storage/emulated/0/Downloads")));
         editText3.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
-                allOf(withId(android.R.id.button1), withText("Aceptar"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
+                allOf(withId(android.R.id.button1), withText("Aceptar")));
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
+                allOf(withId(R.id.fab)));
         floatingActionButton.perform(click());
 
         pressBack();
 
         ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.support.design.widget.AppBarLayout")),
-                                                0)),
-                                1),
-                        isDisplayed()));
+                allOf(withContentDescription("Open navigation drawer")));
         appCompatImageButton3.perform(click());
 
         ViewInteraction navigationMenuItemView2 = onView(
@@ -178,131 +133,55 @@ public class PrimerTest {
         appCompatEditText2.perform(scrollTo(), replaceText("UnCantante"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.nueva_cancion_letra),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.scrollView2),
-                                        0),
-                                7)));
+                allOf(withId(R.id.nueva_cancion_letra)));
         appCompatEditText3.perform(scrollTo(), replaceText("'letra..........'"), closeSoftKeyboard());
 
         ViewInteraction floatingActionButton2 = onView(
-                allOf(withId(R.id.fab),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
+                allOf(withId(R.id.fab)));
         floatingActionButton2.perform(click());
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(android.R.id.button1), withText("Aceptar"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
+                allOf(withId(android.R.id.button1), withText("Aceptar")));
         appCompatButton2.perform(scrollTo(), click());
 
         ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.nueva_cancion_letra), withText("'letra..........'"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.scrollView2),
-                                        0),
-                                7)));
+                allOf(withId(R.id.nueva_cancion_letra), withText("[C]\n'letra..........'")));
         appCompatEditText4.perform(scrollTo(), replaceText("'letra..........'[C]\n'..........'"));
 
         ViewInteraction appCompatEditText5 = onView(
-                allOf(withId(R.id.nueva_cancion_letra), withText("'letra..........'[C]\n'..........'"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.scrollView2),
-                                        0),
-                                7),
-                        isDisplayed()));
+                allOf(withId(R.id.nueva_cancion_letra), withText("'letra..........'[C]\n'..........'")));
         appCompatEditText5.perform(closeSoftKeyboard());
 
         ViewInteraction floatingActionButton3 = onView(
-                allOf(withId(R.id.fab),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
+                allOf(withId(R.id.fab)));
         floatingActionButton3.perform(click());
 
         ViewInteraction editText4 = onView(
-                allOf(withText("C"),
-                        childAtPosition(
-                                allOf(withId(android.R.id.custom),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.FrameLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
+                allOf(withText("C")));
         editText4.perform(replaceText("V"));
 
         ViewInteraction editText5 = onView(
-                allOf(withText("V"),
-                        childAtPosition(
-                                allOf(withId(android.R.id.custom),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.FrameLayout")),
-                                                0)),
-                                0),
-                        isDisplayed()));
+                allOf(withText("V")));
         editText5.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatButton3 = onView(
-                allOf(withId(android.R.id.button1), withText("Aceptar"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
+                allOf(withId(android.R.id.button1), withText("Aceptar")));
         appCompatButton3.perform(scrollTo(), click());
 
         ViewInteraction appCompatEditText6 = onView(
-                allOf(withId(R.id.nueva_cancion_letra), withText("'letra..........'[C]\n'..........'"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.scrollView2),
-                                        0),
-                                7)));
+                allOf(withId(R.id.nueva_cancion_letra), withText("'letra..........'[C]\n'..........'")));
         appCompatEditText6.perform(scrollTo(), replaceText("'letra..........'[C]\n'..........'[V]\n"));
 
         ViewInteraction appCompatEditText7 = onView(
-                allOf(withId(R.id.nueva_cancion_letra), withText("'letra..........'[C]\n'..........'[V]\n"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.scrollView2),
-                                        0),
-                                7),
-                        isDisplayed()));
+                allOf(withId(R.id.nueva_cancion_letra), withText("'letra..........'[C]\n'..........'[V]\n")));
         appCompatEditText7.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatButton4 = onView(
-                allOf(withId(R.id.nueva_cancion_guardar), withText("Guardar"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.design.widget.CoordinatorLayout")),
-                                        2),
-                                1),
-                        isDisplayed()));
+                allOf(withId(R.id.nueva_cancion_guardar), withText("Guardar")));
         appCompatButton4.perform(click());
 
         ViewInteraction appCompatImageButton4 = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.support.design.widget.AppBarLayout")),
-                                                0)),
-                                1),
-                        isDisplayed()));
+                allOf(withContentDescription("Open navigation drawer")));
         appCompatImageButton4.perform(click());
 
         ViewInteraction navigationMenuItemView3 = onView(
@@ -316,10 +195,7 @@ public class PrimerTest {
         navigationMenuItemView3.perform(click());
 
         ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.cancion_lista),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                1)));
+                allOf(withId(R.id.cancion_lista)));
         recyclerView.perform(actionOnItemAtPosition(1, click()));
 
         ViewInteraction floatingActionButton4 = onView(
@@ -346,25 +222,11 @@ public class PrimerTest {
         pressBack();
 
         ViewInteraction appCompatImageButton5 = onView(
-                allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withId(R.id.app_bar),
-                                                0)),
-                                1),
-                        isDisplayed()));
+                allOf(withContentDescription("Navigate up")));
         appCompatImageButton5.perform(click());
 
         ViewInteraction appCompatImageButton6 = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.support.design.widget.AppBarLayout")),
-                                                0)),
-                                1),
-                        isDisplayed()));
+                allOf(withContentDescription("Open navigation drawer")));
         appCompatImageButton6.perform(click());
 
     }

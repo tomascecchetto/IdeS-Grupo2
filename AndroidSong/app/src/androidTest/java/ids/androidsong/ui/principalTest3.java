@@ -78,25 +78,11 @@ public class principalTest3 {
         floatingActionButton.perform(click());
 
         ViewInteraction appCompatImageButton2 = onView(
-                allOf(withContentDescription("Navegar hacia arriba"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.support.design.widget.AppBarLayout")),
-                                                0)),
-                                1),
-                        isDisplayed()));
+                allOf(withContentDescription("Navegar hacia arriba")));
         appCompatImageButton2.perform(click());
 
         ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.support.design.widget.AppBarLayout")),
-                                                0)),
-                                1),
-                        isDisplayed()));
+                allOf(withContentDescription("Open navigation drawer")));
         appCompatImageButton3.perform(click());
 
         ViewInteraction navigationMenuItemView2 = onView(
