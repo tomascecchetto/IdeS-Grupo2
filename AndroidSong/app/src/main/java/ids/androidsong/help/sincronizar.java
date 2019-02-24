@@ -1,10 +1,13 @@
 package ids.androidsong.help;
 
+import static java.util.Objects.isNull;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.google.api.services.drive.Drive;
@@ -14,8 +17,12 @@ import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +46,8 @@ public class sincronizar{
     private boolean existeLocal;
     boolean existeStatus;
     private final ProgressDialog mProgress;
-    private final TextView syncLog;
+    private boolean showLog = false;
+    private TextView syncLog = null;
     private TextView confLog;
     private final Map<String, String> carpetasDriveId = new HashMap<>();
     private String carpetaPrincipal;
@@ -52,7 +60,6 @@ public class sincronizar{
         super();
         coneccion = new conectarDrive(context);
         mProgress = new ProgressDialog(context);
-        syncLog = context.findViewById(R.id.sincronizar_log_sync);
     }
 
     private Drive getDriveService(){
@@ -75,8 +82,66 @@ public class sincronizar{
         return createFolder(carpetasDriveId.get("Principal"),nombre);
     }
 
-    public void sincronizarEnBackground(){
-        new sincronizarBackground().execute();
+    //Hacer Sinc ahora
+    public void sincronizarEnBackground(TextView log) {
+        sincronizarEnBackground(true,false,log);
+    }
+
+
+    public void sincronizarEnBackground(Boolean ignorarFecha, Boolean ignorarFlag, TextView log) {
+        String freq = "";
+        String last = "";
+        Boolean flag = false;
+        if (log != null) {
+            showLog = true;
+            syncLog = log;
+        }
+
+        try {
+            freq = new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCFREQUENCE,
+                    "Nunca");
+            last = new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCLAST, "19900101");
+            flag = new opciones().getBool(aSDbContract.Opciones.OPT_NAME_SYNCFLAG);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!flag || ignorarFlag) {
+            int dias = 0;
+            switch (freq) {
+                case "Diariamente":
+                    dias = 1;
+                    break;
+                case "Semanalmente":
+                    dias = 7;
+                    break;
+                case "Mensualmente":
+                    dias = 30;
+                    break;
+                case "Nunca":
+                    dias = 0;
+                    break;
+            }
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+            Date d = null;
+            try {
+                d = formatter.parse(last);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar lastDate = Calendar.getInstance();
+            lastDate.setTime(d);
+            Calendar today = Calendar.getInstance();
+            long diff = today.getTimeInMillis() - lastDate.getTimeInMillis();
+            long diferencia = diff / (24 * 60 * 60 * 1000); // To force each service run: diferencia = diferencia +2;
+            if ((dias != 0 && diferencia >= dias) || ignorarFecha)
+                new sincronizarBackground().execute();
+        } else {
+            if (showLog) {
+                syncLog.setText("Sincronización actualmente activa. Espere o mantenga presionado el botón para forzar el inicio.");
+            } else {
+                Log.i("SyncUpdate","Sincronización actualmente activa. Espere o mantenga presionado el botón para forzar el inicio.");
+            }
+        }
     }
 
     private String getFolder(String parent, String path)  throws IOException {
@@ -145,10 +210,22 @@ public class sincronizar{
         @Override
         protected String doInBackground(Void... params) {
             try {
+                new opciones(aSDbContract.Opciones.OPT_NAME_SYNCFLAG,Boolean.toString(true)).modificacion();
+                Log.i("SyncUpdate","Iniciando sincronización.");
                 sincronizar();
+                new opciones(aSDbContract.Opciones.OPT_NAME_SYNCFLAG,Boolean.toString(false)).modificacion();
+                Log.i("SyncUpdate","Terminando sincronización.");
+                String fecha = android.text.format.DateFormat.format("yyyyMMdd", new java.util.Date()).toString();
+                new opciones(aSDbContract.Opciones.OPT_NAME_SYNCLAST,fecha).modificacion();
                 return "\nSincronización completa.";
             } catch (Exception e) {
                 mLastError = e;
+                try {
+                    new opciones(aSDbContract.Opciones.OPT_NAME_SYNCFLAG,Boolean.toString(false))
+                                .modificacion();
+                } catch (Exception e1) {
+                    Log.e("Error",e1.getMessage());
+                }
                 cancel(true);
                 return null;
             }
@@ -156,7 +233,6 @@ public class sincronizar{
 
         private String getSongsFolder() throws Exception{
             String folder = getFolder(null,new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCPATH,
-
                     DEFAULT_PATH));
             carpetasDriveId.put("Principal",folder);
             List<File> fullResult = getFullResult(getDriveService().files().list()
@@ -171,11 +247,20 @@ public class sincronizar{
             return folder;
         }
 
-        private void procesarCarpeta(String file) throws IOException {
+        private String getUltimaCarpeta(String path) {
+            int i,f;
+            f = path.lastIndexOf("/");
+            i = path.substring(0,f-1).lastIndexOf("/");
+            return path.substring(i+1,f);
+        }
+
+        private void procesarCarpeta(String file) throws Exception {
             String parent;
             if (file == null) parent = "root";
             else parent = file;
-            String nombreCarpeta = getDriveService().files().get(parent).execute().getTitle();
+            String nombreCarpetaDrive = getDriveService().files().get(parent).execute().getTitle();
+            String nombreCarpeta = nombreCarpetaDrive.equals(getUltimaCarpeta(new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCPATH,
+                    DEFAULT_PATH))) ? "Principal" : nombreCarpetaDrive ;
             List<File> fullResult = getFullResult(getDriveService().files().list()
                     .setQ("trashed=false and '" + parent + "' in parents")
                     .setFields("nextPageToken, items(id, title, mimeType, modifiedDate, parents)"));
@@ -272,14 +357,17 @@ public class sincronizar{
 
         @Override
         protected void onPreExecute() {
-            syncLog.setText("");
-            mProgress.show();
+            if (showLog) {
+                syncLog.setText("");
+                mProgress.show();
+            }
         }
 
         @Override
         protected void onProgressUpdate (String[]... values){
-            if (values[0][0].equals("sync")) syncLog.setText(
+            if (values[0][0].equals("sync")) if (showLog) syncLog.setText(
                     String.format("%s\n%s", syncLog.getText(), values[0][1]));
+            else Log.i("SyncUpdate",values[0][1]);
             else confLog.setText(
                     String.format("%s\n%s", confLog.getText(), values[0][1]));
         }
@@ -293,21 +381,21 @@ public class sincronizar{
 
         @Override
         protected void onPostExecute(String output) {
-            mProgress.hide();
+            if (showLog && mProgress.isShowing()) mProgress.hide();
             if (output == null) {
-                syncLog.setText(R.string.Error_con_Drive);
+                if (showLog) syncLog.setText(R.string.Error_con_Drive);
             } else {
-                syncLog.setText(String.format("%s%s", syncLog.getText(), output));
+                if (showLog) syncLog.setText(String.format("%s%s", syncLog.getText(), output));
             }
         }
 
         @Override
         protected void onCancelled() {
-            mProgress.hide();
+            if (showLog && mProgress.isShowing()) mProgress.hide();
             if (mLastError != null) {
-                    syncLog.setText(String.format("The following error occurred:\n%s", mLastError.getMessage()));
+                    if (showLog) syncLog.setText(String.format("The following error occurred:\n%s", mLastError.getMessage()));
             } else {
-                syncLog.setText(String.format("%s\nRequest cancelled.", syncLog.getText()));
+                if (showLog) syncLog.setText(String.format("%s\nRequest cancelled.", syncLog.getText()));
             }
         }
     }
@@ -394,15 +482,16 @@ public class sincronizar{
         cancionLocal.setTitulo(cancionLocal.getTitulo() + " (Conflicto)");
         status.setTitulo(cancionLocal.getTitulo());
         cancionLocal.modificacion();
-        status.setDriveDT(null);
+        status.setDriveDT(cancion.getFechaDrive());
         status.setLocalDT(cancionLocal.getFechaModificacion());
         status.modificacion();
         status.marcarProcesado();
-        nuevoDriveALocal(cancion,status);
+        driveStatus nuevoStatus = new driveStatus();
+        nuevoDriveALocal(cancion,nuevoStatus);
     }
 
     private boolean statusLocalNuevo(driveStatus status) {
-        return status.getDriveDT() == null;
+        return (status.getDriveDT() == null || status.getDriveDT().equals("null") || status.getDriveDT().equals(""));
     }
 
     private boolean existeLocal(driveStatus status) {

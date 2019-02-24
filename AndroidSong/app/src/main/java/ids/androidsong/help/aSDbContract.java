@@ -65,6 +65,9 @@ public final class aSDbContract {
         public static final String OPT_NAME_IMPORTOVERRIDE = "importOverride";
         public static final String OPT_NAME_SYNCPATH = "synctPath";
         public static final String OPT_NAME_SYNCOVERRIDE = "syncOverride";
+        public static final String OPT_NAME_SYNCFREQUENCE = "syncFrequence";
+        public static final String OPT_NAME_SYNCFLAG = "syncFlag";
+        public static final String OPT_NAME_SYNCLAST = "syncLast";
 
         public static final String OPT_TYPE_BOOL = "bool";
         public static final String OPT_TYPE_TEXT = "text";

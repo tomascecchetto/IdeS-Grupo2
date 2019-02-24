@@ -127,7 +127,8 @@ class conectarDrive implements EasyPermissions.PermissionCallbacks {
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (! isDeviceOnline()) {
-            syncLog.setText(R.string.Error_sin_red);
+            if (syncLog != null)
+                    syncLog.setText(R.string.Error_sin_red);
         } else {
             new MakeRequestTask().execute();
         }
@@ -148,7 +149,7 @@ class conectarDrive implements EasyPermissions.PermissionCallbacks {
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    syncLog.setText(con.getString(R.string.Error_Google_Services));
+                    if (syncLog != null) syncLog.setText(con.getString(R.string.Error_Google_Services));
                 } else {
                     getDriveConnection();
                 }
@@ -322,21 +323,25 @@ class conectarDrive implements EasyPermissions.PermissionCallbacks {
 
         @Override
         protected void onPreExecute() {
-            syncLog.setText("");
-            mProgress.show();
+            if (syncLog != null) {
+                syncLog.setText("");
+                mProgress.show();
+            }
         }
 
         @Override
         protected void onPostExecute(String output) {
-            mProgress.hide();
+            if (mProgress.isShowing()) mProgress.hide();
+            mProgress.dismiss();
             if (output == null) {
-                syncLog.setText(R.string.Error_con_Drive);
+                if (syncLog != null) syncLog.setText(R.string.Error_con_Drive);
             }
         }
 
         @Override
         protected void onCancelled() {
-            mProgress.hide();
+            if (mProgress.isShowing()) mProgress.hide();
+            mProgress.dismiss();
             if (mLastError != null) {
                 if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
                     showGooglePlayServicesAvailabilityErrorDialog(
@@ -347,11 +352,11 @@ class conectarDrive implements EasyPermissions.PermissionCallbacks {
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             REQUEST_AUTHORIZATION);
                 } else {
-                    syncLog.setText(String.format("The following error occurred:\n%s",
+                    if (syncLog != null) syncLog.setText(String.format("The following error occurred:\n%s",
                             mLastError.getMessage()));
                 }
             } else {
-                syncLog.setText(R.string.Conexion_cancelada);
+                if (syncLog != null) syncLog.setText(R.string.Conexion_cancelada);
             }
         }
     }

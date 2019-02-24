@@ -31,7 +31,9 @@ import ids.androidsong.help.App;
 import ids.androidsong.help.aSDbContract;
 import ids.androidsong.help.aSDbHelper;
 import ids.androidsong.help.alert;
+import ids.androidsong.help.androidSongSyncService;
 import ids.androidsong.help.permisos;
+import ids.androidsong.help.sincronizar;
 import ids.androidsong.object.cancion;
 import ids.androidsong.object.coleccion;
 import ids.androidsong.object.item;
@@ -40,10 +42,11 @@ import ids.androidsong.object.opciones;
 public class principal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final Context con = this;
+    private Context con;
     private NavigationView navigationView;
     private int itemId;
     private View recyclerView;
+    sincronizar sincBl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +54,10 @@ public class principal extends AppCompatActivity
         setContentView(R.layout.activity_principal);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        App.SetContext(con);
 
         permisos.SolicitarCuenta(this);
+        con = this;
+        App.SetContext(con);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +82,15 @@ public class principal extends AppCompatActivity
         assert recyclerView != null;
 
         new DBTask().execute();
+
+        sincBl = new sincronizar(this);
+        startService(new Intent(con,androidSongSyncService.class));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        sincBl.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

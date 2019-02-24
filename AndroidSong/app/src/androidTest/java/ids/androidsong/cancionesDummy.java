@@ -16,7 +16,7 @@ public class cancionesDummy {
     private int cantidadInterna;
     private String TITULO_DUMMY = "Canción Dummy ";
     private String CARPETA_DUMMY = "Principal";
-    private String ATRIBUTO_DUMMY = "Dummy ";
+    private String ATRIBUTO_DUMMY = "Dummy_";
     private String SECCION_NOMBRE_DUMMY = "V";
     private String SECCION_CONTENIDO_DUMMY = ". C    F#      G\n" +
                                              " Contenido Dummy ";

@@ -121,6 +121,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ids.androidsong.ui.cancionLista" />
         </activity>
+        <service android:name=".help.androidSongSyncService" />
     </application>
 
 </manifest>

@@ -9,10 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import ids.androidsong.R;
 import ids.androidsong.help.aSDbContract;
@@ -22,13 +23,16 @@ import ids.androidsong.object.opciones;
 
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
+import java.util.ArrayList;
+
 public class sincronizador extends AppCompatActivity /*implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener*/ {
 
     private TextView path;
     private Context con;
     private boolean sobreescritura;
     private sincronizar sincBl;
-
+    private Spinner spinnerFrecuencia;
+    private TextView syncLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +40,14 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
         setContentView(R.layout.activity_sincronizar);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        syncLog = findViewById(R.id.sincronizar_log_sync);
 
         con = this;
         path = findViewById(R.id.sincronizar_text_path);
-        ToggleButton sobreescribir = findViewById(R.id.sincronizar_button_override);
+        /*ToggleButton sobreescribir = findViewById(R.id.sincronizar_button_override);*/
         try {
             path.setText(new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCPATH, sincronizar.DEFAULT_PATH));
-            sobreescritura = new opciones().getBool(aSDbContract.Opciones.OPT_NAME_SYNCOVERRIDE);
+            /*sobreescritura = new opciones().getBool(aSDbContract.Opciones.OPT_NAME_SYNCOVERRIDE);
             sobreescribir.setChecked(sobreescritura);
             sobreescribir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -54,10 +59,12 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
                         e.printStackTrace();
                     }
                 }
-            });
+            });*/
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        setupFrecuencia();
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -72,8 +79,50 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
                 iniciarSincronizacion();
             }
         });
+        fab.setOnLongClickListener( new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                forzarSincronizacion();
+                return false;
+            }
+        });
         sincBl = new sincronizar(this);
         sincBl.getDriveConnection();
+    }
+
+    private void setupFrecuencia() {
+        spinnerFrecuencia = findViewById(R.id.sincronizar_auto_freq);
+        String freq = "Diariamente";
+        final ArrayList<String> frecuencias = new ArrayList<>();
+        frecuencias.add("Diariamente");
+        frecuencias.add("Semanalmente");
+        frecuencias.add("Mensualmente");
+        frecuencias.add("Nunca");
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                frecuencias);
+        spinnerFrecuencia.setAdapter(spinnerArrayAdapter);
+        try {
+            freq = new opciones().getString(aSDbContract.Opciones.OPT_NAME_SYNCFREQUENCE,"Nunca");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        spinnerFrecuencia.setSelection(frecuencias.indexOf(freq));
+        spinnerFrecuencia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    new opciones(aSDbContract.Opciones.OPT_NAME_SYNCFREQUENCE,frecuencias.get(position)).modificacion();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -83,9 +132,12 @@ public class sincronizador extends AppCompatActivity /*implements GoogleApiClien
     }
 
     private void iniciarSincronizacion() {
-        sincBl.sincronizarEnBackground();
+        sincBl.sincronizarEnBackground(syncLog);
     }
 
+    private void forzarSincronizacion() {
+        sincBl.sincronizarEnBackground(true,true,syncLog);
+    }
 
     @SuppressWarnings("unused")
     public void changePath(View view) {

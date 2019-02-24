@@ -12,10 +12,10 @@
 
     <TextView
         android:id="@+id/textView12"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Directorio de Sincronización"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,20 +53,17 @@
 
         <TextView
             android:id="@+id/textView9"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Sobreescribir canciones"
-            android:textAppearance="@android:style/TextAppearance.Material.Subhead" />
-
-        <ToggleButton
-            android:id="@+id/sincronizar_button_override"
-            android:layout_width="100dp"
+            android:text="@string/auto_sincronizar"
+            android:textAppearance="@android:style/TextAppearance.Material.Subhead"/>
+        <Spinner
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textOff="No"
-            android:textOn="Si" />
+            android:id="@+id/sincronizar_auto_freq">
+        </Spinner>
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"

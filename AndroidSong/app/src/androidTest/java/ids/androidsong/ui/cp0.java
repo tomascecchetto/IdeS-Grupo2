@@ -52,7 +52,7 @@ import ids.androidsong.object.cancion;
 @RunWith(AndroidJUnit4.class)
 public class cp0 {
 
-    private static int CANTIDAD_CANCIONES_DUMMY = 2;
+    private static int CANTIDAD_CANCIONES_DUMMY = 1;
     private static int CANTIDAD_SECCIONES_DUMMY = 3;
 
     @Rule
@@ -64,7 +64,7 @@ public class cp0 {
         ArrayList<cancion> canciones = new ArrayList<>();
         cancionesDummy cancionesDummy = new cancionesDummy(CANTIDAD_SECCIONES_DUMMY);
         canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY));
-        canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY, "Pruebas"));
+        //canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY, "Pruebas"));
         for (cancion c : canciones) {
             c.alta();
         }
@@ -75,7 +75,7 @@ public class cp0 {
 
     }
 
-    @After
+    /*@After
     public void destroy(){
         try {
             App.GetDBHelper().clearDb();
@@ -83,5 +83,5 @@ public class cp0 {
         } catch (Exception e) {
             System.out.print("Error restaurando BD\n");
         }
-    }
+    }*/
 }
