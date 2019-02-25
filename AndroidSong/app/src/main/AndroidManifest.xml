@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ids.androidsong">
+          package="ids.androidsong">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <application
         android:allowBackup="true"
@@ -19,9 +19,9 @@
             android:label="@string/title_activity_principal"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
@@ -32,13 +32,13 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal" />
+                android:value="ids.androidsong.ui.principal"/>
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/cancion_lista_search" />
+                android:resource="@xml/cancion_lista_search"/>
 
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
         </activity>
         <activity
@@ -48,7 +48,16 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionLista" />
+                android:value="ids.androidsong.ui.cancionLista"/>
+        </activity>
+        <activity
+            android:name=".ui.cancionPre"
+            android:label="@string/title_cancionmusico_detail"
+            android:parentActivityName=".ui.shareReceptor"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ids.androidsong.ui.cancionLista"/>
         </activity>
         <activity
             android:name=".ui.editarCancion"
@@ -57,7 +66,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionDetalle" />
+                android:value="ids.androidsong.ui.cancionDetalle"/>
         </activity>
         <activity
             android:name=".ui.nuevaCancion"
@@ -67,7 +76,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal" />
+                android:value="ids.androidsong.ui.principal"/>
         </activity>
         <activity
             android:name=".ui.fullscreenCancion"
@@ -77,7 +86,7 @@
             android:theme="@style/FullscreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionLista" />
+                android:value="ids.androidsong.ui.cancionLista"/>
         </activity>
         <activity
             android:name=".ui.importador"
@@ -86,7 +95,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal" />
+                android:value="ids.androidsong.ui.principal"/>
         </activity>
         <activity
             android:name=".ui.sincronizador"
@@ -95,12 +104,12 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal" />
+                android:value="ids.androidsong.ui.principal"/>
         </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
 
         <activity
             android:name=".ui.papelera"
@@ -109,7 +118,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal" />
+                android:value="ids.androidsong.ui.principal"/>
         </activity>
         <activity
             android:name=".ui.atributos"
@@ -119,9 +128,76 @@
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionLista" />
+                android:value="ids.androidsong.ui.cancionLista"/>
         </activity>
-        <service android:name=".help.androidSongSyncService" />
+
+        <service android:name=".help.androidSongSyncService"/>
+
+        <activity
+            android:name=".ui.shareReceptor"
+            android:label="@string/title_activity_share_receptor"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <!-- needed for properly formatted email messages -->
+                <data
+                    android:scheme="content"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.androidSong" />
+                <!-- needed for mangled email messages -->
+                <data
+                    android:scheme="content"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.androidSong" />
+                <!-- needed for mangled email messages -->
+                <data
+                    android:scheme="content"
+                    android:mimeType="application/octet-stream"
+                    android:pathPattern=".*\\.androidSong" />
+
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.androidSong" />
+                <data android:host="*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.androidSong" />
+                <data android:host="*" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <action
+                    android:name="android.intent.action.EDIT" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+                <category
+                    android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="file" />
+                <data
+                    android:scheme="content" />
+                <data
+                    android:mimeType="application/plain" />
+                <data
+                    android:mimeType="application/octet-stream" />
+                <data
+                    android:mimeType="text/*" />
+                <data android:pathPattern=".*\\.androidSong" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

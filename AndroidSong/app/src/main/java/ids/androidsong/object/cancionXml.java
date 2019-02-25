@@ -65,7 +65,7 @@ public class cancionXml extends cancion {
         }
     }
 
-    private void BuildCancion(Document dom) {
+    protected void BuildCancion(Document dom) {
         try
         {
             CargarNodos(dom);
@@ -99,6 +99,10 @@ public class cancionXml extends cancion {
     }
 
     File toXml(){
+        return toXml("tempXml.txt");
+    }
+
+    File toXml(String fileName){
         Document dom = null;
         try {
             dom = GetRawDocument(R.raw.nuevacancion);
@@ -106,11 +110,11 @@ public class cancionXml extends cancion {
             Log.e("Error",e.getMessage());
         }
         LoadCancion(dom);
-        return grabar(dom);
+        return grabar(dom,fileName);
     }
 
-    File grabar(Document dom) {
-        String nomarchivo = "/tempXml.txt";
+    File grabar(Document dom, String fileName) {
+        String nomarchivo = "/"+fileName;
         File file = new File(App.GetContext().getCacheDir().getAbsolutePath()+nomarchivo);
         try {
             String contenido = GetStringFromDocument(dom);

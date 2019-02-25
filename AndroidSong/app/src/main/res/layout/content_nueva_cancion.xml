@@ -9,7 +9,7 @@
     tools:showIn="@layout/activity_nueva_cancion">
 
     <Button
-        android:id="@+id/nueva_cancion_guardar"
+        android:id="@+id/cancion_pre_guardar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -24,7 +24,7 @@
         android:id="@+id/nueva_cancion_validacion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/nueva_cancion_guardar"
+        android:layout_above="@+id/cancion_pre_guardar"
         android:text="Prueba"
         android:textAlignment="center"
         android:textColor="@android:color/holo_red_light"
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
-        android:layout_above="@id/nueva_cancion_guardar">
+        android:layout_above="@id/cancion_pre_guardar">
 
         <LinearLayout
             android:layout_width="match_parent"

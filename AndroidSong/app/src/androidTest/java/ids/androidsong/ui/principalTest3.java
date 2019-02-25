@@ -257,7 +257,7 @@ public class principalTest3 {
         appCompatEditText2.perform(scrollTo(), replaceText("b"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.nueva_cancion_guardar), withText("Guardar"),
+                allOf(withId(R.id.cancion_pre_guardar), withText("Guardar"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.support.design.widget.CoordinatorLayout")),

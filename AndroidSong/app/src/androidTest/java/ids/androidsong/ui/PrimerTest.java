@@ -177,7 +177,7 @@ public class PrimerTest {
         appCompatEditText7.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatButton4 = onView(
-                allOf(withId(R.id.nueva_cancion_guardar), withText("Guardar")));
+                allOf(withId(R.id.cancion_pre_guardar), withText("Guardar")));
         appCompatButton4.perform(click());
 
         ViewInteraction appCompatImageButton4 = onView(

@@ -33,4 +33,5 @@
     <string name="Error_valor_rango">El valor está fuera del rango admitido: %1$s a %2$s</string>
     <string name="Error_valor_numerico">El valor no es numérico: %s</string>
     <string name="auto_sincronizar">Auto-sincronizar:</string>
+    <string name="title_activity_share_receptor">Importar canción...</string>
 </resources>

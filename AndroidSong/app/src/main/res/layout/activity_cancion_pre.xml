@@ -1,0 +1,123 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="ids.androidsong.ui.cancionPre"
+    tools:ignore="MergeRootFrame">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/detail_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@+id/cancionmusico_detail_container"
+        app:layout_anchorGravity="top|end"
+        app:srcCompat="?attr/actionModeCloseDrawable"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/cancionmusico_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_opciones"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@color/colorPrimary"
+        android:cropToPadding="false"
+        android:onClick="mostrarOpciones"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/ic_action_collapse"
+        android:contentDescription="Icon" />
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_flat"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="false"
+        android:backgroundTint="@android:color/holo_purple"
+        android:cropToPadding="false"
+        android:onClick="modificarAcordesBemol"
+        android:scaleType="fitXY"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="56dp"
+        app:srcCompat="@drawable/ic_action_flat" />
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_sharp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/holo_purple"
+        android:cropToPadding="false"
+        android:onClick="modificarAcordesSostenido"
+        android:scaleType="fitXY"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="96dp"
+        app:srcCompat="@drawable/ic_action_sharp" />
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_menor"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/holo_purple"
+        android:cropToPadding="false"
+        android:onClick="tamanioLetraMenor"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="136dp"
+        app:srcCompat="@drawable/ic_action_expand" />
+
+    <ImageButton
+        android:id="@+id/cancion_detalle_mayor"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
+        android:backgroundTint="@android:color/holo_purple"
+        android:cropToPadding="false"
+        android:onClick="tamanioLetraMayor"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="176dp"
+        app:srcCompat="@drawable/ic_action_collapse" />
+
+</android.support.design.widget.CoordinatorLayout>
