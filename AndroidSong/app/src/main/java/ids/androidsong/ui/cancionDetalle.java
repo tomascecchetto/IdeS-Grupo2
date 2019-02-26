@@ -1,8 +1,12 @@
 package ids.androidsong.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +14,11 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
+import java.util.List;
+
 import ids.androidsong.R;
+import ids.androidsong.object.cancion;
+import ids.androidsong.object.cancionShare;
 
 /**
  * An activity representing a single cancion detail screen. This
@@ -115,6 +123,23 @@ public class cancionDetalle extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void compartirCancion(View view){
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("*/*");
+        cancion cancion = new cancion(itemId);
+        cancion.fill();
+        Uri uri = FileProvider.getUriForFile(this,"ids.androidsong.fileprovider",(new cancionShare(cancion)).toXmlForShare());
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        List<ResolveInfo> resInfoList = this.getPackageManager().queryIntentActivities(sharingIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo resolveInfo : resInfoList) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            this.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT,"Compartiendo canción: "+cancion.getTitulo());
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, cancion.getTitulo());
+        startActivity(Intent.createChooser(sharingIntent, "Compartir con:"));
+    }
+
     private void mostrarOpciones() {
         ImageButton modAcordesSostenido = findViewById(R.id.cancion_detalle_sharp);
         ImageButton modAcordesBemol = findViewById(R.id.cancion_detalle_flat);
@@ -122,6 +147,7 @@ public class cancionDetalle extends AppCompatActivity {
         ImageButton tamanioLetraMayor = findViewById(R.id.cancion_detalle_mayor);
         ImageButton mostrarEdicion = findViewById(R.id.cancion_detalle_editar);
         ImageButton mostrarAtributos = findViewById(R.id.cancion_detalle_info);
+        ImageButton compartirCancion = findViewById(R.id.cancion_detalle_share);
         if (opciones){
             modAcordesSostenido.setVisibility(View.GONE);
             modAcordesBemol.setVisibility(View.GONE);
@@ -129,6 +155,7 @@ public class cancionDetalle extends AppCompatActivity {
             tamanioLetraMayor.setVisibility(View.GONE);
             mostrarEdicion.setVisibility(View.GONE);
             mostrarAtributos.setVisibility(View.GONE);
+            compartirCancion.setVisibility(View.GONE);
             opciones = false;
         } else {
             modAcordesSostenido.setVisibility(View.VISIBLE);
@@ -137,6 +164,7 @@ public class cancionDetalle extends AppCompatActivity {
             tamanioLetraMayor.setVisibility(View.VISIBLE);
             mostrarEdicion.setVisibility(View.VISIBLE);
             mostrarAtributos.setVisibility(View.VISIBLE);
+            compartirCancion.setVisibility(View.VISIBLE);
             opciones = true;
         }
     }

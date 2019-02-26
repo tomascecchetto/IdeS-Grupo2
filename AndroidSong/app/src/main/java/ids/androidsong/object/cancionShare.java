@@ -7,6 +7,7 @@ import android.util.Log;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -34,6 +35,14 @@ public class cancionShare extends cancionXml implements Serializable {
         this.carpeta = c;
     }
 
+    public cancionShare(cancion c) {
+        this.setId(c.getId());
+        this.setCarpeta(c.getCarpeta());
+        this.setTitulo(c.getTitulo());
+        this.setSecciones(c.getSecciones());
+        this.setAtributos(c.getAtributos());
+    }
+
     public void fill(Uri uri){
         Document dom;
         try {
@@ -58,5 +67,9 @@ public class cancionShare extends cancionXml implements Serializable {
         return db.parse(is);
     }
 
+    public File toXmlForShare() {
+        File tempFile = super.toXml(getTitulo()+".androidSong");
+        return tempFile;
+    }
 
 }
