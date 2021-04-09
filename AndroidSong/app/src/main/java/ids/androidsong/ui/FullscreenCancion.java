@@ -12,18 +12,18 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 import ids.androidsong.R;
-import ids.androidsong.adapter.listaSecciones;
-import ids.androidsong.object.cancion;
+import ids.androidsong.adapter.ListaSecciones;
+import ids.androidsong.object.Cancion;
 
-import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_CAPO;
-import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_FUENTE;
-import static ids.androidsong.ui.cancionDetalleFragment.ARG_ITEM_ID;
+import static ids.androidsong.ui.CancionDetalleFragment.ARG_ITEM_CAPO;
+import static ids.androidsong.ui.CancionDetalleFragment.ARG_ITEM_FUENTE;
+import static ids.androidsong.ui.CancionDetalleFragment.ARG_ITEM_ID;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class fullscreenCancion extends AppCompatActivity {
+public class FullscreenCancion extends AppCompatActivity {
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -100,7 +100,7 @@ public class fullscreenCancion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ids.androidsong.object.cancion cancion = new cancion(
+        Cancion cancion = new Cancion(
                 getIntent().getIntExtra(ARG_ITEM_ID, 0));
         int capo = getIntent().getIntExtra(ARG_ITEM_CAPO,0);
         int fuente = getIntent().getIntExtra(ARG_ITEM_FUENTE,0);
@@ -118,7 +118,7 @@ public class fullscreenCancion extends AppCompatActivity {
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView.setAdapter(new listaSecciones(cancion.getSecciones(),capo,fuente));
+        mContentView.setAdapter(new ListaSecciones(cancion.getSecciones(),capo,fuente));
 
 
         // Set up the user interaction to manually show or hide the system UI.

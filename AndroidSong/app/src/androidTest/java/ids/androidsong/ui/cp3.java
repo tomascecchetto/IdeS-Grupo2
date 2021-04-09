@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import ids.androidsong.R;
 import ids.androidsong.cancionesDummy;
 import ids.androidsong.help.App;
-import ids.androidsong.object.cancion;
+import ids.androidsong.object.Cancion;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -49,16 +49,16 @@ public class cp3 {
     private static int CANTIDAD_SECCIONES_DUMMY = 3;
 
     @Rule
-    public ActivityTestRule<principal> mActivityTestRule = new ActivityTestRule<>(principal.class);
+    public ActivityTestRule<Principal> mActivityTestRule = new ActivityTestRule<>(Principal.class);
 
     @Before
     public void setup(){
         /*Pide canciones dummy y las inserta*/
-        ArrayList<cancion> canciones = new ArrayList<>();
+        ArrayList<Cancion> canciones = new ArrayList<>();
         cancionesDummy cancionesDummy = new cancionesDummy(CANTIDAD_SECCIONES_DUMMY);
         canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY));
         canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY,"Pruebas"));
-        for (cancion c : canciones){
+        for (Cancion c : canciones){
             c.alta();
         }
     }

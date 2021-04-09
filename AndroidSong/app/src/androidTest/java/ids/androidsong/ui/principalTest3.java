@@ -42,7 +42,7 @@ import static org.hamcrest.Matchers.is;
 public class principalTest3 {
 
     @Rule
-    public ActivityTestRule<principal> mActivityTestRule = new ActivityTestRule<>(principal.class);
+    public ActivityTestRule<Principal> mActivityTestRule = new ActivityTestRule<>(Principal.class);
 
     @Test
     public void principalTest3() {

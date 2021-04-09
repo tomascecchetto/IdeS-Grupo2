@@ -11,27 +11,27 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 
 import ids.androidsong.help.App;
-import ids.androidsong.object.cancion;
-import ids.androidsong.object.driveStatus;
+import ids.androidsong.object.Cancion;
+import ids.androidsong.object.DriveStatus;
 
 import static org.junit.Assert.*;
 
 /**
  * Pruebas de Alta de canciones
  * Verificar los eventos de una Baja
- * Validar la papelera y la eliminación desde papelera
+ * Validar la Papelera y la eliminación desde Papelera
  * Validar la restauración (marca el status como nuevo)
  * Validar DriveStatus:
  *      con marca de Baja (para canciones ya sincronizadas, hay que simular la sincronización pegando una fecha en status.DriveDT)
  *      o su ausencia (para canciones que sólo existen localmente)
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.xml", packageName = "ids.androidsong")
+@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.Xml", packageName = "ids.androidsong")
 public class BajaUnitTest {
 
     private int CANTIDAD_CANCIONES_DUMMY = 5;
     private String DRIVE_HASH = "DriveHash";
-    ArrayList<cancion> canciones;
+    ArrayList<Cancion> canciones;
 
     @Before
     public void setup(){
@@ -39,7 +39,7 @@ public class BajaUnitTest {
         App.SetContext(RuntimeEnvironment.application);
         App.GetOpenDB();
         canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
-        for (cancion cancion : canciones) {
+        for (Cancion cancion : canciones) {
             cancion.alta();
         }
     }
@@ -48,96 +48,96 @@ public class BajaUnitTest {
 
     @Test
     public void Cancion_BajaNoSincronizado_Status(){
-        cancion cancion = canciones.get(0);
+        Cancion cancion = canciones.get(0);
         cancion.baja();
-        driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        DriveStatus status = new DriveStatus(cancion.getTitulo(),cancion.getCarpeta());
         status.get();
         assertEquals(0,status.getItemId());
     }
 
     @Test
     public void Cancion_BajaSincronizado_Status(){
-        cancion cancion = canciones.get(0);
-        driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        Cancion cancion = canciones.get(0);
+        DriveStatus status = new DriveStatus(cancion.getTitulo(),cancion.getCarpeta());
         status.setItem(cancion);
         status.setDriveDT(DRIVE_HASH);
         status.modificacion();
         cancion.baja();
-        status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        status = new DriveStatus(cancion.getTitulo(),cancion.getCarpeta());
         status.get();
         assertTrue(status.getDriveDT().equals(DRIVE_HASH) && status.getLocalDT() == null);
     }
 
     @Test
     public void Cancion_Baja_Papelera(){
-        cancion cancion0 = canciones.get(0);
+        Cancion cancion0 = canciones.get(0);
         cancion0.baja();
-        cancion cancion1 = canciones.get(1);
+        Cancion cancion1 = canciones.get(1);
         cancion1.baja();
-        assertTrue((new cancion()).getBajas().size() == 2);
+        assertTrue((new Cancion()).getBajas().size() == 2);
     }
 
     @Test
     public void Cancion_Baja_Lista(){
-        cancion cancion0 = canciones.get(0);
+        Cancion cancion0 = canciones.get(0);
         cancion0.baja();
-        cancion cancion1 = canciones.get(1);
+        Cancion cancion1 = canciones.get(1);
         cancion1.baja();
-        assertTrue((new cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-2);
+        assertTrue((new Cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-2);
     }
 
     @Test
     public void Cancion_RestaurarNoSincronizado_Status(){
-        cancion cancion = canciones.get(0);
+        Cancion cancion = canciones.get(0);
         cancion.baja();
         cancion.restaurar();
-        driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        DriveStatus status = new DriveStatus(cancion.getTitulo(),cancion.getCarpeta());
         status.get();
         assertTrue(status.getItemId() > 0 && status.getLocalDT() != null && status.getDriveDT() == null);
     }
 
     @Test
     public void Cancion_RestaurarSincronizado_Status(){
-        cancion cancion = canciones.get(0);
-        driveStatus status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        Cancion cancion = canciones.get(0);
+        DriveStatus status = new DriveStatus(cancion.getTitulo(),cancion.getCarpeta());
         status.fill();
         status.setDriveDT(DRIVE_HASH);
         status.modificacion();
         cancion.baja();
         cancion.restaurar();
-        status = new driveStatus(cancion.getTitulo(),cancion.getCarpeta());
+        status = new DriveStatus(cancion.getTitulo(),cancion.getCarpeta());
         status.get();
         assertTrue(status.getLocalDT() != null);
     }
 
     @Test
     public void Cancion_Restaurar_Papelera(){
-        cancion cancion0 = canciones.get(0);
+        Cancion cancion0 = canciones.get(0);
         cancion0.baja();
-        cancion cancion1 = canciones.get(1);
+        Cancion cancion1 = canciones.get(1);
         cancion1.baja();
         cancion1.restaurar();
-        assertTrue((new cancion()).getBajas().size() == 1);
+        assertTrue((new Cancion()).getBajas().size() == 1);
     }
 
     @Test
     public void Cancion_Restaurar_Lista(){
-        cancion cancion0 = canciones.get(0);
+        Cancion cancion0 = canciones.get(0);
         cancion0.baja();
-        cancion cancion1 = canciones.get(1);
+        Cancion cancion1 = canciones.get(1);
         cancion1.baja();
         cancion1.restaurar();
-        assertTrue((new cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-1);
+        assertTrue((new Cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-1);
     }
 
     @Test
     public void Cancion_Eliminar() {
-        cancion cancion0 = canciones.get(0);
+        Cancion cancion0 = canciones.get(0);
         cancion0.baja();
-        cancion cancion1 = canciones.get(1);
+        Cancion cancion1 = canciones.get(1);
         cancion1.baja();
         cancion1.eliminar();
-        assertTrue((new cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-2 && (new cancion()).getBajas().size() == 1);
+        assertTrue((new Cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-2 && (new Cancion()).getBajas().size() == 1);
     }
 
     @After

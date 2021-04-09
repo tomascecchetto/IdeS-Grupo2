@@ -44,7 +44,7 @@ import ids.androidsong.help.App;
 public class cp1 {
 
     @Rule
-    public ActivityTestRule<principal> mActivityTestRule = new ActivityTestRule<>(principal.class);
+    public ActivityTestRule<Principal> mActivityTestRule = new ActivityTestRule<>(Principal.class);
 
     @Test
     public void cp1_1() {

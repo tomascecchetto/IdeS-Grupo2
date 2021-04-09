@@ -23,7 +23,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context="ids.androidsong.ui.cancionPre"
+        tools:context="ids.androidsong.ui.CancionPre"
         tools:listitem="@layout/lista_secciones" />
 
 

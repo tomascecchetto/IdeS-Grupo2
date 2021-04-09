@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="ids.androidsong.ui.principal"
+    tools:context="ids.androidsong.ui.Principal"
     tools:showIn="@layout/app_bar_principal"
     tools:layout_editor_absoluteY="121dp"
     tools:layout_editor_absoluteX="0dp"
@@ -64,7 +64,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/guideline2"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11"
-        tools:context="ids.androidsong.ui.cancionLista"
+        tools:context="ids.androidsong.ui.CancionLista"
         tools:listitem="@layout/favoritos_lista"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp" />

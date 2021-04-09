@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ids.androidsong.ui.atributosListaFragment"
+    tools:context="ids.androidsong.ui.AtributosListaFragment"
     tools:showIn="@layout/activity_atributos">
 
     <android.support.v7.widget.RecyclerView
@@ -24,7 +24,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context="ids.androidsong.ui.atributos"
+        tools:context="ids.androidsong.ui.Atributos"
         tools:listitem="@layout/atributos_lista_item" />
 
 </android.support.constraint.ConstraintLayout>

@@ -11,23 +11,23 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 
 import ids.androidsong.help.App;
-import ids.androidsong.object.cancion;
-import ids.androidsong.object.driveStatus;
+import ids.androidsong.object.Cancion;
+import ids.androidsong.object.DriveStatus;
 
 import static org.junit.Assert.*;
 
 /**
  * Pruebas de Alta de canciones
  * Verificar la correcta creación de todos los elementos en BD
- * Item, atributos, secciones, driveStatus (con marca de Nuevo)
+ * Item, Atributos, secciones, DriveStatus (con marca de Nuevo)
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.xml", packageName = "ids.androidsong")
+@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.Xml", packageName = "ids.androidsong")
 public class AltaUnitTest {
 
     private int CANTIDAD_CANCIONES_DUMMY = 5;
     private int CANTIDAD_SECCIONES_DUMMY = 3;
-    private ArrayList<cancion> canciones;
+    private ArrayList<Cancion> canciones;
 
     @Before
     public void setup(){
@@ -41,22 +41,22 @@ public class AltaUnitTest {
 
     @Test
     public void Cancion_Alta(){
-        for (cancion cancion : canciones) {
+        for (Cancion cancion : canciones) {
             cancion.alta();
         }
-        int cantidad = new cancion().get().size();
+        int cantidad = new Cancion().get().size();
         assertTrue( cantidad == CANTIDAD_CANCIONES_DUMMY);
     }
 
     @Test
     public void Cancion_Secciones(){
-        for (cancion cancion : canciones) {
+        for (Cancion cancion : canciones) {
             cancion.alta();
         }
         boolean result = true;
-        cancion cancionGuardada;
-        for(cancion c : canciones){
-            cancionGuardada = new cancion(c.getId());
+        Cancion cancionGuardada;
+        for(Cancion c : canciones){
+            cancionGuardada = new Cancion(c.getId());
             cancionGuardada.fill();
             if (c.getSecciones().size() != cancionGuardada.getSecciones().size())
                 result = false;
@@ -66,13 +66,13 @@ public class AltaUnitTest {
 
     @Test
     public void Cancion_Atributos(){
-        for (cancion cancion : canciones) {
+        for (Cancion cancion : canciones) {
             cancion.alta();
         }
         boolean result = true;
-        cancion cancionGuardada;
-        for(cancion c : canciones){
-            cancionGuardada = new cancion(c.getId());
+        Cancion cancionGuardada;
+        for(Cancion c : canciones){
+            cancionGuardada = new Cancion(c.getId());
             cancionGuardada.fill();
             if (c.getAtributos().size() != cancionGuardada.getAtributos().size())
                 result = false;
@@ -82,10 +82,10 @@ public class AltaUnitTest {
 
     @Test
     public void DriveStatus_getNuevos() throws Exception {
-        for (cancion cancion : canciones) {
+        for (Cancion cancion : canciones) {
             cancion.alta();
         }
-        ArrayList<driveStatus> lista = new driveStatus().getNuevos();
+        ArrayList<DriveStatus> lista = new DriveStatus().getNuevos();
         assertTrue(lista.size() == CANTIDAD_CANCIONES_DUMMY);
     }
 

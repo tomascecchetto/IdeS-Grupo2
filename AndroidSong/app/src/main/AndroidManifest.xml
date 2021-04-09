@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.principal"
+            android:name=".ui.Principal"
             android:label="@string/title_activity_principal"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,14 +26,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.cancionLista"
+            android:name=".ui.CancionLista"
             android:label="@string/title_cancionmusico_list"
             android:launchMode="singleTop"
-            android:parentActivityName=".ui.principal"
+            android:parentActivityName=".ui.Principal"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal"/>
+                android:value="ids.androidsong.ui.Principal"/>
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/cancion_lista_search"/>
@@ -43,69 +43,69 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.cancionDetalle"
+            android:name=".ui.CancionDetalle"
             android:label="@string/title_cancionmusico_detail"
-            android:parentActivityName=".ui.cancionLista"
+            android:parentActivityName=".ui.CancionLista"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionLista"/>
+                android:value="ids.androidsong.ui.CancionLista"/>
         </activity>
         <activity
-            android:name=".ui.cancionPre"
+            android:name=".ui.CancionPre"
             android:label="@string/title_cancionmusico_detail"
-            android:parentActivityName=".ui.shareReceptor"
+            android:parentActivityName=".ui.ShareReceptor"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionLista"/>
+                android:value="ids.androidsong.ui.CancionLista"/>
         </activity>
         <activity
-            android:name=".ui.editarCancion"
+            android:name=".ui.EditarCancion"
             android:label="@string/title_activity_editar_cancion"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionDetalle"/>
+                android:value="ids.androidsong.ui.CancionDetalle"/>
         </activity>
         <activity
-            android:name=".ui.nuevaCancion"
+            android:name=".ui.NuevaCancion"
             android:label="@string/title_activity_nueva_cancion"
-            android:parentActivityName=".ui.principal"
+            android:parentActivityName=".ui.Principal"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal"/>
+                android:value="ids.androidsong.ui.Principal"/>
         </activity>
         <activity
             android:name=".ui.fullscreenCancion"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen_cancion"
-            android:parentActivityName=".ui.cancionLista"
+            android:parentActivityName=".ui.CancionLista"
             android:theme="@style/FullscreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionLista"/>
+                android:value="ids.androidsong.ui.CancionLista"/>
         </activity>
         <activity
-            android:name=".ui.importador"
+            android:name=".ui.Importador"
             android:label="@string/title_activity_importador"
-            android:parentActivityName=".ui.principal"
+            android:parentActivityName=".ui.Principal"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal"/>
+                android:value="ids.androidsong.ui.Principal"/>
         </activity>
         <activity
-            android:name=".ui.sincronizador"
+            android:name=".ui.Sincronizador"
             android:label="@string/title_activity_sincronizar"
-            android:parentActivityName=".ui.principal"
+            android:parentActivityName=".ui.Principal"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal"/>
+                android:value="ids.androidsong.ui.Principal"/>
         </activity>
 
         <meta-data
@@ -113,29 +113,29 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity
-            android:name=".ui.papelera"
+            android:name=".ui.Papelera"
             android:label="@string/title_activity_papelera"
-            android:parentActivityName=".ui.principal"
+            android:parentActivityName=".ui.Principal"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.principal"/>
+                android:value="ids.androidsong.ui.Principal"/>
         </activity>
         <activity
-            android:name=".ui.atributos"
+            android:name=".ui.Atributos"
             android:label="@string/title_activity_atributos"
-            android:parentActivityName=".ui.cancionLista"
+            android:parentActivityName=".ui.CancionLista"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ids.androidsong.ui.cancionLista"/>
+                android:value="ids.androidsong.ui.CancionLista"/>
         </activity>
 
-        <service android:name=".help.androidSongSyncService"/>
+        <service android:name=".help.AndroidSongSyncService"/>
 
         <activity
-            android:name=".ui.shareReceptor"
+            android:name=".ui.ShareReceptor"
             android:label="@string/title_activity_share_receptor"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

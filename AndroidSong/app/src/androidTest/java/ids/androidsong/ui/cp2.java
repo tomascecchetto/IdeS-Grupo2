@@ -34,9 +34,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +44,7 @@ import java.util.ArrayList;
 import ids.androidsong.R;
 import ids.androidsong.cancionesDummy;
 import ids.androidsong.help.App;
-import ids.androidsong.object.cancion;
+import ids.androidsong.object.Cancion;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -56,16 +54,16 @@ public class cp2 {
     private static int CANTIDAD_SECCIONES_DUMMY = 3;
 
     @Rule
-    public ActivityTestRule<principal> mActivityTestRule = new ActivityTestRule<>(principal.class);
+    public ActivityTestRule<Principal> mActivityTestRule = new ActivityTestRule<>(Principal.class);
 
     @Before
     public void setup(){
         /*Pide canciones dummy y las inserta*/
-        ArrayList<cancion> canciones = new ArrayList<>();
+        ArrayList<Cancion> canciones = new ArrayList<>();
         cancionesDummy cancionesDummy = new cancionesDummy(CANTIDAD_SECCIONES_DUMMY);
         canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY));
         canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY,"Pruebas"));
-        for (cancion c : canciones){
+        for (Cancion c : canciones){
             c.alta();
         }
     }
@@ -268,7 +266,7 @@ public class cp2 {
         textView3.check(matches(isDisplayed()));
 
         ViewInteraction textView4 = onView(
-                allOf(withId(android.R.id.text1), withText("Copiar a carpeta"),
+                allOf(withId(android.R.id.text1), withText("Copiar a Carpeta"),
                         childAtPosition(
                                 allOf(IsInstanceOf.<View>instanceOf(android.widget.ListView.class),
                                         childAtPosition(
@@ -280,7 +278,7 @@ public class cp2 {
         textView4.check(matches(isDisplayed()));
 
         ViewInteraction textView5 = onView(
-                allOf(withId(android.R.id.text1), withText("Mover a carpeta"),
+                allOf(withId(android.R.id.text1), withText("Mover a Carpeta"),
                         childAtPosition(
                                 allOf(IsInstanceOf.<View>instanceOf(android.widget.ListView.class),
                                         childAtPosition(

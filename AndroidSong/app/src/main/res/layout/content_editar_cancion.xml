@@ -7,5 +7,5 @@
     android:hint="Letra de la canción"
     android:inputType="textMultiLine"
     android:fontFamily="monospace"
-    tools:context="ids.androidsong.ui.editarCancion"
+    tools:context="ids.androidsong.ui.EditarCancion"
     tools:showIn="@layout/activity_editar_cancion"/>

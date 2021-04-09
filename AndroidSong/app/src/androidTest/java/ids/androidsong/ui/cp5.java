@@ -26,7 +26,6 @@ import android.widget.TextView;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -38,10 +37,10 @@ import java.util.ArrayList;
 import ids.androidsong.R;
 import ids.androidsong.cancionesDummy;
 import ids.androidsong.help.App;
-import ids.androidsong.help.sincronizar;
-import ids.androidsong.object.cancion;
-import ids.androidsong.object.driveStatus;
-import ids.androidsong.object.item;
+import ids.androidsong.help.Sincronizar;
+import ids.androidsong.object.Cancion;
+import ids.androidsong.object.DriveStatus;
+import ids.androidsong.object.Item;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -50,17 +49,17 @@ public class cp5 {
     private static final int CANTIDAD_CANCIONES_DUMMY = 1;
     private static final int CANTIDAD_SECCIONES_DUMMY = 3;
     private static final String FALSO_HASH = "FALSO_HASH";
-    private ArrayList<cancion> canciones = new ArrayList<>();
+    private ArrayList<Cancion> canciones = new ArrayList<>();
 
     @Rule
-    public ActivityTestRule<principal> mActivityTestRule = new ActivityTestRule<>(principal.class);
+    public ActivityTestRule<Principal> mActivityTestRule = new ActivityTestRule<>(Principal.class);
 
     @Before
     public void setup() {
         /*Pide canciones dummy y las inserta*/
         cancionesDummy cancionesDummy = new cancionesDummy(CANTIDAD_SECCIONES_DUMMY);
         canciones.addAll(cancionesDummy.getCancionesDummy(CANTIDAD_CANCIONES_DUMMY));
-        for (cancion c : canciones) {
+        for (Cancion c : canciones) {
             c.alta();
         }
     }
@@ -169,9 +168,9 @@ public class cp5 {
                 allOf(withId(R.id.fab)));
         floatingActionButton.perform(click());
 
-        driveStatus status = new driveStatus(canciones.get(0).getTitulo(),canciones.get(0).getCarpeta());
+        DriveStatus status = new DriveStatus(canciones.get(0).getTitulo(),canciones.get(0).getCarpeta());
         status.fill();
-        status.setDriveDT(null); //De este modo la sincronización pienza que la cancion fue recién creada localmente
+        status.setDriveDT(null); //De este modo la sincronización pienza que la Cancion fue recién creada localmente
         status.modificacion();
 
         floatingActionButton.perform(click());
@@ -263,7 +262,7 @@ public class cp5 {
         textView.check(matches(withPartialText(
                 "Canción Dummy 0, Subida a Drive")));
 
-        driveStatus status = new driveStatus(canciones.get(0).getTitulo(),canciones.get(0).getCarpeta());
+        DriveStatus status = new DriveStatus(canciones.get(0).getTitulo(),canciones.get(0).getCarpeta());
         status.setDriveDT(FALSO_HASH); //De este modo la sincronización pienza que la versión de Drive cambió.
         status.modificacion();
         canciones.get(0).modificarAtributos();
@@ -311,7 +310,7 @@ public class cp5 {
         textView.check(matches(withPartialText(
                 "Canción Dummy 0, Subida a Drive")));
 
-        driveStatus status = new driveStatus(canciones.get(0).getTitulo(),canciones.get(0).getCarpeta());
+        DriveStatus status = new DriveStatus(canciones.get(0).getTitulo(),canciones.get(0).getCarpeta());
         status.setDriveDT(FALSO_HASH);
         status.modificacion();
 
@@ -537,14 +536,14 @@ public class cp5 {
     @After
     public void destroy(){
         try {
-            ArrayList<item> cancionesRemanentes = new cancion().get();
-            for (item i: cancionesRemanentes){
+            ArrayList<Item> cancionesRemanentes = new Cancion().get();
+            for (Item i: cancionesRemanentes){
                 i.baja();
                 i.eliminar();
             }
-            sincronizar sincBl = new sincronizar((Activity)App.GetContext());
+            Sincronizar sincBl = new Sincronizar((Activity)App.GetContext());
             sincBl.getDriveConnection();
-            sincBl.sincronizarEnBackground();
+            sincBl.sincronizarEnBackground(null);
             App.GetDBHelper().clearDb();
             App.CloseDB();
         } catch (Exception e) {

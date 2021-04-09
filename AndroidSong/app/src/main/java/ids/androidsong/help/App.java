@@ -10,7 +10,7 @@ import android.util.Log;
 public class App {
 
     private static Context  APP_CONTEXT;
-    private static aSDbHelper DB_HELPER;
+    private static AsdbHelper DB_HELPER;
 
     public static Context GetContext(){
         return APP_CONTEXT;
@@ -20,9 +20,9 @@ public class App {
         APP_CONTEXT = pcon;
     }
 
-    public static synchronized aSDbHelper GetDBHelper(){
+    public static synchronized AsdbHelper GetDBHelper(){
         if (DB_HELPER == null){
-            DB_HELPER = new aSDbHelper(GetContext());
+            DB_HELPER = new AsdbHelper(GetContext());
         }
         return DB_HELPER;
     }

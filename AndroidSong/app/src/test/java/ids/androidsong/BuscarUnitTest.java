@@ -11,8 +11,8 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 
 import ids.androidsong.help.App;
-import ids.androidsong.object.cancion;
-import ids.androidsong.object.item;
+import ids.androidsong.object.Cancion;
+import ids.androidsong.object.Item;
 
 import static org.junit.Assert.*;
 
@@ -20,13 +20,13 @@ import static org.junit.Assert.*;
  * Pruebas de Búsqueda de canciones
  * Buscar:
  *      Por título
- *      por carpeta
+ *      por Carpeta
  *      por estado (activo-baja)
  *      por id (fill)
- *      por atributos (próximamente)
+ *      por Atributos (próximamente)
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.xml", packageName = "ids.androidsong")
+@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.Xml", packageName = "ids.androidsong")
 public class BuscarUnitTest {
 
     private int CANTIDAD_CANCIONES_DUMMY = 20;
@@ -35,27 +35,27 @@ public class BuscarUnitTest {
     public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
         App.SetContext(RuntimeEnvironment.application);
-        ArrayList<cancion> canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
-        for (cancion cancion : canciones) {
+        ArrayList<Cancion> canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);
+        for (Cancion cancion : canciones) {
             cancion.alta();
         }
     }
 
     @Test
     public void Cancion_BuscarNinguno(){
-        ArrayList<item> lista = new cancion().buscar("25");
+        ArrayList<Item> lista = new Cancion().buscar("25");
         assertTrue(lista.size() == 0);
     }
 
     @Test
     public void Cancion_BuscarUno(){
-        ArrayList<item> lista = new cancion().buscar("13");
+        ArrayList<Item> lista = new Cancion().buscar("13");
         assertTrue(lista.size() == 1);
     }
 
     @Test
     public void Cancion_BuscarVarios(){
-        ArrayList<item> lista = new cancion().buscar("5");
+        ArrayList<Item> lista = new Cancion().buscar("5");
         assertTrue(lista.size() == 2);
     }
 
