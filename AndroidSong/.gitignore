@@ -1,8 +1,11 @@
 *.iml
+*.idea
 .gradle
 /local.properties
 /.idea
+AndroidSong/.idea
 .DS_Store
 /build
 /captures
 .externalNativeBuild
+
