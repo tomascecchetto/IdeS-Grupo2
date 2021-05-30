@@ -29,7 +29,7 @@
     <string name="Error_Google_Services">Esta aplicación requiere Google Play Services. Por favor,
         instale Google Play Services y reinicie la app.
     </string>
-    <string name="Error_longitud_max">Longitud máxima superada, el límite es %d</string>
+    <string name="Error_longitud_max">Cantidad máxima de caracteres (%d) alcanzada </string>
     <string name="Error_valor_rango">El valor está fuera del rango admitido: %1$s a %2$s</string>
     <string name="Error_valor_numerico">El valor no es numérico: %s</string>
     <string name="auto_sincronizar">Auto-sincronizar:</string>

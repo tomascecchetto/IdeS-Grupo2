@@ -85,7 +85,7 @@ public final class AsdbContract {
         public static final String TABLE_NAME = "DriveStatus";
         public static final String COLUMN_NAME_ITEMID = "itemId";
         public static final String COLUMN_NAME_TITULO = "titulo";
-        public static final String COLUMN_NAME_CARPETA = "Carpeta";
+        public static final String COLUMN_NAME_CARPETA = "carpeta";
         public static final String COLUMN_NAME_LOCALDT = "localDT";
         public static final String COLUMN_NAME_DRIVEDT = "driveDT";
         public static final String COLUMN_NAME_PROCESADO = "procesado";
