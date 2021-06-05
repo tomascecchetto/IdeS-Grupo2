@@ -18,6 +18,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ids.androidsong.R;
 import ids.androidsong.help.Enum;
 import ids.androidsong.help.Alert;
@@ -35,6 +38,7 @@ public class NuevaCancion extends AppCompatActivity {
     private EditText transporte;
     private EditText letra;
     private TextView error;
+    private  static Map<String,Boolean> inputValids = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,27 +62,28 @@ public class NuevaCancion extends AppCompatActivity {
     }
 
     private void setupValidaciones() {
+        inputValids.clear();
         error = findViewById(R.id.nueva_cancion_validacion);
         error.setVisibility(View.GONE);
         titulo = findViewById(R.id.nueva_cancion_titulo);
         titulo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (!b) LongitudMaxima((EditText)view,50, null);
+                if (!b) inputValids.put("titulo",LongitudMaxima((EditText)view,50, null));
             }
         });
         autor = findViewById(R.id.nueva_cancion_autor);
         autor.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (!b) LongitudMaxima((EditText)view,50, null);
+                if (!b) inputValids.put("autor",LongitudMaxima((EditText)view,50, null));
             }
         });
         presentacion = findViewById(R.id.nueva_cancion_presentacion);
         presentacion.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (!b) LongitudMaxima((EditText)view,50, null);
+                if (!b) inputValids.put("presentacion",LongitudMaxima((EditText)view,50, null));
             }
         });
         tono = findViewById(R.id.nueva_cancion_tono);
@@ -86,8 +91,11 @@ public class NuevaCancion extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    if (LongitudMaxima((EditText) view, 3, null))
-                        RangoValido((EditText) view, "A,Bb,B,C,C#,D,Eb,E,F,F#,G,Ab,Am,Bbm,Bm,Cm,C#m,Dm,Ebm,Em,Fm,F#m,Gm,Abm", null);
+                    Boolean tonoValidate = false;
+                    if (tonoValidate=LongitudMaxima((EditText) view, 3, null)){
+                        tonoValidate=RangoValido((EditText) view, "A,Bb,B,C,C#,D,Eb,E,F,F#,G,Ab,Am,Bbm,Bm,Cm,C#m,Dm,Ebm,Em,Fm,F#m,Gm,Abm", null);
+                        inputValids.put("tono",tonoValidate);
+                    }
                 }
             }
         });
@@ -96,8 +104,12 @@ public class NuevaCancion extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b) {
-                    if (ValorNumerico((EditText) view, null))
-                        RangoValido((EditText) view, 1, 12, null);
+                    Boolean transporteValidate = false;
+                    if (transporteValidate=ValorNumerico((EditText) view, null)){
+                        transporteValidate=RangoValido((EditText) view, 1, 12, null);
+                        inputValids.put("transporte",transporteValidate);
+                    }
+
                 }
             }
         });
@@ -114,6 +126,7 @@ public class NuevaCancion extends AppCompatActivity {
     }
 
     public void GuardarCancion(View view) {
+        if (!inputValids.containsValue(false)){
         Cancion cancion = new Cancion();
         Spinner carpeta = findViewById(R.id.nueva_cancion_carpeta);
         cancion.setCarpeta(carpeta.getSelectedItem().toString());
@@ -129,6 +142,12 @@ public class NuevaCancion extends AppCompatActivity {
                 .setAction("Action", null).show();
         Intent intent = new Intent(this, Principal.class);
         startActivity(intent);
+        }else{
+            Snackbar.make(view,
+                    String.format("No se puede guardar la canción, hay campos invalidos"),
+                    Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     private void seccion() {
