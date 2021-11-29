@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
  * Item, Atributos, secciones, DriveStatus (con marca de Nuevo)
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.Xml", packageName = "ids.androidsong")
+@Config(constants = BuildConfig.class, sdk = 27, manifest = "AndroidManifest.xml", packageName = "ids.androidsong")
 public class ConversionesUnitTest {
 
     private int CANTIDAD_CANCIONES_DUMMY = 1;

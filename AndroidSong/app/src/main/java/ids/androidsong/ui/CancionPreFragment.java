@@ -56,10 +56,10 @@ public class CancionPreFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            getCancionFromUri();
+        // Load the dummy content specified by the fragment
+        // arguments. In a real-world scenario, use a Loader
+        // to load content from a content provider.
+        getCancionFromUri();
         if (uri != null) {
             Activity activity = this.getActivity();
             appBarLayout = activity.findViewById(R.id.toolbar_layout);

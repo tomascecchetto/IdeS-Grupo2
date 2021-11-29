@@ -139,14 +139,17 @@ public class Item {
         String sortOrder = AsdbContract.Items.COLUMN_NAME_TITULO + " ASC";
         String filter = AsdbContract.Items.COLUMN_NAME_ID + "=" + Integer.toString(getId());
         Cursor c = App.GetOpenDB().query(AsdbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
-        c.moveToFirst();
-        setTitulo(c.getString(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_TITULO)));
-        setTipo(c.getString(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_TIPO)));
-        setCarpeta((new Carpeta()).get(c.getInt(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_CARPETAID))));
-        setSecciones(new Seccion().get(this));
-        setAtributos(new Atributo().get(this));
-        setFechaModificacion(c.getString(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_FECHAMODIFICACION)));
-        c.close();
+
+        if(c!= null && c.moveToFirst() ) {
+            //  c.moveToFirst();
+            setTitulo(c.getString(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_TITULO)));
+            setTipo(c.getString(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_TIPO)));
+            setCarpeta((new Carpeta()).get(c.getInt(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_CARPETAID))));
+            setSecciones(new Seccion().get(this));
+            setAtributos(new Atributo().get(this));
+            setFechaModificacion(c.getString(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_FECHAMODIFICACION)));
+            c.close();
+        }
     }
 
     ArrayList<Item> get(String tipo){
@@ -168,13 +171,13 @@ public class Item {
             filter = filter + FILTRO_ITEM_BAJA;
         Cursor c = App.GetOpenDB().query(AsdbContract.Items.TABLE_NAME, null, filter, null, null, null, sortOrder);
         if (c.moveToFirst()) {
-        do {
-            items.add(new Item(
-                    c.getInt(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_ID)),
-                    c.getString(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_TITULO)),
-                    c.getInt(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_CARPETAID))
-            ));
-        } while (c.moveToNext());
+            do {
+                items.add(new Item(
+                        c.getInt(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_ID)),
+                        c.getString(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_TITULO)),
+                        c.getInt(c.getColumnIndex(AsdbContract.Items.COLUMN_NAME_CARPETAID))
+                ));
+            } while (c.moveToNext());
         }
         c.close();
         return items;

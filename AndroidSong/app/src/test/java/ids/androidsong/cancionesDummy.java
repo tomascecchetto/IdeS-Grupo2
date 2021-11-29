@@ -8,9 +8,9 @@ import ids.androidsong.object.Cancion;
 import ids.androidsong.object.Seccion;
 
 /*Esta clase genera canciones de prueba para insertar en la BD de test
-* En el constructor se puede setear la cantidad de elementos variables
-* (Atributos usuario y secciones) a crear.
-*/
+ * En el constructor se puede setear la cantidad de elementos variables
+ * (Atributos usuario y secciones) a crear.
+ */
 public class cancionesDummy {
 
     private int cantidadInterna;
@@ -19,7 +19,7 @@ public class cancionesDummy {
     private String ATRIBUTO_DUMMY = "Dummy ";
     private String SECCION_NOMBRE_DUMMY = "V";
     private String SECCION_CONTENIDO_DUMMY = ". C    F#      G\n" +
-                                             " Contenido Dummy ";
+            " Contenido Dummy ";
     private int delta;
 
     public cancionesDummy(int c){

@@ -81,9 +81,7 @@ public class Sincronizador extends AppCompatActivity /*implements GoogleApiClien
         });
         fab.setOnLongClickListener( new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View view) {
-                forzarSincronizacion();
-                return false;
+            public boolean onLongClick(View view) { forzarSincronizacion();return false;
             }
         });
         sincBl = new Sincronizar(this);

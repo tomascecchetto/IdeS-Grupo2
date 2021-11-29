@@ -127,21 +127,21 @@ public class NuevaCancion extends AppCompatActivity {
 
     public void GuardarCancion(View view) {
         if (!inputValids.containsValue(false)){
-        Cancion cancion = new Cancion();
-        Spinner carpeta = findViewById(R.id.nueva_cancion_carpeta);
-        cancion.setCarpeta(carpeta.getSelectedItem().toString());
-        cancion.setTitulo(titulo.getText().toString());
-        cancion.getAtributos().add(new Atributo(Enum.atributo.autor.toString(),autor.getText().toString()));
-        cancion.getAtributos().add(new Atributo(Enum.atributo.interprete.toString(),autor.getText().toString()));
-        cancion.getAtributos().add(new Atributo(Enum.atributo.presentacion.toString(),presentacion.getText().toString()));
-        cancion.getAtributos().add(new Atributo(Enum.atributo.tono.toString(),tono.getText().toString()));
-        cancion.getAtributos().add(new Atributo(Enum.atributo.transporte.toString(),transporte.getText().toString()));
-        cancion.llenarSecciones(letra.getText().toString());
-        cancion.alta();
-        Snackbar.make(view, "Canción " + cancion.getTitulo() + "creada con éxito.", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-        Intent intent = new Intent(this, Principal.class);
-        startActivity(intent);
+            Cancion cancion = new Cancion();
+            Spinner carpeta = findViewById(R.id.nueva_cancion_carpeta);
+            cancion.setCarpeta(carpeta.getSelectedItem().toString());
+            cancion.setTitulo(titulo.getText().toString());
+            cancion.getAtributos().add(new Atributo(Enum.atributo.autor.toString(),autor.getText().toString()));
+            cancion.getAtributos().add(new Atributo(Enum.atributo.interprete.toString(),autor.getText().toString()));
+            cancion.getAtributos().add(new Atributo(Enum.atributo.presentacion.toString(),presentacion.getText().toString()));
+            cancion.getAtributos().add(new Atributo(Enum.atributo.tono.toString(),tono.getText().toString()));
+            cancion.getAtributos().add(new Atributo(Enum.atributo.transporte.toString(),transporte.getText().toString()));
+            cancion.llenarSecciones(letra.getText().toString());
+            cancion.alta();
+            Snackbar.make(view, "Canción " + cancion.getTitulo() + "creada con éxito.", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            Intent intent = new Intent(this, Principal.class);
+            startActivity(intent);
         }else{
             Snackbar.make(view,
                     String.format("No se puede guardar la canción, hay campos invalidos"),

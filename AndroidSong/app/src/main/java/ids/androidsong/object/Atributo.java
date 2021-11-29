@@ -63,11 +63,14 @@ public class Atributo {
         registro.put(AsdbContract.Atributos.COLUMN_NAME_VALOR, getValor());
 
         App.GetOpenDB().insert(AsdbContract.Atributos.TABLE_NAME, null, registro);
-        //helper.currentDB.close();
+        //deberia cerrarse la conexion en el metodo
+        App.CloseDB();
+
     }
 
     public void baja(Item i) {
         App.GetOpenDB().delete(AsdbContract.Atributos.TABLE_NAME, AsdbContract.Atributos.COLUMN_NAME_ITEMID + "=" + i.getId(), null);
+        App.CloseDB();
         //helper.currentDB.close();
     }
 
@@ -77,6 +80,7 @@ public class Atributo {
         registro.put(AsdbContract.Atributos.COLUMN_NAME_VALOR, a.getValor());
 
         App.GetOpenDB().update(AsdbContract.Atributos.TABLE_NAME, registro, AsdbContract.Atributos.COLUMN_NAME_ID + "=" + a.getId(), null);
+        App.CloseDB();
         //helper.currentDB.close();
     }
 
@@ -95,6 +99,7 @@ public class Atributo {
             } while (c.moveToNext());
         }
         c.close();
+        App.CloseDB();
         return atributos;
     }
 

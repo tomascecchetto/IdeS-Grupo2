@@ -135,7 +135,10 @@ public class CancionDetalle extends AppCompatActivity {
             String packageName = resolveInfo.activityInfo.packageName;
             this.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
-        sharingIntent.putExtra(Intent.EXTRA_SUBJECT,"Compartiendo canción: "+cancion.getTitulo());
+        //sharingIntent.putExtra(Intent.EXTRA_SUBJECT,"Compartiendo canción: "+cancion.getTitulo());
+
+        //la cancion se comparte con el formato "nombre.ids"
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT,cancion.getTitulo()+".ids");
         sharingIntent.putExtra(Intent.EXTRA_TEXT, cancion.getTitulo());
         startActivity(Intent.createChooser(sharingIntent, "Compartir con:"));
     }

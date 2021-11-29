@@ -43,6 +43,7 @@ public class App {
 
     public static void CloseDB(){
         if (GetDBHelper().currentDB != null)
-            if (GetDBHelper().currentDB.isOpen()) GetDBHelper().currentDB.close();
+            if (GetDBHelper().currentDB.isOpen())
+                GetDBHelper().currentDB.close();
     }
 }

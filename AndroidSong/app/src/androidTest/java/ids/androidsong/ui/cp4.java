@@ -64,130 +64,53 @@ public class cp4 {
     }
 
     @Test
+    //edicion de una cancion
     public void cp4_1() {
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.drawer_layout),
-                                        0),
-                                2),
-                        isDisplayed()));
+        ViewInteraction floatingActionButton = onView(allOf(withId(R.id.fab), childAtPosition(childAtPosition(withId(R.id.drawer_layout), 0), 2), isDisplayed()));
         floatingActionButton.perform(click());
 
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.cancion_lista),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                1)));
+        ViewInteraction recyclerView = onView(allOf(withId(R.id.cancion_lista), childAtPosition(withClassName(is("android.widget.LinearLayout")), 1)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.cancion_detalle_opciones), withContentDescription("Icon"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
+        ViewInteraction appCompatImageButton = onView(allOf(withId(R.id.cancion_detalle_opciones), withContentDescription("Icon"), childAtPosition(childAtPosition(withId(android.R.id.content), 0), 3), isDisplayed()));
         appCompatImageButton.perform(click());
 
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withId(R.id.cancion_detalle_editar),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                8),
-                        isDisplayed()));
+        ViewInteraction appCompatImageButton2 = onView(allOf(withId(R.id.cancion_detalle_editar), childAtPosition(childAtPosition(withId(android.R.id.content), 0), 8), isDisplayed()));
         appCompatImageButton2.perform(click());
 
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.editar_cancion_letra)));
+        ViewInteraction appCompatEditText = onView(allOf(withId(R.id.editar_cancion_letra)));
         appCompatEditText.perform(click());
 
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.editar_cancion_letra)));
+        ViewInteraction appCompatEditText2 = onView(allOf(withId(R.id.editar_cancion_letra)));
         appCompatEditText2.perform(replaceText(""));
 
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.editar_cancion_letra),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(
-                                                is("android.support.design.widget"
-                                                        + ".CoordinatorLayout")),
-                                        1),
-                                1),
-                        isDisplayed()));
+        ViewInteraction appCompatEditText3 = onView(allOf(withId(R.id.editar_cancion_letra), childAtPosition(childAtPosition(withClassName(is("android.support.design.widget" + ".CoordinatorLayout")), 1), 1), isDisplayed()));
         appCompatEditText3.perform(closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.editar_cancion_letra),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(
-                                                is("android.support.design.widget"
-                                                        + ".CoordinatorLayout")),
-                                        1),
-                                1),
-                        isDisplayed()));
+        ViewInteraction appCompatEditText4 = onView(allOf(withId(R.id.editar_cancion_letra), childAtPosition(childAtPosition(withClassName(is("android.support.design.widget" + ".CoordinatorLayout")), 1), 1), isDisplayed()));
         appCompatEditText4.perform(click());
 
-        ViewInteraction appCompatEditText5 = onView(
-                allOf(withId(R.id.editar_cancion_letra),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(
-                                                is("android.support.design.widget"
-                                                        + ".CoordinatorLayout")),
-                                        1),
-                                1),
-                        isDisplayed()));
-        appCompatEditText5.perform(replaceText(" Texto de prueba para letra"), closeSoftKeyboard());
+        ViewInteraction appCompatEditText5 = onView(allOf(withId(R.id.editar_cancion_letra), childAtPosition(childAtPosition(withClassName(is("android.support.design.widget" + ".CoordinatorLayout")), 1), 1), isDisplayed()));
+        appCompatEditText5.perform(replaceText("Texto de prueba para letra"), closeSoftKeyboard());
 
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.button2), withText("Guardar cambios"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(
-                                                is("android.support.design.widget.CoordinatorLayout")),
-                                        1),
-                                0),
-                        isDisplayed()));
+        ViewInteraction appCompatButton = onView(allOf(withId(R.id.button2), withText("Guardar cambios"), childAtPosition(childAtPosition(withClassName(is("android.support.design.widget.CoordinatorLayout")), 1), 0), isDisplayed()));
         appCompatButton.perform(click());
 
-        ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Desplazarse hacia arriba"),
-                        childAtPosition(
-                                allOf(withId(R.id.detail_toolbar),
-                                        childAtPosition(
-                                                withId(R.id.toolbar_layout),
-                                                0)),
-                                1),
-                        isDisplayed()));
+        //esto no esta
+        ViewInteraction appCompatImageButton3 = onView(allOf(withContentDescription("Navigate up"), childAtPosition(allOf(withId(R.id.detail_toolbar), childAtPosition(withId(R.id.toolbar_layout), 0)), 1), isDisplayed()));
         appCompatImageButton3.perform(click());
 
-        ViewInteraction recyclerView2 = onView(
-                allOf(withId(R.id.cancion_lista),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                1)));
+
+        ViewInteraction recyclerView2 = onView(allOf(withId(R.id.cancion_lista), childAtPosition(withClassName(is("android.widget.LinearLayout")), 1)));
         recyclerView2.perform(actionOnItemAtPosition(0, click()));
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.seccion_contenido), withText("Texto de prueba para letra\n"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.cancion_detalle_secciones),
-                                        0),
-                                1),
-                        isDisplayed()));
+        ViewInteraction textView = onView(allOf(withId(R.id.seccion_contenido), withText("Texto de prueba para letra\n"), childAtPosition(childAtPosition(withId(R.id.cancion_detalle_secciones), 0), 1), isDisplayed()));
         textView.check(matches(withText("Texto de prueba para letra\n")));
 
     }
 
     @Test
+    //edicion de acordes de una cancion
     public void cp4_2() {
         ViewInteraction floatingActionButton = onView(
                 allOf(withId(R.id.fab),
@@ -282,7 +205,7 @@ public class cp4 {
         appCompatButton.perform(click());
 
         ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Desplazarse hacia arriba"),
+                allOf(withContentDescription("Navigate up"),
                         childAtPosition(
                                 allOf(withId(R.id.detail_toolbar),
                                         childAtPosition(
@@ -306,6 +229,7 @@ public class cp4 {
     }
 
     @Test
+    //edicion de secciones de una cancion
     public void cp4_3() {
         ViewInteraction floatingActionButton = onView(
                 allOf(withId(R.id.fab),
@@ -400,7 +324,7 @@ public class cp4 {
         appCompatButton2.perform(click());
 
         ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Desplazarse hacia arriba"),
+                allOf(withContentDescription("Navigate up"),
                         childAtPosition(
                                 allOf(withId(R.id.detail_toolbar),
                                         childAtPosition(

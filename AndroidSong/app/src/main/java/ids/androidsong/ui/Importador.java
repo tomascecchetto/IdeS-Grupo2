@@ -27,7 +27,7 @@ import ids.androidsong.object.Opciones;
 
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class Importador extends AppCompatActivity {
 
     private TextView path;
@@ -72,8 +72,8 @@ public class Importador extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-                public void onClick(View view) {
-                    new ImportarCanciones().execute();
+            public void onClick(View view) {
+                new ImportarCanciones().execute();
                 Snackbar.make(view, "Importación iniciada", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -121,26 +121,32 @@ public class Importador extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             ArrayList<CancionXml> canciones = (new Importar()).getCanciones();
-            for (CancionXml cancion :
-                    canciones) {
-                isCancelled();
-                try {
-                    cancion.fill();
-                    if (cancion.getSecciones() != null) {
-                        if (cancion.getId() > 0) {
-                            if (sobreescritura) {
-                                cancion.modificacion();
-                                publishProgress(getLog("sync", cancion.getTitulo() + " sobreescrita correctamente."));
+
+            //si recibe una lista vacia muestra un mensaje que no hay nada para importar
+            if (canciones.isEmpty()){
+                publishProgress(getLog("sync","Ninguna cancion para importar"));
+            }
+            else {
+                for (CancionXml cancion : canciones) {
+                    isCancelled();
+                    try {
+                        cancion.fill();
+                        if (cancion.getSecciones() != null) {
+                            if (cancion.getId() > 0) {
+                                if (sobreescritura) {
+                                    cancion.modificacion();
+                                    publishProgress(getLog("sync", cancion.getTitulo() + " sobreescrita correctamente."));
+                                } else {
+                                    publishProgress(getLog("conf", "Conflicto con " + cancion.getTitulo() + ", exceptuado."));
+                                }
                             } else {
-                                publishProgress(getLog("conf", "Conflicto con " + cancion.getTitulo() + ", exceptuado."));
+                                cancion.alta();
+                                publishProgress(getLog("sync", cancion.getTitulo() + " importada correctamente."));
                             }
-                        } else {
-                            cancion.alta();
-                            publishProgress(getLog("sync", cancion.getTitulo() + " importada correctamente."));
                         }
+                    } catch (Exception e) {
+                        publishProgress(getLog("conf", "Conflicto con " + cancion.getTitulo() + ": " + e.getMessage()));
                     }
-                } catch (Exception e) {
-                    publishProgress(getLog("conf", "Conflicto con " + cancion.getTitulo() + ": " + e.getMessage()));
                 }
             }
             return null;
@@ -155,10 +161,12 @@ public class Importador extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate (String[]... values){
-            if (values[0][0].equals("sync")) syncLog.setText(
-                    String.format("%s\n%s", syncLog.getText(), values[0][1]));
-            else confLog.setText(
-                    String.format("%s\n%s", confLog.getText(), values[0][1]));
+            if (values[0][0].equals("sync")) {
+                syncLog.setText(String.format("%s\n%s", syncLog.getText(), values[0][1])); //no deberia importar una lista vacia
+            }
+            else {
+                confLog.setText(String.format("%s\n%s", confLog.getText(), values[0][1]));
+            }
         }
 
         @Override

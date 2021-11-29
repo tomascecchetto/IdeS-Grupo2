@@ -33,14 +33,14 @@ import ids.androidsong.object.Cancion;
 
 /**
  * Created by ALAN on 05/11/2017.
- * Clase que gestiona la busqueda y carga de canciones desde disco
+ * Clase que gestiona la busqueda y carga de canciones desde DRIVE
+ * key=AIzaSyAgrhw7agZfXvqitoignULp4gLxs-ZL0wA
  */
 
+//desde drive?
 public class Sincronizar {
 
-    public static final String
-            DEFAULT_PATH = App.GetContext().getString(R.string.OpenSongFolder) + "/" +
-            App.GetContext().getString(R.string.SongsFolder);
+    public static final String DEFAULT_PATH = App.GetContext().getString(R.string.OpenSongFolder) + "/" + App.GetContext().getString(R.string.SongsFolder);
     private boolean existeLocal;
     boolean existeStatus;
     private final ProgressDialog mProgress;
@@ -85,19 +85,18 @@ public class Sincronizar {
         sincronizarEnBackground(true,false,log);
     }
 
-
     public void sincronizarEnBackground(Boolean ignorarFecha, Boolean ignorarFlag, TextView log) {
         String freq = "";
         String last = "";
         Boolean flag = false;
+
         if (log != null) {
             showLog = true;
             syncLog = log;
         }
 
         try {
-            freq = new Opciones().getString(AsdbContract.Opciones.OPT_NAME_SYNCFREQUENCE,
-                    "Nunca");
+            freq = new Opciones().getString(AsdbContract.Opciones.OPT_NAME_SYNCFREQUENCE, "Nunca");
             last = new Opciones().getString(AsdbContract.Opciones.OPT_NAME_SYNCLAST, "19900101");
             flag = new Opciones().getBool(AsdbContract.Opciones.OPT_NAME_SYNCFLAG);
         } catch (Exception e) {
@@ -162,7 +161,8 @@ public class Sincronizar {
             folderId = fullResult.get(0).getId();
             if (subFolders != null)
                 folderId = getFolder(folderId, subFolders);
-        } else {
+        }
+        else {
             folderId = createFolder(parent,path);
         }
         return folderId;
@@ -220,7 +220,7 @@ public class Sincronizar {
                 mLastError = e;
                 try {
                     new Opciones(AsdbContract.Opciones.OPT_NAME_SYNCFLAG,Boolean.toString(false))
-                                .modificacion();
+                            .modificacion();
                 } catch (Exception e1) {
                     Log.e("Error",e1.getMessage());
                 }
@@ -230,8 +230,7 @@ public class Sincronizar {
         }
 
         private String getSongsFolder() throws Exception{
-            String folder = getFolder(null,new Opciones().getString(AsdbContract.Opciones.OPT_NAME_SYNCPATH,
-                    DEFAULT_PATH));
+            String folder = getFolder(null,new Opciones().getString(AsdbContract.Opciones.OPT_NAME_SYNCPATH, DEFAULT_PATH));
             carpetasDriveId.put("Principal",folder);
             List<File> fullResult = getFullResult(getDriveService().files().list()
                     .setQ("trashed=false and mimeType = 'application/vnd.google-apps.folder' and '" + folder + "' in parents")
@@ -325,8 +324,8 @@ public class Sincronizar {
             ArrayList<DriveStatus> statuses = new DriveStatus().getNuevos();
             if (statuses.size() > 0) {
                 for (DriveStatus status : statuses) {
-                nuevoLocalADrive(status);
-                publishProgress(getLog("sync", status.getTitulo() + ", Subida a Drive"));
+                    nuevoLocalADrive(status);
+                    publishProgress(getLog("sync", status.getTitulo() + ", Subida a Drive"));
                 }
             }
         }
@@ -391,7 +390,7 @@ public class Sincronizar {
         protected void onCancelled() {
             if (showLog && mProgress.isShowing()) mProgress.hide();
             if (mLastError != null) {
-                    if (showLog) syncLog.setText(String.format("The following error occurred:\n%s", mLastError.getMessage()));
+                if (showLog) syncLog.setText(String.format("The following error occurred:\n%s", mLastError.getMessage()));
             } else {
                 if (showLog) syncLog.setText(String.format("%s\nRequest cancelled.", syncLog.getText()));
             }

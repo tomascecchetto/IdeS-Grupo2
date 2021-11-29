@@ -42,47 +42,47 @@ public class CancionPre extends AppCompatActivity {
 
         // Show the Up button in the action bar.
 
-    // savedInstanceState is non-null when there is fragment state
-    // saved from previous configurations of this activity
-    // (e.g. when rotating the screen from portrait to landscape).
-    // In this case, the fragment will automatically be re-added
-    // to its container so we don't need to manually add it.
-    // For more information, see the Fragments API guide at:
-    //
-    // http://developer.android.com/guide/components/fragments.html
-    //
+        // savedInstanceState is non-null when there is fragment state
+        // saved from previous configurations of this activity
+        // (e.g. when rotating the screen from portrait to landscape).
+        // In this case, the fragment will automatically be re-added
+        // to its container so we don't need to manually add it.
+        // For more information, see the Fragments API guide at:
+        //
+        // http://developer.android.com/guide/components/fragments.html
+        //
         if(savedInstanceState ==null)
 
-    {
-        // Create the detail fragment and add it to the activity
-        // using a fragment transaction.
-        fragment = new CancionPreFragment();
-        fragment.uri = getIntent().getParcelableExtra(CancionPreFragment.ARG_ITEM_ID);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.cancionmusico_detail_container, fragment)
-                .commit();
+        {
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
+            fragment = new CancionPreFragment();
+            fragment.uri = getIntent().getParcelableExtra(CancionPreFragment.ARG_ITEM_ID);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.cancionmusico_detail_container, fragment)
+                    .commit();
+        }
+
+        mostrarOpciones();
     }
 
-    mostrarOpciones();
-}
-
     public void modificarAcordesSostenido(View view) {
-        capo = capo + 1;
+        //     capo = capo + 1;
         fragment.modificarAcordesSostenido();
     }
 
     public void modificarAcordesBemol(View view) {
-        capo = capo - 1;
+        //  capo = capo - 1;
         fragment.modificarAcordesBemol();
     }
 
     public void tamanioLetraMenor(View view) {
-        fontSize = fontSize - 2;
+        //    fontSize = fontSize - 2;
         fragment.tamanioLetraMenor();
     }
 
     public void tamanioLetraMayor(View view) {
-        fontSize = fontSize + 2;
+        //     fontSize = fontSize + 2;
         fragment.tamanioLetraMayor();
     }
 

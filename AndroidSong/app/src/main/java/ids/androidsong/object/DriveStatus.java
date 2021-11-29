@@ -226,8 +226,7 @@ public class DriveStatus {
     }
 
     public void borrarProcesado(){
-        String filter = AsdbContract.DriveStatus.COLUMN_NAME_PROCESADO + " = 1 AND " +
-                AsdbContract.DriveStatus.COLUMN_NAME_LOCALDT + " is null";
+        String filter = AsdbContract.DriveStatus.COLUMN_NAME_PROCESADO + " = 1 AND " + AsdbContract.DriveStatus.COLUMN_NAME_LOCALDT + " is null";
         App.GetOpenDB().delete(AsdbContract.DriveStatus.TABLE_NAME,filter,null);
 
         ContentValues registro = new ContentValues();

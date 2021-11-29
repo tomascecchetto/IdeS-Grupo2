@@ -17,7 +17,6 @@ import java.io.OutputStream;
  * Created by ALAN on 10/09/2017.
  * Clase para gestinar la carga y actualización de la BD en Assets
  */
-
 public class AsdbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 10;
@@ -35,7 +34,7 @@ public class AsdbHelper extends SQLiteOpenHelper {
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
         if (!db.isReadOnly()) {
-                db.setForeignKeyConstraintsEnabled(true);
+            db.setForeignKeyConstraintsEnabled(true);
         }
     }
 

@@ -22,7 +22,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 /**
-    Manipulación de Xml
+ Manipulación de Xml
  */
 public class Xml {
 

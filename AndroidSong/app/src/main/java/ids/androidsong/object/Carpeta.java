@@ -73,16 +73,19 @@ public class Carpeta {
     }
 
     public int get(String nombre){
-        int carpetaId;
+        int carpetaId=0;
         String[] projection = { AsdbContract.Carpetas.COLUMN_NAME_ID };
         Cursor c = App.GetOpenDB().query(AsdbContract.Carpetas.TABLE_NAME, projection, AsdbContract.Carpetas.COLUMN_NAME_NOMBRE + "=\"" + nombre + "\"", null, null, null, null);
-        if (c.moveToFirst())
-            carpetaId = c.getInt(c.getColumnIndex(AsdbContract.Carpetas.COLUMN_NAME_ID));
-        else {
-            setNombre(nombre);
-            carpetaId = alta();
+        if(c!= null) {
+            if (c.moveToFirst()){
+                carpetaId = c.getInt(c.getColumnIndex(AsdbContract.Carpetas.COLUMN_NAME_ID));
+            }
+            else {
+                setNombre(nombre);
+                carpetaId = alta();
+            }
+            c.close();
         }
-        c.close();
         return carpetaId;
     }
 }

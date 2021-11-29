@@ -45,20 +45,23 @@ public class ShareReceptor extends AppCompatActivity {
     private void getCancionFromIntent() {
         Intent intent = getIntent();
         Uri returnUri = intent.getData();
-        Cursor returnCursor =
-                getContentResolver().query(returnUri, null, null, null, null);
+        Cursor returnCursor = getContentResolver().query(returnUri, null, null, null, null);
         int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
         returnCursor.moveToFirst();
+        //   if(nameIndex>=0){
         String title = returnCursor.getString(nameIndex);
         title = title.substring(0,title.indexOf("."));
         returnCursor.close();
         cancion = new CancionShare(title,"");
+        //   }
+
+
         try {
             cancion.fill(returnUri);
         } catch (Exception e) {
-            Alert.SimpleErrorAlert(this,
-                    "Error al cargar archivo, no es una canción de AndroidSong.");
+            Alert.SimpleErrorAlert(this, "Error al cargar archivo, no es una canción de AndroidSong.");
         }
+
     }
 
     private void setupView(){
@@ -98,14 +101,14 @@ public class ShareReceptor extends AppCompatActivity {
                 new Alert.InputRunnable() {
                     @Override
                     public void run(String text) throws Exception {
-                           if (text.length() > 0) {
-                                (new Carpeta(text)).alta();
-                                setupCarpetas();
-                            } else {
-                                throw new Exception("El nombre no puede estar vacío");
-                            }
+                        if (text.length() > 0) {
+                            (new Carpeta(text)).alta();
+                            setupCarpetas();
+                        } else {
+                            throw new Exception("El nombre no puede estar vacío");
                         }
-                    },
+                    }
+                },
                 "Nueva Carpeta:");
     }
 

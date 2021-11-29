@@ -69,9 +69,9 @@ public class Opciones {
         String filter = AsdbContract.Opciones.COLUMN_NAME_NOMBRE + "= \"" + nombre + "\"";
         Cursor c = helper.currentDB.query(AsdbContract.Opciones.TABLE_NAME, null, filter, null, null, null, null);
         if (c.moveToFirst()) {
-                setNombre(c.getString(c.getColumnIndex(AsdbContract.Opciones.COLUMN_NAME_NOMBRE)));
-                setTipo(c.getString(c.getColumnIndex(AsdbContract.Opciones.COLUMN_NAME_TIPO)));
-                setValor(c.getString(c.getColumnIndex(AsdbContract.Opciones.COLUMN_NAME_VALOR)));
+            setNombre(c.getString(c.getColumnIndex(AsdbContract.Opciones.COLUMN_NAME_NOMBRE)));
+            setTipo(c.getString(c.getColumnIndex(AsdbContract.Opciones.COLUMN_NAME_TIPO)));
+            setValor(c.getString(c.getColumnIndex(AsdbContract.Opciones.COLUMN_NAME_VALOR)));
         } else {
             setNombre(nombre);
             setTipo(AsdbContract.Opciones.OPT_TYPE_BOOL);

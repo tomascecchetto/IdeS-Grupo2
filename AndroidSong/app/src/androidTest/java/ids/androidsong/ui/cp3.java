@@ -63,89 +63,7 @@ public class cp3 {
         }
     }
 
-    @Test
-    public void cp3_1() {
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.drawer_layout),
-                                        0),
-                                2),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
-
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.cancion_lista),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                1)));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.cancion_detalle_opciones), withContentDescription("Icon"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
-
-        ViewInteraction seccion = onView(allOf(withId(R.id.seccion_contenido), withText(" C    F#      G\nContenido Dummy 1\n")));
-        seccion.check(matches(withFontSize(16*2)));
-
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withId(R.id.cancion_detalle_mayor)));
-        appCompatImageButton2.perform(click());
-        appCompatImageButton2.perform(click());
-        appCompatImageButton2.perform(click());
-
-        seccion.check(matches(withFontSize(22*2)));
-    }
-
-    @Test
-    public void cp3_2() {
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.drawer_layout),
-                                        0),
-                                2),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
-
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.cancion_lista),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                1)));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.cancion_detalle_opciones), withContentDescription("Icon"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
-
-        ViewInteraction seccion = onView(allOf(withId(R.id.seccion_contenido), withText(" C    F#      G\nContenido Dummy 1\n")));
-        seccion.check(matches(withFontSize(16*2)));
-
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withId(R.id.cancion_detalle_menor)));
-        appCompatImageButton2.perform(click());
-        appCompatImageButton2.perform(click());
-        appCompatImageButton2.perform(click());
-
-        seccion.check(matches(withFontSize(10*2)));
-    }
-
-    @Test
+    @Test // ver si se puede probar solo subir un semitono
     public void cp3_3() {
         ViewInteraction floatingActionButton = onView(
                 allOf(withId(R.id.fab),
@@ -240,7 +158,7 @@ public class cp3 {
         appCompatButton.perform(click());
 
         ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Desplazarse hacia arriba"),
+                allOf(withContentDescription("Navigate up"),
                         childAtPosition(
                                 allOf(withId(R.id.detail_toolbar),
                                         childAtPosition(
@@ -367,7 +285,7 @@ public class cp3 {
         appCompatButton.perform(click());
 
         ViewInteraction appCompatImageButton3 = onView(
-                allOf(withContentDescription("Desplazarse hacia arriba"),
+                allOf(withContentDescription("Navigate up"),
                         childAtPosition(
                                 allOf(withId(R.id.detail_toolbar),
                                         childAtPosition(
@@ -404,150 +322,6 @@ public class cp3 {
 
     }
 
-    @Test
-    public void cp3_5() {
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.drawer_layout),
-                                        0),
-                                2),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
-
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.cancion_lista),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                1)));
-        recyclerView.perform(actionOnItemAtPosition(1, click()));
-
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.cancion_detalle_opciones), withContentDescription("Icon"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
-
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withId(R.id.cancion_detalle_info),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                9),
-                        isDisplayed()));
-        appCompatImageButton2.perform(click());
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.atributo_nombre), withText("autor"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.lista_atributos),
-                                        3),
-                                0),
-                        isDisplayed()));
-        textView.check(matches(isDisplayed()));
-
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.atributo_nombre), withText("himno_numero"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.lista_atributos),
-                                        4),
-                                0),
-                        isDisplayed()));
-        textView2.check(matches(isDisplayed()));
-
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.atributo_nombre), withText("interprete"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.lista_atributos),
-                                        5),
-                                0),
-                        isDisplayed()));
-        textView3.check(matches(isDisplayed()));
-
-        ViewInteraction textView4 = onView(
-                allOf(withId(R.id.atributo_nombre), withText("presentacion"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.lista_atributos),
-                                        6),
-                                0),
-                        isDisplayed()));
-        textView4.check(matches(isDisplayed()));
-
-        ViewInteraction textView5 = onView(
-                allOf(withId(R.id.atributo_nombre), withText("tono"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.lista_atributos),
-                                        8),
-                                0),
-                        isDisplayed()));
-        textView5.check(matches(isDisplayed()));
-
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.atributo_nombre), withText("tono"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.lista_atributos),
-                                        8),
-                                0),
-                        isDisplayed()));
-        textView6.check(matches(isDisplayed()));
-
-    }
-
-    @Test
-    public void cp3_6() {
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.fab),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.drawer_layout),
-                                        0),
-                                2),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
-
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.cancion_lista),
-                        childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
-                                1)));
-        recyclerView.perform(actionOnItemAtPosition(2, click()));
-
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.cancion_detalle_opciones), withContentDescription("Icon"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
-
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withId(R.id.cancion_detalle_editar),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                8),
-                        isDisplayed()));
-        appCompatImageButton2.perform(click());
-
-        ViewInteraction editText = onView(
-                allOf(withId(R.id.editar_cancion_letra)));
-        editText.check(matches(isDisplayed()));
-    }
 
     @After
     public void destroy(){

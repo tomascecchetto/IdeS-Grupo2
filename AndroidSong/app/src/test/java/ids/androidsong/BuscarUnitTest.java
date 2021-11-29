@@ -26,13 +26,12 @@ import static org.junit.Assert.*;
  *      por Atributos (próximamente)
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.Xml", packageName = "ids.androidsong")
-public class BuscarUnitTest {
+@Config(constants = BuildConfig.class, sdk = 27, manifest = "AndroidManifest.xml", packageName = "ids.androidsong")
 
+public class BuscarUnitTest {
     private int CANTIDAD_CANCIONES_DUMMY = 20;
 
-    @Before
-    public void setup(){
+    @Before public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
         App.SetContext(RuntimeEnvironment.application);
         ArrayList<Cancion> canciones = new cancionesDummy().getCancionesDummy(CANTIDAD_CANCIONES_DUMMY);

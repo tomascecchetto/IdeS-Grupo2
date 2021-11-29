@@ -26,15 +26,15 @@ import static org.junit.Assert.*;
  *      o su ausencia (para canciones que sólo existen localmente)
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.Xml", packageName = "ids.androidsong")
+@Config(constants = BuildConfig.class, sdk = 27, manifest = "AndroidManifest.xml", packageName = "ids.androidsong")
+
 public class BajaUnitTest {
 
     private int CANTIDAD_CANCIONES_DUMMY = 5;
     private String DRIVE_HASH = "DriveHash";
     ArrayList<Cancion> canciones;
 
-    @Before
-    public void setup(){
+    @Before public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
         App.SetContext(RuntimeEnvironment.application);
         App.GetOpenDB();
@@ -42,6 +42,7 @@ public class BajaUnitTest {
         for (Cancion cancion : canciones) {
             cancion.alta();
         }
+
     }
 
 
@@ -63,27 +64,38 @@ public class BajaUnitTest {
         status.setDriveDT(DRIVE_HASH);
         status.modificacion();
         cancion.baja();
+
         status = new DriveStatus(cancion.getTitulo(),cancion.getCarpeta());
         status.get();
-        assertTrue(status.getDriveDT().equals(DRIVE_HASH) && status.getLocalDT() == null);
+
+        assertEquals(status.getDriveDT(), DRIVE_HASH); //falla esto
+        assertNull(status.getLocalDT());
+        //   assertTrue(status.getDriveDT().equals(DRIVE_HASH) && status.getLocalDT() == null);
     }
 
     @Test
     public void Cancion_Baja_Papelera(){
-        Cancion cancion0 = canciones.get(0);
-        cancion0.baja();
-        Cancion cancion1 = canciones.get(1);
-        cancion1.baja();
-        assertTrue((new Cancion()).getBajas().size() == 2);
+        for (int i=0;i<2;i++){
+            Cancion c = canciones.get(i);
+            c.baja();
+        }
+        //    Cancion cancion0 = canciones.get(0);
+        //   cancion0.baja();
+        //   Cancion cancion1 = canciones.get(1);
+        //   cancion1.baja();
+        assertEquals(2, (new Cancion()).getBajas().size());
     }
 
     @Test
     public void Cancion_Baja_Lista(){
+
+        //java.lang.IllegalStateException: Cannot perform this operation because the connection pool has been closed.
+
         Cancion cancion0 = canciones.get(0);
         cancion0.baja();
         Cancion cancion1 = canciones.get(1);
         cancion1.baja();
-        assertTrue((new Cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-2);
+        assertEquals((new Cancion()).get().size(), CANTIDAD_CANCIONES_DUMMY - 2);
     }
 
     @Test
@@ -107,7 +119,7 @@ public class BajaUnitTest {
         cancion.restaurar();
         status = new DriveStatus(cancion.getTitulo(),cancion.getCarpeta());
         status.get();
-        assertTrue(status.getLocalDT() != null);
+        assertNotNull(status.getLocalDT());
     }
 
     @Test
@@ -117,7 +129,7 @@ public class BajaUnitTest {
         Cancion cancion1 = canciones.get(1);
         cancion1.baja();
         cancion1.restaurar();
-        assertTrue((new Cancion()).getBajas().size() == 1);
+        assertEquals(1, (new Cancion()).getBajas().size());
     }
 
     @Test
@@ -140,13 +152,13 @@ public class BajaUnitTest {
         assertTrue((new Cancion()).get().size() == CANTIDAD_CANCIONES_DUMMY-2 && (new Cancion()).getBajas().size() == 1);
     }
 
-    @After
-    public void finalize(){
+    @After public void finalize(){
         try {
-            App.CloseDB();
             App.GetDBHelper().clearDb();
+            App.CloseDB();
         } catch (Exception e) {
             System.out.print("Error restaurando BD\n");
         }
     }
+
 }

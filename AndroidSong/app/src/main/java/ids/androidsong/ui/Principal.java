@@ -139,7 +139,7 @@ public class Principal extends AppCompatActivity
 
     private void abrirSincronizador() {
         Intent intent = new Intent(con, Sincronizador.class);
-         startActivity(intent);
+        startActivity(intent);
     }
 
     private void abrirPapelera() {

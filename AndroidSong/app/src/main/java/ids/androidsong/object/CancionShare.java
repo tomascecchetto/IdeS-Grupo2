@@ -67,7 +67,8 @@ public class CancionShare extends CancionXml implements Serializable {
     }
 
     public File toXmlForShare() {
-        File tempFile = super.toXml(getTitulo()+".androidSong");
+        //File tempFile = super.toXml(getTitulo()+".androidSong");
+        File tempFile = super.toXml(getTitulo()+".ids");
         return tempFile;
     }
 

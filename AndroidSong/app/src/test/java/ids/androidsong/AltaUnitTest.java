@@ -22,15 +22,15 @@ import static org.junit.Assert.*;
  * Item, Atributos, secciones, DriveStatus (con marca de Nuevo)
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = "src/main/AndroidManifest.Xml", packageName = "ids.androidsong")
+@Config(constants = BuildConfig.class, sdk = 27, manifest = "AndroidManifest.xml", packageName = "ids.androidsong")
+
 public class AltaUnitTest {
 
     private int CANTIDAD_CANCIONES_DUMMY = 5;
     private int CANTIDAD_SECCIONES_DUMMY = 3;
     private ArrayList<Cancion> canciones;
 
-    @Before
-    public void setup(){
+    @Before public void setup(){
         //Esto guarda el contexto en la clase estática que maneja el acceso a los recursos.
         App.SetContext(RuntimeEnvironment.application);
         App.GetOpenDB();
@@ -86,11 +86,10 @@ public class AltaUnitTest {
             cancion.alta();
         }
         ArrayList<DriveStatus> lista = new DriveStatus().getNuevos();
-        assertTrue(lista.size() == CANTIDAD_CANCIONES_DUMMY);
+        assertEquals(lista.size(), CANTIDAD_CANCIONES_DUMMY);
     }
 
-    @After
-    public void finalize(){
+    @After public void finalize(){
         try {
             App.GetDBHelper().clearDb();
             App.CloseDB();

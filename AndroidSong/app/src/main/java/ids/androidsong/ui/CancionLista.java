@@ -84,11 +84,11 @@ public class CancionLista extends AppCompatActivity {
                     Snackbar.make(view, "Seleccione una canción primero", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 else {
-                Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
-                intent.putExtra(CancionDetalleFragment.ARG_ITEM_ID,itemId);
-                intent.putExtra(CancionDetalleFragment.ARG_ITEM_CAPO,capo);
-                intent.putExtra(CancionDetalleFragment.ARG_ITEM_FUENTE,fontSize);
-                startActivity(intent);
+                    Intent intent = new Intent(getApplication().getBaseContext(),FullscreenCancion.class);
+                    intent.putExtra(CancionDetalleFragment.ARG_ITEM_ID,itemId);
+                    intent.putExtra(CancionDetalleFragment.ARG_ITEM_CAPO,capo);
+                    intent.putExtra(CancionDetalleFragment.ARG_ITEM_FUENTE,fontSize);
+                    startActivity(intent);
                 }
             }
         });
@@ -232,7 +232,6 @@ public class CancionLista extends AppCompatActivity {
                     final Cancion cancion = new Cancion(itemId);
                     cancion.fill();
                     final CharSequence[] items = {"Abrir", "Añadir a Favoritos", "Copiar a Carpeta", "Mover a Carpeta", "Renombrar canción", "Eliminar canción"};
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(con);
 
                     builder.setTitle(cancion.getTitulo());
@@ -386,7 +385,7 @@ public class CancionLista extends AppCompatActivity {
                             setupRecyclerView((RecyclerView) recyclerView);
                         }
                     },
-                "Eliminar " + cancion.getTitulo());
+                    "Eliminar " + cancion.getTitulo());
         }
 
         private void agregarFavorito() {

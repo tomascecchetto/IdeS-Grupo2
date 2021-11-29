@@ -98,15 +98,19 @@ public class Seccion {
         String sortOrder = AsdbContract.Secciones.COLUMN_NAME_ID + " ASC";
         String filter = AsdbContract.Secciones.COLUMN_NAME_ITEMID + "=" + item.getId();
         Cursor c = App.GetOpenDB().query(AsdbContract.Secciones.TABLE_NAME, null, filter, null, null, null, sortOrder);
-        c.moveToFirst();
-        do {
-            secciones.add(new Seccion(
-                    c.getInt(c.getColumnIndex(AsdbContract.Secciones.COLUMN_NAME_ID)),
-                    c.getString(c.getColumnIndex(AsdbContract.Secciones.COLUMN_NAME_NOMBRE)),
-                    c.getString(c.getColumnIndex(AsdbContract.Secciones.COLUMN_NAME_CONTENIDO))
-            ));
-        } while (c.moveToNext());
-        c.close();
+
+        if(c!= null && c.moveToFirst() ) {
+            //    c.moveToFirst();
+            do {
+                secciones.add(new Seccion(
+                        c.getInt(c.getColumnIndex(AsdbContract.Secciones.COLUMN_NAME_ID)),
+                        c.getString(c.getColumnIndex(AsdbContract.Secciones.COLUMN_NAME_NOMBRE)),
+                        c.getString(c.getColumnIndex(AsdbContract.Secciones.COLUMN_NAME_CONTENIDO))
+                ));
+            } while (c.moveToNext());
+            c.close();
+
+        }
         return secciones;
     }
 

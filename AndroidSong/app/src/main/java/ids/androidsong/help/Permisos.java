@@ -24,12 +24,8 @@ public class Permisos {
     }
 
     private static void Solicitar(Activity activity, String permission, int id){
-        if (ContextCompat.checkSelfPermission(activity,
-                permission)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{permission},
-                    id);
+        if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{permission}, id);
         }
     }
 }

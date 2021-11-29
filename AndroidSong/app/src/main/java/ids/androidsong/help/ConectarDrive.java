@@ -1,8 +1,7 @@
 package ids.androidsong.help;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.Manifest;
+import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
@@ -41,6 +40,8 @@ import ids.androidsong.R;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by Alan on 12/2/2018.
  * Clase para encapsular el flujo de autenticación de la API REST de Drive
@@ -63,12 +64,16 @@ class ConectarDrive implements EasyPermissions.PermissionCallbacks {
     private static final String[] SCOPES = { DriveScopes.DRIVE };
 
     ConectarDrive(Activity context) {
+
+        // GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(app.getApplicationContext());
+
+        //if you want to use your common space of G drive
+         //mDriveServiceHelper = new DriveServiceHelper(getGoogleDriveService(getApplicationContext(), account, "your_app_name_here"));
+
         super();
         con = context;
         syncLog = con.findViewById(R.id.sincronizar_log_sync);
-        mCredential = GoogleAccountCredential.usingOAuth2(
-                con.getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
+        mCredential = GoogleAccountCredential.usingOAuth2(con.getApplicationContext(), Arrays.asList(SCOPES)).setBackOff(new ExponentialBackOff());
         mProgress = new ProgressDialog(con);
         mProgress.setMessage("Conectando con Google Drive");
     }
@@ -77,10 +82,7 @@ class ConectarDrive implements EasyPermissions.PermissionCallbacks {
         if (mService == null) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, mCredential)
-                    .setApplicationName("AndroidSong")
-                    .build();
+            mService = new com.google.api.services.drive.Drive.Builder(transport, jsonFactory, mCredential).setApplicationName("AndroidSong").build();
         }
         return mService;
     }
@@ -104,6 +106,8 @@ class ConectarDrive implements EasyPermissions.PermissionCallbacks {
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
+                // to set accountName manually instead of prompting user to select it
+                //mCredential.setSelectedAccount(new Account("facundochila@gmail.com", "androidsong"));
                 getDriveConnection();
             } else {
                 // Start a dialog from which the user can choose an account
@@ -128,7 +132,7 @@ class ConectarDrive implements EasyPermissions.PermissionCallbacks {
             chooseAccount();
         } else if (! isDeviceOnline()) {
             if (syncLog != null)
-                    syncLog.setText(R.string.Error_sin_red);
+                syncLog.setText(R.string.Error_sin_red);
         } else {
             new MakeRequestTask().execute();
         }
@@ -196,10 +200,8 @@ class ConectarDrive implements EasyPermissions.PermissionCallbacks {
      *     date on this device; false otherwise.
      */
     private boolean isGooglePlayServicesAvailable() {
-        GoogleApiAvailability apiAvailability =
-                GoogleApiAvailability.getInstance();
-        final int connectionStatusCode =
-                apiAvailability.isGooglePlayServicesAvailable(con);
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        final int connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(con);
         return connectionStatusCode == ConnectionResult.SUCCESS;
     }
 
