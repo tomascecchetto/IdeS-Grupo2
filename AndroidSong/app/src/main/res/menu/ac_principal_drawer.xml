@@ -23,10 +23,6 @@
                 android:icon="@drawable/ic_menu_slideshow"
                 android:title="Importar" />
             <item
-                android:id="@+id/nav_sync"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Sincronizar" />
-            <item
                 android:id="@+id/switch_acordes"
                 android:icon="@drawable/ic_menu_acordes"
                 android:title="Mostrar acordes"

@@ -184,8 +184,6 @@ public class Principal extends AppCompatActivity
             abrirCancionNueva();
         } else if (id == R.id.nav_import) {
             abrirImportador();
-        } else if (id == R.id.nav_sync) {
-            abrirSincronizador();
         } else if (id == R.id.nav_trash) {
             abrirPapelera();
         }
