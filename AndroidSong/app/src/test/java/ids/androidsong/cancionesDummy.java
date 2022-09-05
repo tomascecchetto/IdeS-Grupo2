@@ -22,6 +22,14 @@ public class cancionesDummy {
             " Contenido Dummy ";
     private int delta;
 
+    private String  tituloInvalido = "titulo invalidoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo";
+    private String  autorInvalido = "autor invalidoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo";
+    private String  presentationInvalido = "presentacion invalidoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo";
+    private String  tonoInvalido = "Zzx";
+    private String  transporteInvalido = "13";
+
+
+
     public cancionesDummy(int c){
         cantidadInterna = c;
     }
@@ -32,6 +40,24 @@ public class cancionesDummy {
 
     public ArrayList<Cancion> getCancionesDummy(int cantidad) {
         return getCancionesDummy(cantidad, CARPETA_DUMMY);
+    }
+
+    public Cancion getCancionErrorTitulo(){
+        Cancion cancion = new Cancion();
+        cancion.setTitulo(TITULO_DUMMY + tituloInvalido);
+        cancion.setCarpeta(CARPETA_DUMMY);
+        cancion.setAtributos(getAtributosDummy(1));
+        cancion.setSecciones(getSeccionesDummy(1));
+        return cancion;
+    }
+
+    public Cancion getCancionErrorAtributo(Enum.atributo atributoError){
+        Cancion cancion = new Cancion();
+        cancion.setTitulo(TITULO_DUMMY +  Integer.toString(1 + delta));
+        cancion.setCarpeta(CARPETA_DUMMY);
+        cancion.setAtributos(getAtributosDummyWithError(1,atributoError));
+        cancion.setSecciones(getSeccionesDummy(1));
+        return cancion;
     }
 
     //El método recibe un parámetro para la cantidad de canciones esperadas
@@ -50,12 +76,56 @@ public class cancionesDummy {
         return canciones;
     }
 
-    private ArrayList<Atributo> getAtributosDummy(int i){
+    private ArrayList<Atributo> getAtributosDummyWithError(int i,Enum.atributo atributoError){
         ArrayList<Atributo> atributos = new ArrayList<>();
+        String valor ="";
         int j;
         //Los Atributos predefinidos se cargan todos
         for (j = 0; j< Enum.atributo.values().length; j++){
-            atributos.add(new Atributo(Enum.atributo.values()[j].name(),ATRIBUTO_DUMMY + Enum.atributo.values()[j].name()));
+            String nombreAtributo = Enum.atributo.values()[j].name();
+            if (nombreAtributo.equals(atributoError.name())) {
+                valor = getMensajeError(atributoError.name());
+            } else {
+                valor = setValor(nombreAtributo);
+            }
+            atributos.add(new Atributo(nombreAtributo,valor));
+        }
+        //Luego se generan Atributos custom par cada canción
+        int k = cantidadInterna == 0 ? i : cantidadInterna;
+        for (j=0;j<k;j++){
+            atributos.add(new Atributo(ATRIBUTO_DUMMY + Integer.toString(j + delta),ATRIBUTO_DUMMY + Integer.toString(j + delta)));
+        }
+        return atributos;
+    }
+
+    private String getMensajeError(String atributo){
+        String resultMessage = ATRIBUTO_DUMMY;
+        switch (atributo){
+            case "autor":
+                resultMessage = autorInvalido;
+                break;
+            case "presentacion":
+                resultMessage =  presentationInvalido;
+                break;
+            case  "tono":
+                resultMessage = tonoInvalido;
+                break;
+            case "transporte":
+                resultMessage = transporteInvalido;
+                break;
+        }
+        return resultMessage;
+    }
+
+    private ArrayList<Atributo> getAtributosDummy(int i){
+        ArrayList<Atributo> atributos = new ArrayList<>();
+        String valor ="";
+        int j;
+        //Los Atributos predefinidos se cargan todos
+        for (j = 0; j< Enum.atributo.values().length; j++){
+            String nombreAtributo = Enum.atributo.values()[j].name();
+            valor = setValor(nombreAtributo);
+            atributos.add(new Atributo(nombreAtributo,valor));
         }
         //Luego se generan Atributos custom par cada canción
         int k = cantidadInterna == 0 ? i : cantidadInterna;
@@ -78,5 +148,12 @@ public class cancionesDummy {
             secciones.add(new Seccion(SECCION_NOMBRE_DUMMY + Integer.toString(j + delta),contenidoDummy));
         }
         return secciones;
+    }
+
+    private String setValor(String nombreAtributo){
+        if (nombreAtributo.equals("tono")) return "Bb";
+        if (nombreAtributo.equals("transporte")) return "1";
+        return ATRIBUTO_DUMMY + nombreAtributo;
+
     }
 }

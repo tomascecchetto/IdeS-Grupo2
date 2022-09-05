@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import java.util.ArrayList;
 
+import ids.androidsong.excepcion.InvalidSongException;
 import ids.androidsong.help.App;
 import ids.androidsong.help.AsdbContract;
 
@@ -102,12 +103,19 @@ public class Item {
         this.fechaModificacion = fechaModificacion;
     }
 
-    void alta(String tipo) {
+    void alta(String tipo) throws InvalidSongException {
 
         int carpeta = (new Carpeta()).get(getCarpeta());
         fechaModificacion = new GregorianCalendar().getTime().toString();
         ContentValues registro = new ContentValues();
-        registro.put(AsdbContract.Items.COLUMN_NAME_TITULO, getTitulo());
+        String titulo = getTitulo();
+
+        if (titulo.length()>50) throw new InvalidSongException(
+                InvalidSongException.Message.INVALID_TITLE.getCode(),
+                InvalidSongException.Message.INVALID_TITLE.getDescription()
+        );
+
+        registro.put(AsdbContract.Items.COLUMN_NAME_TITULO, titulo);
         registro.put(AsdbContract.Items.COLUMN_NAME_TIPO, tipo);
         registro.put(AsdbContract.Items.COLUMN_NAME_CARPETAID, carpeta);
         registro.put(AsdbContract.Items.COLUMN_NAME_FECHAMODIFICACION, getFechaModificacion());

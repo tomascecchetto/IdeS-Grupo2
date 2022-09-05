@@ -10,7 +10,9 @@ import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 
+import ids.androidsong.excepcion.InvalidSongException;
 import ids.androidsong.help.App;
+import ids.androidsong.help.Enum;
 import ids.androidsong.object.Cancion;
 import ids.androidsong.object.DriveStatus;
 
@@ -49,6 +51,109 @@ public class AltaUnitTest {
     }
 
     @Test
+    public void alta_cancion_error_titulo(){
+        Cancion cancionErrorTitulo = new cancionesDummy(1).getCancionErrorTitulo();
+
+        String mensajseDevuelto = "";
+        String codigoDevuelto = "";
+
+        String mensajeEsperado = InvalidSongException.Message.INVALID_TITLE.getDescription();
+        String codigoEsperado =  InvalidSongException.Message.INVALID_TITLE.getCode();
+
+        try {
+            cancionErrorTitulo.alta();
+        }catch (InvalidSongException e){
+            codigoDevuelto = e.getCode();
+            mensajseDevuelto = e.getMessage();
+        }
+
+        assertTrue(cancionErrorTitulo.getTitulo().length()>50);
+        assertTrue(codigoDevuelto.equals(codigoEsperado));
+        assertTrue(mensajseDevuelto.equals(mensajeEsperado));
+    }
+
+    @Test
+    public void alta_cancion_error_autor(){
+        Cancion cancionErrorTitulo = new cancionesDummy(1).getCancionErrorAtributo(Enum.atributo.autor);
+
+        String mensajseDevuelto = "";
+        String codigoDevuelto = "";
+
+        String mensajeEsperado = InvalidSongException.Message.INVALID_AUTHOR.getDescription();
+        String codigoEsperado =  InvalidSongException.Message.INVALID_AUTHOR.getCode();
+
+        try {
+            cancionErrorTitulo.alta();
+        }catch (InvalidSongException e){
+            codigoDevuelto = e.getCode();
+            mensajseDevuelto = e.getMessage();
+        }
+        assertTrue(codigoDevuelto.equals(codigoEsperado));
+        assertTrue(mensajseDevuelto.equals(mensajeEsperado));
+    }
+
+    @Test
+    public void alta_cancion_error_presentacion(){
+        Cancion cancionErrorTitulo = new cancionesDummy(1).getCancionErrorAtributo(Enum.atributo.presentacion);
+
+        String mensajseDevuelto = "";
+        String codigoDevuelto = "";
+
+        String mensajeEsperado = InvalidSongException.Message.INVALID_PRESENTATION.getDescription();
+        String codigoEsperado =  InvalidSongException.Message.INVALID_PRESENTATION.getCode();
+
+        try {
+            cancionErrorTitulo.alta();
+        }catch (InvalidSongException e){
+            codigoDevuelto = e.getCode();
+            mensajseDevuelto = e.getMessage();
+        }
+        assertTrue(codigoDevuelto.equals(codigoEsperado));
+        assertTrue(mensajseDevuelto.equals(mensajeEsperado));
+    }
+
+    @Test
+    public void alta_cancion_error_tono() {
+        Cancion cancionErrorTitulo = new cancionesDummy(1).getCancionErrorAtributo(Enum.atributo.tono);
+
+        String mensajseDevuelto = "";
+        String codigoDevuelto = "";
+
+        String mensajeEsperado = InvalidSongException.Message.INVALID_TONE.getDescription();
+        String codigoEsperado = InvalidSongException.Message.INVALID_TONE.getCode();
+
+        try {
+            cancionErrorTitulo.alta();
+        } catch (InvalidSongException e) {
+            codigoDevuelto = e.getCode();
+            mensajseDevuelto = e.getMessage();
+        }
+        assertTrue(codigoDevuelto.equals(codigoEsperado));
+        assertTrue(mensajseDevuelto.equals(mensajeEsperado));
+    }
+
+    @Test
+    public void alta_cancion_error_transporte() {
+        Cancion cancionErrorTitulo = new cancionesDummy(1).getCancionErrorAtributo(Enum.atributo.transporte);
+
+        String mensajseDevuelto = "";
+        String codigoDevuelto = "";
+
+        String mensajeEsperado = InvalidSongException.Message.INVALID_TRANSPORTATION.getDescription();
+        String codigoEsperado = InvalidSongException.Message.INVALID_TRANSPORTATION.getCode();
+
+        try {
+            cancionErrorTitulo.alta();
+        } catch (InvalidSongException e) {
+            codigoDevuelto = e.getCode();
+            mensajseDevuelto = e.getMessage();
+        }
+        assertTrue(codigoDevuelto.equals(codigoEsperado));
+        assertTrue(mensajseDevuelto.equals(mensajeEsperado));
+    }
+
+
+        @Test
     public void Cancion_Secciones(){
         for (Cancion cancion : canciones) {
             cancion.alta();

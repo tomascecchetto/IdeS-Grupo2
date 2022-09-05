@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 
+import ids.androidsong.excepcion.InvalidSongException;
 import ids.androidsong.help.Enum;
 
 /**
@@ -100,7 +101,7 @@ public class Cancion extends Item implements Serializable {
         return getByTitulo(Enum.itemTipo.CANCION.name(),filtro);
     }
 
-    public void alta(){
+    public void alta() throws InvalidSongException {
         super.alta(Enum.itemTipo.CANCION.name());
     }
 
